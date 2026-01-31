@@ -3,11 +3,13 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
-import shutil, json
 from datetime import datetime
+import shutil, json, os
 from fpdf import FPDF
+import docx2txt
+import PyPDF2
 
-app = FastAPI(title="MINICUBA Backend")
+app = FastAPI(title="MINICUBA PRO")
 
 # ------------------- CORS -------------------
 app.add_middleware(
@@ -27,9 +29,34 @@ if not HIST_FILE.exists():
     HIST_FILE.write_text("[]")
 
 # ------------------- Servir frontend -------------------
-# Monta toda la carpeta frontend para que index.html sea accesible en /
 FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
 app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
+
+# ------------------- Funciones de lectura de documentos -------------------
+def leer_pdf(file_path):
+    texto = ""
+    try:
+        with open(file_path, 'rb') as f:
+            reader = PyPDF2.PdfReader(f)
+            for page in reader.pages:
+                texto += page.extract_text() + "\n"
+    except:
+        texto = ""
+    return texto
+
+def leer_docx(file_path):
+    try:
+        return docx2txt.process(str(file_path))
+    except:
+        return ""
+
+def extraer_texto(file_path):
+    if str(file_path).lower().endswith(".pdf"):
+        return leer_pdf(file_path)
+    elif str(file_path).lower().endswith(".docx"):
+        return leer_docx(file_path)
+    else:
+        return file_path.read_text(encoding='utf-8')
 
 # ------------------- Subida de archivos -------------------
 @app.post("/subir_archivo")
@@ -53,12 +80,12 @@ async def historial():
     h = json.loads(HIST_FILE.read_text())
     return JSONResponse(h)
 
-# ------------------- IA local -------------------
+# ------------------- IA administrativa -------------------
 @app.post("/ia")
 async def ia_local(texto: str = Form(...)):
     texto = texto.lower()
     if "impuesto" in texto:
-        respuesta = "Según normas generales, los impuestos dependen del régimen fiscal. Verifica con MFP."
+        respuesta = "Verifica con MFP: impuestos según régimen fiscal cubano."
     elif "contrato" in texto:
         respuesta = "Revisa objeto, vigencia, obligaciones y firmas. Evita cláusulas ambiguas."
     else:
@@ -77,14 +104,20 @@ async def generar_pdf(texto: str = Form(...)):
     pdf.output(str(file_path))
     return FileResponse(str(file_path), filename="MINICUBA.pdf")
 
-# ------------------- Nómina Cubana -------------------
-@app.post("/nomina")
-async def nomina():
-    salario_base = 3000
+# ------------------- Organizar documentos -------------------
+@app.get("/organizar_documentos")
+async def organizar_documentos():
+    archivos = []
+    for f in sorted(UPLOAD_DIR.iterdir()):
+        archivos.append({"nombre": f.name, "cuantia": "No detectada"})
+    return JSONResponse(archivos)
+
+# ------------------- Nómina por trabajador -------------------
+@app.post("/nomina_trabajador")
+async def nomina_trabajador(salario_base: float = Form(...)):
     seguridad = salario_base * 0.05
     impuesto = salario_base * 0.03
     neto = salario_base - seguridad - impuesto
-
     return {
         "salario_base": salario_base,
         "seguridad_social": seguridad,
@@ -92,3 +125,23 @@ async def nomina():
         "pago_neto": neto,
         "mensaje": "⚠️ Cálculo orientativo conforme a normas vigentes. Confirmar con MFP."
     }
+
+# ------------------- Generar contrato/formulario automático -------------------
+@app.post("/generar_contrato")
+async def generar_contrato(titulo: str = Form(...), contenido: str = Form(...)):
+    texto = f"""
+CONTRATO / FORMULARIO – MIPYME CUBA
+
+Título: {titulo}
+
+Contenido:
+{contenido}
+
+Cláusulas:
+1. Cumplimiento de leyes cubanas vigentes.
+2. Obligaciones fiscales y laborales.
+3. Vigencia por acuerdo mutuo.
+
+Documento orientativo, sin firmas.
+"""
+    return {"contrato": texto}
