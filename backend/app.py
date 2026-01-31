@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import shutil, json
 from datetime import datetime
@@ -11,7 +12,7 @@ app = FastAPI(title="MINICUBA Backend")
 # ------------------- CORS -------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Cambiar a tu dominio en producción
+    allow_origins=["*"],  # Cambiar por tu dominio en producción
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -24,6 +25,11 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 HIST_FILE = Path("historial.json")
 if not HIST_FILE.exists():
     HIST_FILE.write_text("[]")
+
+# ------------------- Servir frontend -------------------
+# Monta toda la carpeta frontend para que index.html sea accesible en /
+FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
+app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
 
 # ------------------- Subida de archivos -------------------
 @app.post("/subir_archivo")
