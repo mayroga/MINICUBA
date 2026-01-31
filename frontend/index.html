@@ -2,60 +2,137 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>MINICUBA – Asistente MIPYME</title>
+<title>MINICUBA PRO – Asistente MIPYME</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body{font-family:Arial;background:#f2f2f2;margin:0}
 header{background:#b30000;color:#fff;padding:12px;text-align:center}
 section{padding:15px}
-textarea,input,select,button{
-  width:100%;padding:10px;margin:6px 0;font-size:15px
-}
-#respuesta,#adminPanel{
-  background:#fff;padding:15px;margin-top:10px
-}
+textarea,input,select,button{width:100%;padding:10px;margin:6px 0;font-size:15px}
+#respuesta,#adminPanel{background:#fff;padding:15px;margin-top:10px}
 .admin{background:#eee;border-left:4px solid #b30000}
 </style>
 </head>
-
 <body>
 <header>
-<h2>🇨🇺 MINICUBA</h2>
-<p>Asistente Administrativo Inteligente para MIPYMES</p>
+<h2>🇨🇺 MINICUBA PRO</h2>
+<p>Asistente Integral para MIPYMES en Cuba</p>
 </header>
 
 <section>
 <select id="rol">
-<option value="cliente">Cliente MIPYME</option>
+<option value="cliente">Cliente</option>
 <option value="admin">Administrador</option>
 </select>
 
 <input type="file" id="archivo" multiple>
-
 <select id="modulo">
 <option value="revision">Revisión de documentos</option>
-<option value="nomina">Nómina Cubana</option>
-<option value="contrato">Generar contrato</option>
-<option value="organizar">Organizar archivos</option>
-<option value="ia">Consulta IA (dudas)</option>
+<option value="nomina">Nómina trabajador</option>
+<option value="contrato">Generar contrato/formulario</option>
+<option value="organizar">Organizar documentos</option>
+<option value="ia">Consulta IA</option>
 </select>
 
-<textarea id="consulta" placeholder="Ej: Revísame este contrato / Haz la nómina de enero"></textarea>
+<textarea id="consulta" placeholder="Ej: Revísame este contrato / Haz la nómina de enero / Genera formulario"></textarea>
 
 <button onclick="procesar()">PROCESAR</button>
 <button onclick="exportarPDF()">PDF</button>
 <button onclick="enviarWhatsApp()">WhatsApp</button>
 
 <div id="respuesta"></div>
-
 <div id="adminPanel" class="admin" style="display:none">
 <h3>👑 PANEL ADMIN</h3>
 <div id="historial"></div>
 </div>
 </section>
 
-<script src="minicuba.js"></script>
-<script src="storage.js"></script>
-<script src="export.js"></script>
+<script>
+const API_URL = "https://TU-DOMINIO-RENDER";
+
+async function procesar(){
+    const rol = document.getElementById("rol").value;
+    const modulo = document.getElementById("modulo").value;
+    const texto = document.getElementById("consulta").value;
+    const archivos = document.getElementById("archivo").files;
+    let resultado = "";
+
+    if(archivos.length>0){
+        for(let f of archivos){
+            let form = new FormData();
+            form.append("file", f);
+            await fetch(`${API_URL}/subir_archivo`, {method:"POST", body:form});
+        }
+    }
+
+    if(modulo==="revision") resultado = await consultaIA(texto);
+    if(modulo==="nomina"){
+        const sal = prompt("Ingrese salario del trabajador en CUP:");
+        const form = new FormData();
+        form.append("salario_base", sal);
+        const res = await fetch(`${API_URL}/nomina_trabajador`, {method:"POST", body:form});
+        const data = await res.json();
+        resultado = `Salario base: ${data.salario_base} CUP\nSeguridad social: ${data.seguridad_social} CUP\nImpuestos: ${data.impuestos} CUP\nPago neto: ${data.pago_neto} CUP\n${data.mensaje}`;
+    }
+    if(modulo==="contrato"){
+        const titulo = prompt("Título del contrato/formulario:");
+        const form = new FormData();
+        form.append("titulo", titulo);
+        form.append("contenido", texto);
+        const res = await fetch(`${API_URL}/generar_contrato`, {method:"POST", body:form});
+        const data = await res.json();
+        resultado = data.contrato;
+    }
+    if(modulo==="organizar"){
+        const res = await fetch(`${API_URL}/organizar_documentos`);
+        const data = await res.json();
+        resultado = data.map(d=>`Nombre: ${d.nombre} - Cuantía: ${d.cuantia}`).join("\n");
+    }
+
+    await guardarHistorial(resultado);
+    document.getElementById("respuesta").innerText = resultado;
+
+    if(rol==="admin"){
+        document.getElementById("adminPanel").style.display="block";
+        cargarHistorial();
+    }
+}
+
+async function consultaIA(texto){
+    const form = new FormData();
+    form.append("texto", texto);
+    const res = await fetch(`${API_URL}/ia`, {method:"POST", body:form});
+    const data = await res.json();
+    return data.respuesta;
+}
+
+async function guardarHistorial(texto){
+    const form = new FormData();
+    form.append("texto", texto);
+    await fetch(`${API_URL}/guardar_historial`, {method:"POST", body:form});
+}
+
+async function cargarHistorial(){
+    const res = await fetch(`${API_URL}/historial`);
+    const data = await res.json();
+    let html="";
+    data.forEach(i=>{
+        html+=`<p><b>${i.fecha}</b><br>${i.texto}</p><hr>`;
+    });
+    document.getElementById("historial").innerHTML = html;
+}
+
+async function exportarPDF(){
+    const texto = document.getElementById("respuesta").innerText;
+    const form = new FormData();
+    form.append("texto", texto);
+    window.open(`${API_URL}/generar_pdf`, "_blank");
+}
+
+function enviarWhatsApp(){
+    const texto = encodeURIComponent(document.getElementById("respuesta").innerText);
+    window.open("https://wa.me/?text="+texto,"_blank");
+}
+</script>
 </body>
 </html>
