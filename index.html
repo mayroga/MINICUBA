@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>MINICUBA – Asistente MIPYME</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;background:#f2f2f2;margin:0}
+header{background:#b30000;color:#fff;padding:12px;text-align:center}
+section{padding:15px}
+textarea,input,select,button{
+  width:100%;padding:10px;margin:6px 0;font-size:15px
+}
+#respuesta,#adminPanel{
+  background:#fff;padding:15px;margin-top:10px
+}
+.admin{background:#eee;border-left:4px solid #b30000}
+</style>
+</head>
+
+<body>
+<header>
+<h2>🇨🇺 MINICUBA</h2>
+<p>Asistente Administrativo Inteligente para MIPYMES</p>
+</header>
+
+<section>
+<select id="rol">
+<option value="cliente">Cliente MIPYME</option>
+<option value="admin">Administrador</option>
+</select>
+
+<input type="file" id="archivo" multiple>
+
+<select id="modulo">
+<option value="revision">Revisión de documentos</option>
+<option value="nomina">Nómina Cubana</option>
+<option value="contrato">Generar contrato</option>
+<option value="organizar">Organizar archivos</option>
+<option value="ia">Consulta IA (dudas)</option>
+</select>
+
+<textarea id="consulta" placeholder="Ej: Revísame este contrato / Haz la nómina de enero"></textarea>
+
+<button onclick="procesar()">PROCESAR</button>
+<button onclick="exportarPDF()">PDF</button>
+<button onclick="enviarWhatsApp()">WhatsApp</button>
+
+<div id="respuesta"></div>
+
+<div id="adminPanel" class="admin" style="display:none">
+<h3>👑 PANEL ADMIN</h3>
+<div id="historial"></div>
+</div>
+</section>
+
+<script src="minicuba.js"></script>
+<script src="storage.js"></script>
+<script src="export.js"></script>
+</body>
+</html>
