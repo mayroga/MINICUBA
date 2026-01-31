@@ -28,13 +28,13 @@ textarea,input,select,button{width:100%;padding:10px;margin:6px 0;font-size:15px
 <input type="file" id="archivo" multiple>
 <select id="modulo">
 <option value="revision">Revisión de documentos</option>
-<option value="nomina">Nómina trabajador</option>
+<option value="nomina">Nómina trabajadores</option>
 <option value="contrato">Generar contrato/formulario</option>
 <option value="organizar">Organizar documentos</option>
 <option value="ia">Consulta IA</option>
 </select>
 
-<textarea id="consulta" placeholder="Ej: Revísame este contrato / Haz la nómina de enero / Genera formulario"></textarea>
+<textarea id="consulta" placeholder="Ej: Revísame este contrato / Haz la nómina / Genera formulario"></textarea>
 
 <button onclick="procesar()">PROCESAR</button>
 <button onclick="exportarPDF()">PDF</button>
@@ -48,8 +48,6 @@ textarea,input,select,button{width:100%;padding:10px;margin:6px 0;font-size:15px
 </section>
 
 <script>
-const API_URL = "https://TU-DOMINIO-RENDER";
-
 async function procesar(){
     const rol = document.getElementById("rol").value;
     const modulo = document.getElementById("modulo").value;
@@ -57,39 +55,48 @@ async function procesar(){
     const archivos = document.getElementById("archivo").files;
     let resultado = "";
 
+    // Subir archivos
     if(archivos.length>0){
         for(let f of archivos){
             let form = new FormData();
             form.append("file", f);
-            await fetch(`${API_URL}/subir_archivo`, {method:"POST", body:form});
+            await fetch(`/subir_archivo`, {method:"POST", body:form});
         }
     }
 
-    if(modulo==="revision") resultado = await consultaIA(texto);
+    // Procesar según módulo
+    if(modulo==="revision"){
+        resultado = await consultaIA(texto);
+    }
     if(modulo==="nomina"){
-        const sal = prompt("Ingrese salario del trabajador en CUP:");
-        const form = new FormData();
-        form.append("salario_base", sal);
-        const res = await fetch(`${API_URL}/nomina_trabajador`, {method:"POST", body:form});
+        const res = await fetch(`/nomina_trabajadores`);
         const data = await res.json();
-        resultado = `Salario base: ${data.salario_base} CUP\nSeguridad social: ${data.seguridad_social} CUP\nImpuestos: ${data.impuestos} CUP\nPago neto: ${data.pago_neto} CUP\n${data.mensaje}`;
+        resultado = "Nómina completa:\n";
+        data.nomina.forEach((t,i)=>{
+            resultado += `${i+1}. ${t.nombre} - Salario Base: ${t.salario_base} CUP - Seguridad Social: ${t.seguridad_social} CUP - Impuestos: ${t.impuestos} CUP - Pago Neto: ${t.pago_neto} CUP\n`;
+        });
+        resultado += data.mensaje;
     }
     if(modulo==="contrato"){
         const titulo = prompt("Título del contrato/formulario:");
         const form = new FormData();
         form.append("titulo", titulo);
         form.append("contenido", texto);
-        const res = await fetch(`${API_URL}/generar_contrato`, {method:"POST", body:form});
+        const res = await fetch(`/generar_contrato`, {method:"POST", body:form});
         const data = await res.json();
         resultado = data.contrato;
     }
     if(modulo==="organizar"){
-        const res = await fetch(`${API_URL}/organizar_documentos`);
+        const res = await fetch(`/organizar_documentos`);
         const data = await res.json();
         resultado = data.map(d=>`Nombre: ${d.nombre} - Cuantía: ${d.cuantia}`).join("\n");
     }
 
-    await guardarHistorial(resultado);
+    // Guardar historial
+    const formHist = new FormData();
+    formHist.append("texto", resultado);
+    await fetch(`/guardar_historial`, {method:"POST", body:formHist});
+
     document.getElementById("respuesta").innerText = resultado;
 
     if(rol==="admin"){
@@ -101,19 +108,13 @@ async function procesar(){
 async function consultaIA(texto){
     const form = new FormData();
     form.append("texto", texto);
-    const res = await fetch(`${API_URL}/ia`, {method:"POST", body:form});
+    const res = await fetch(`/ia`, {method:"POST", body:form});
     const data = await res.json();
     return data.respuesta;
 }
 
-async function guardarHistorial(texto){
-    const form = new FormData();
-    form.append("texto", texto);
-    await fetch(`${API_URL}/guardar_historial`, {method:"POST", body:form});
-}
-
 async function cargarHistorial(){
-    const res = await fetch(`${API_URL}/historial`);
+    const res = await fetch(`/historial`);
     const data = await res.json();
     let html="";
     data.forEach(i=>{
@@ -126,7 +127,7 @@ async function exportarPDF(){
     const texto = document.getElementById("respuesta").innerText;
     const form = new FormData();
     form.append("texto", texto);
-    window.open(`${API_URL}/generar_pdf`, "_blank");
+    window.open(`/generar_pdf`, "_blank");
 }
 
 function enviarWhatsApp(){
