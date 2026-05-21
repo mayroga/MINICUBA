@@ -1,8 +1,10 @@
 /* =========================================================
-   KAMIZEN ENGINE V17 - FULL CINEMATIC MULTI-AVATAR SYSTEM
+   KAMIZEN ENGINE V18 - FULL CINEMATIC MULTI-AVATAR SYSTEM
    ✔ Persistencia Local Completa (LocalStorage)
    ✔ Narración Rápida Estilo Contenido Corto (1.25x Base / 1.55x Avatar Overdrive)
    ✔ Dual-Avatar Display (MICHAEL + JONATHAN / NOEL Intercalados)
+   ✔ Mecánica Original de Videojuego: Hide & Seek Block Arena
+   ✔ Avatares en Rewards: Visualización Dinámica en Bloques de Recompensa
    ✔ Guía Vocal y Visual de Respiración Expandida
    ✔ Botón JUMP/SKIP para navegación directa sin bloqueos
    ✔ Soporte completo e intacto: v, h, story, br, sil, d, r, c, sim
@@ -217,11 +219,9 @@ function narrate(text, isAvatarActive, callback) {
     speech.lang = "en-US";
     
     if (isAvatarActive) {
-        // Voz al máximo ritmo de revolución, estresada e impactante para el niño
         speech.rate = 1.55; 
         speech.pitch = 1.35; 
     } else {
-        // Voz rápida regular de Shorts
         speech.rate = 1.25; 
         speech.pitch = 1.1; 
     }
@@ -326,6 +326,8 @@ function renderBlock(block, navHeader) {
     let textToRead = "";
     let isAvatarMode = (block.t === "sim");
 
+    const companionName = state.companionToggle ? "JONATHAN" : "NOEL";
+
     const timerUI = `
         <div class="card center" style="border: 3px solid var(--primary); background: #0f172a; margin-bottom: 10px; padding: 10px;">
             <h1 id="timerDisplay" style="font-size:2.5rem;margin:0; font-family: monospace;">00:00</h1>
@@ -345,29 +347,29 @@ function renderBlock(block, navHeader) {
     }
     
     // =========================================================
-    // INTEGRACIÓN AVANZADA: MODO VIDEOJUEGO MULTI-AVATAR (SIM)
+    // MODO SIMULACIÓN INTERACTIVA: HIDE AND SEEK ARENA
     // =========================================================
     if (isAvatarMode) {
         startDopamineMusic();
-        
         state.companionToggle = !state.companionToggle;
-        const companionName = state.companionToggle ? "JONATHAN" : "NOEL";
         
-        const basePhrase = block.sub?.en || block.tx?.en || "GO FIGHT FOR MAXIMUM ENERGY RIGHT NOW";
-        const safetyEnrichment = " ALERT LEVEL RED. SPEED UP YOUR MIND AND STAY IN TOTAL CONTROL.";
+        const basePhrase = block.sub?.en || block.tx?.en || "GO HIDE OR SEEK FOR MAXIMUM ENERGY RIGHT NOW";
+        const safetyEnrichment = " HIDE AND SEEK MODE ENGAGED. SPEED UP YOUR MIND AND STAY IN TOTAL CONTROL.";
         textToRead = `Attention ${companionName} and MICHAEL! ` + basePhrase + safetyEnrichment;
 
         html += `
         <style>
-            @keyframes leftHeroMove {
-                0% { transform: scale(0.85) translateX(-15px) rotate(-6deg); }
-                50% { transform: scale(1.6) translateY(18px) translateX(8px); z-index: 50; }
-                100% { transform: scale(0.85) translateX(10px) rotate(6deg); }
+            @keyframes leftHeroSeek {
+                0% { transform: scale(0.85) translateX(-15px) rotate(-6deg); opacity: 1; }
+                30% { transform: scale(1.6) translateY(15px) translateX(5px); z-index: 50; }
+                60% { transform: scale(0.5) translateY(-20px); opacity: 0.3; } /* Escondiéndose */
+                100% { transform: scale(0.85) translateX(10px) rotate(6deg); opacity: 1; }
             }
-            @keyframes rightHeroMove {
-                0% { transform: scale(0.85) translateX(10px) rotate(6deg); }
-                75% { transform: scale(1.6) translateY(18px) translateX(-8px); z-index: 50; }
-                100% { transform: scale(0.85) translateX(-15px) rotate(-6deg); }
+            @keyframes rightHeroSeek {
+                0% { transform: scale(0.85) translateX(10px) rotate(6deg); opacity: 1; }
+                40% { transform: scale(0.5) translateY(-20px); opacity: 0.2; } /* Escondiéndose */
+                75% { transform: scale(1.6) translateY(15px) translateX(-5px); z-index: 50; opacity: 1; }
+                100% { transform: scale(0.85) translateX(-15px) rotate(-6deg); opacity: 1; }
             }
             @keyframes cyberGridLoop {
                 from { background-position: 0 0; }
@@ -384,7 +386,7 @@ function renderBlock(block, navHeader) {
                 position: relative;
                 box-shadow: 0 0 25px rgba(250, 204, 21, 0.5);
             ">
-                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace;">🎮 LIVE ARENA</div>
+                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace;">🎮 HIDE & SEEK</div>
                 <div style="position: absolute; top: 12px; right: 15px; font-size: 11px; color: #facc15; font-family: monospace; font-weight: bold;">⚡ OVERDRIVE 1.55x</div>
 
                 <div class="video-game-background" style="
@@ -404,7 +406,7 @@ function renderBlock(block, navHeader) {
                     <div style="text-align: center; width: 45%; position: relative;">
                         <div style="font-family: monospace; font-size: 12px; color: #0ea5e9; margin-bottom: 8px; font-weight: bold; text-shadow: 0 0 5px #0ea5e9;">MICHAEL</div>
                         <div style="width: 100px; height: 115px; margin: 0 auto; background: rgba(30, 41, 59, 0.85); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 2.5px solid #0ea5e9; box-shadow: 0 0 10px #0ea5e9;">
-                            <div class="cube-model-inner" style="width: 45px; height: 85px; position: relative; transform-origin: center center; animation: leftHeroMove 3s infinite alternate ease-in-out;">
+                            <div class="cube-model-inner" style="width: 45px; height: 85px; position: relative; transform-origin: center center; animation: leftHeroSeek 4s infinite ease-in-out;">
                                 <div style="width: 24px; height: 24px; background: #ffdbac; border-radius: 4px; border: 2px solid #000; margin: 0 auto; position: relative;">
                                     <div style="display:flex; justify-content:space-around; margin-top:5px;"><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div></div>
                                 </div>
@@ -418,7 +420,7 @@ function renderBlock(block, navHeader) {
                     <div style="text-align: center; width: 45%; position: relative;">
                         <div style="font-family: monospace; font-size: 12px; color: #f43f5e; margin-bottom: 8px; font-weight: bold; text-shadow: 0 0 5px #f43f5e;">${companionName}</div>
                         <div style="width: 100px; height: 115px; margin: 0 auto; background: rgba(30, 41, 59, 0.85); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 2.5px solid #f43f5e; box-shadow: 0 0 10px #f43f5e;">
-                            <div class="cube-model-inner" style="width: 45px; height: 85px; position: relative; transform-origin: center center; animation: rightHeroMove 3s infinite alternate ease-in-out;">
+                            <div class="cube-model-inner" style="width: 45px; height: 85px; position: relative; transform-origin: center center; animation: rightHeroSeek 4s infinite ease-in-out;">
                                 <div style="width: 24px; height: 24px; background: #ffdcbe; border-radius: 4px; border: 2px solid #000; margin: 0 auto; position: relative;">
                                     <div style="display:flex; justify-content:space-around; margin-top:5px;"><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div></div>
                                 </div>
@@ -430,16 +432,7 @@ function renderBlock(block, navHeader) {
                     </div>
                 </div>
 
-                <div class="youtube-shorts-subtitles" style="
-                    background: rgba(0, 0, 0, 0.85);
-                    padding: 15px;
-                    border-radius: 12px;
-                    min-height: 70px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border: 2px solid #334155;
-                ">
+                <div class="youtube-shorts-subtitles">
                     <p id="shorts-text-target" style="
                         font-size: 1.35rem; 
                         font-weight: 900; 
@@ -457,6 +450,37 @@ function renderBlock(block, navHeader) {
         `;
     }
     
+    // =========================================================
+    // BLOQUE REWARD CON DISEÑO DE AVATARES CELEBRANDO
+    // =========================================================
+    if (block.t === "r") { 
+        html += `
+        <style>
+            @keyframes rewardJump {
+                0% { transform: translateY(0) scale(1); }
+                100% { transform: translateY(-12px) scale(1.05); }
+            }
+        </style>
+        <div class="card center" style="border: 3px solid #eab308; background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%); padding: 20px;">
+            <h2 style="color:#eab308; font-size: 1.8rem; text-transform: uppercase; margin-bottom: 5px;">⭐ ${block.tx || "REWARD UNLOCKED"}</h2>
+            <p style="font-size:2rem; font-weight:900; color:#fff; margin: 5px 0;">+${block.p || 0} XP</p>
+            
+            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 12px; border: 1px dashed #eab308;">
+                <div style="animation: rewardJump 0.3s infinite alternate ease-in-out; text-align:center;">
+                    <div style="width: 14px; height: 14px; background: #ffdbac; border: 1px solid #000; border-radius: 2px; margin: 0 auto;"></div>
+                    <div style="width: 22px; height: 18px; background: #0ea5e9; border: 1px solid #000; border-radius: 2px; color: white; font-size: 7px; font-weight: bold; display:flex; align-items:center; justify-content:center;">M</div>
+                    <span style="font-size: 9px; color: #0ea5e9; font-family: monospace; font-weight: bold;">MICHAEL</span>
+                </div>
+                <div style="animation: rewardJump 0.3s infinite alternate-reverse ease-in-out; text-align:center;">
+                    <div style="width: 14px; height: 14px; background: #ffdcbe; border: 1px solid #000; border-radius: 2px; margin: 0 auto;"></div>
+                    <div style="width: 22px; height: 18px; background: #f43f5e; border: 1px solid #000; border-radius: 2px; color: white; font-size: 7px; font-weight: bold; display:flex; align-items:center; justify-content:center;">${companionName[0]}</div>
+                    <span style="font-size: 9px; color: #f43f5e; font-family: monospace; font-weight: bold;">${companionName}</span>
+                </div>
+            </div>
+        </div>`; 
+        textToRead = `${block.tx || "Reward unlocked"}. Excellent work Michael and ${companionName}, you earned ${block.p} experience points.`; 
+    }
+    
     if (block.t === "d") {
         html += `<div class="card"><h3>${block.q?.en || ""}</h3>`;
         block.op?.forEach((opt, i) => {
@@ -465,7 +489,6 @@ function renderBlock(block, navHeader) {
         html += `</div>`;
         textToRead = `${block.q?.en}. Your options are: ${block.op.join(". ")}`;
     }
-    if (block.t === "r") { html += `<div class="card center"><h2>⭐ ${block.tx || "REWARD"}</h2><p style="font-size:1.5rem;">+${block.p || 0} XP</p></div>`; textToRead = `${block.tx}. You have earned ${block.p} experience points.`; }
     if (block.t === "c") { html += `<div class="card"><p>${block.tx?.en || ""}</p></div>`; textToRead = block.tx?.en; }
 
     if (block.t !== "d") html += `<button id="continueBtn" disabled>NARRATING...</button>`;
@@ -521,7 +544,6 @@ function selectAnswer(index, correct, explanations) {
     const explanation = explanations?.[index] || "";
     const feedbackWrap = document.createElement("div");
     
-    // Colores directos y obligatorios según el acierto de la respuesta
     const headerColor = isCorrect ? '#22c55e' : '#ef4444';
     const headerText = isCorrect ? "EXCELLENT!" : "KEEP LEARNING";
     
