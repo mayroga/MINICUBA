@@ -1,13 +1,11 @@
 /* =========================================================
-   KAMIZEN ENGINE V14 - FULL VERSION WITH GAMING ROBLOX SIM
+   KAMIZEN ENGINE V15 - NEURAL TRAINING INTERACTIVE SYSTEM
    ✔ Persistencia Local (LocalStorage)
-   ✔ Narración Rápida Estilo YouTube Shorts (1.25x Speed + Pitch)
-   ✔ Avatar Animado Estilo Roblox (CSS Blocky Walking)
-   ✔ Guía Vocal de Respiración (Visual)
-   ✔ Botón JUMP/SKIP para navegación directa
-   ✔ Soporte completo: v, h, story, br, sil, d, r, c, sim
-   ✔ Master Timer Reducido: 10 Minutes Total Focus
-   ✔ Auto-Flow: Bloques de simulación de 30 segundos, historias y textos
+   ✔ Flujo Dinámico de Animación y Acercamiento de Cámara (Cam Zoom)
+   ✔ Audio de Dopamina Automatizado (Frecuencia de Enfoque Activa)
+   ✔ Narración Ultra Rápida con Tono Sorprendente (Efecto Asombro)
+   ✔ Totalmente libre de marcas registradas y nombres protegidos
+   ✔ Estricto control de inactividad y reportes de progreso
    ========================================================= */
 
 let state = {
@@ -20,7 +18,10 @@ let state = {
     initialized: false,
     timer: null,
     timeLeft: 0,
-    sessionStartTime: null
+    sessionStartTime: null,
+    audioCtx: null,
+    oscillator: null,
+    gainNode: null
 };
 
 /* =========================
@@ -73,6 +74,55 @@ async function loadAllData() {
 }
 
 /* =========================
+   SISTEMA DE MÚSICA DE DOPAMINA NATIVA
+========================= */
+function startDopamineMusic() {
+    try {
+        if (!state.audioCtx) {
+            state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        state.oscillator = state.audioCtx.createOscillator();
+        state.gainNode = state.audioCtx.createGain();
+        
+        // Frecuencia armónica optimizada para estimulación y enfoque rápido
+        state.oscillator.type = 'triangle';
+        state.oscillator.frequency.setValueAtTime(180, state.audioCtx.currentTime); 
+        
+        // Ritmo de pulsación rápida (Efecto dopamina lúdico)
+        state.oscillator.frequency.linearRampToValueAtTime(320, state.audioCtx.currentTime + 0.5);
+        
+        state.gainNode.gain.setValueAtTime(0.04, state.audioCtx.currentTime);
+        
+        state.oscillator.connect(state.gainNode);
+        state.gainNode.connect(state.audioCtx.destination);
+        state.oscillator.start();
+        
+        // Modulación rítmica constante continua
+        state.musicInterval = setInterval(() => {
+            if (state.oscillator) {
+                let currentFreq = state.oscillator.frequency.value;
+                state.oscillator.frequency.setValueAtTime(currentFreq === 180 ? 240 : 180, state.audioCtx.currentTime);
+            }
+        }, 200);
+
+    } catch (e) {
+        console.log("Audio synthesis update deferred.");
+    }
+}
+
+function stopDopamineMusic() {
+    if (state.musicInterval) clearInterval(state.musicInterval);
+    if (state.oscillator) {
+        try {
+            state.oscillator.stop();
+            state.oscillator.disconnect();
+        } catch (e) {}
+        state.oscillator = null;
+    }
+}
+
+/* =========================
    CONTROL DE CIERRE Y REPORTE (10 MIN)
 ========================= */
 function startMasterTimer() {
@@ -84,6 +134,7 @@ function startMasterTimer() {
 
 function finishSession() {
     window.speechSynthesis.cancel();
+    stopDopamineMusic();
     clearInterval(state.timer);
     
     const currentMissionId = state.missions[state.currentIndex]?.id || 0;
@@ -112,7 +163,7 @@ function finishSession() {
             `<p>Small daily training creates powerful minds. See you next session, warrior. 🛡️</p>`
         ];
         app.innerHTML = `<div class="card center animated fadeIn">${notes[0]}<button onclick="location.reload()" style="margin-top:20px;">FINISH SESSION</button></div>`;
-        narrate(app.innerText.replace(/✔/g, ""));
+        narrate(app.innerText.replace(/✔/g, ""), false);
     }
 }
 
@@ -126,6 +177,7 @@ function jumpToBlock() {
         const idx = state.missions.findIndex(m => m.id === idNum);
         if (idx !== -1) {
             window.speechSynthesis.cancel();
+            stopDopamineMusic();
             clearInterval(state.timer);
             state.currentIndex = idx;  
             state.currentBlock = 0;    
@@ -139,6 +191,7 @@ function jumpToBlock() {
 
 function goBack() {
     window.speechSynthesis.cancel();
+    stopDopamineMusic();
     clearInterval(state.timer);
     state.speechLocked = false;
     if (state.currentBlock > 0) {
@@ -152,17 +205,24 @@ function goBack() {
 }
 
 // =========================================================
-// LÓGICA DE NARRACIÓN (YOUTUBE SHORTS LENGUAJE RÁPIDO)
+// NARRACIÓN CONFIGURABLE (ESTÁNDAR VS ULTRA RÁPIDA CON ASOMBRO)
 // =========================================================
-function narrate(text, callback) {
+function narrate(text, isAvatarActive, callback) {
     if (!text) { if (callback) callback(); return; }
     state.speechLocked = true;
     window.speechSynthesis.cancel();
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-US";
     
-    speech.rate = 1.25; 
-    speech.pitch = 1.1; 
+    if (isAvatarActive) {
+        // Voz ultra rápida e impactante para asombrar al niño
+        speech.rate = 1.45; 
+        speech.pitch = 1.3; 
+    } else {
+        // Ritmo regular y equilibrado para las lecturas e historias base
+        speech.rate = 1.05; 
+        speech.pitch = 1.0; 
+    }
     
     speech.onend = () => { state.speechLocked = false; if (callback) callback(); };
     window.speechSynthesis.speak(speech);
@@ -248,7 +308,7 @@ function render() {
             </div>
             <button id="continueBtn" disabled>NARRATING...</button>
         `;
-        narrate(`${story.t}. ${story.en}`, () => {
+        narrate(`${story.t}. ${story.en}`, false, () => {
             setTimeout(startMission, 1500);
         });
     } else {
@@ -262,6 +322,7 @@ function renderBlock(block, navHeader) {
     const app = document.getElementById("app");
     let html = navHeader;
     let textToRead = "";
+    let isAvatarMode = (block.t === "sim");
 
     const timerUI = `
         <div class="card center" style="border: 3px solid var(--primary); background: #0f172a; margin-bottom: 10px; padding: 10px;">
@@ -282,23 +343,27 @@ function renderBlock(block, navHeader) {
     }
     
     // =========================================================
-    // INTEGRACIÓN AVANZADA: MODO SHORTS GAMING (AVATAR CAMINANDO)
+    // MODO INTERACTIVO: ENFOQUE DINÁMICO DE AVATAR (CINEMATIC SIM)
     // =========================================================
-    if (block.t === "sim") {
-        // Estilos CSS inyectados para añadir la animación de caminata realista (Cuerpo + Extremidades independientes)
+    if (isAvatarMode) {
+        startDopamineMusic();
+
         html += `
         <style>
-            @keyframes walkRun {
-                0% { transform: translateY(0px) rotate(-3deg); }
-                100% { transform: translateY(-8px) rotate(3deg); }
+            @keyframes walkAndZoom {
+                0% { transform: scale(0.85) translateY(0px) translateX(-15px); }
+                30% { transform: scale(0.95) translateY(-5px) translateX(15px); }
+                60% { transform: scale(1.35) translateY(12px) translateX(0px); } /* Acercamiento dramático de cara */
+                85% { transform: scale(1.0) translateY(-2px) translateX(-5px); }
+                100% { transform: scale(1.35) translateY(12px) translateX(0px); }
             }
-            @keyframes swingLegLeft {
-                0% { transform: rotate(-25deg); }
-                100% { transform: rotate(25deg); }
+            @keyframes limbSwingLeft {
+                0% { transform: rotate(-35deg); }
+                100% { transform: rotate(35deg); }
             }
-            @keyframes swingLegRight {
-                0% { transform: rotate(25deg); }
-                100% { transform: rotate(-25deg); }
+            @keyframes limbSwingRight {
+                0% { transform: rotate(35deg); }
+                100% { transform: rotate(-35deg); }
             }
         </style>
         ` + timerUI + `
@@ -309,79 +374,78 @@ function renderBlock(block, navHeader) {
                 border-radius: 20px; 
                 text-align: center;
                 position: relative;
-                box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+                box-shadow: 0 0 25px rgba(14, 165, 233, 0.6);
             ">
-                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace; letter-spacing: 1px;">🔴 LIVE SHORTS</div>
-                <div style="position: absolute; top: 12px; right: 15px; font-size: 11px; color: #0ea5e9; font-family: monospace; font-weight: bold;">⚡ SPEED: 1.25x</div>
+                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace; letter-spacing: 1px;">🔴 LIVE MONITOR</div>
+                <div style="position: absolute; top: 12px; right: 15px; font-size: 11px; color: #22c55e; font-family: monospace; font-weight: bold;">⚡ MAX FOCUS</div>
 
-                <div class="avatar-roblox-box" style="
-                    width: 130px;
-                    height: 150px;
+                <div class="avatar-view-frame" style="
+                    width: 140px;
+                    height: 160px;
                     margin: 25px auto 15px auto;
-                    background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+                    background: radial-gradient(circle, #1e293b 0%, #020617 100%);
                     border: 4px solid #0ea5e9;
                     border-radius: 25px;
-                    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     position: relative;
                     overflow: hidden;
                 ">
-                    <div class="roblox-character" style="width: 60px; height: 110px; position: relative; display: flex; flex-direction: column; align-items: center; animation: walkRun 0.3s infinite alternate ease-in-out;">
+                    <div class="character-cube-model" style="width: 60px; height: 110px; position: relative; display: flex; flex-direction: column; align-items: center; transform-origin: center center; animation: walkAndZoom 4s infinite alternate ease-in-out;">
                         
-                        <div style="position: absolute; top: -4px; width: 32px; height: 8px; background: #3b82f6; border-radius: 3px; z-index: 4; border: 1px solid #000;"></div>
+                        <div style="position: absolute; top: -4px; width: 32px; height: 8px; background: #e11d48; border-radius: 3px; z-index: 4; border: 1.5px solid #000;"></div>
                         
-                        <div style="width: 26px; height: 26px; background: #ffdbac; border-radius: 4px; border: 2px solid #000; position: relative; z-index: 3;">
-                            <div style="position: absolute; top: 6px; left: 4px; width: 4px; height: 6px; background: #000; border-radius: 1px;"></div>
-                            <div style="position: absolute; top: 6px; right: 4px; width: 4px; height: 6px; background: #000; border-radius: 1px;"></div>
-                            <div style="position: absolute; bottom: 4px; left: 7px; width: 8px; height: 3px; background: #000; border-radius: 2px;"></div>
+                        <div style="width: 28px; height: 28px; background: #ffdbac; border-radius: 4px; border: 2px solid #000; position: relative; z-index: 3;">
+                            <div style="position: absolute; top: 6px; left: 5px; width: 5px; height: 6px; background: #000; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 6px; right: 5px; width: 5px; height: 6px; background: #000; border-radius: 50%;"></div>
+                            <div style="position: absolute; bottom: 5px; left: 8px; width: 10px; height: 4px; background: #000; border-radius: 2px;"></div>
                         </div>
                         
-                        <div style="width: 44px; height: 38px; background: #3b82f6; border: 2px solid #000; border-radius: 2px; margin-top: -2px; position: relative; z-index: 2; display: flex; justify-content: center; align-items: center;">
-                            <div style="font-size: 10px; font-weight: bold; color: white; font-family: sans-serif;">⚡</div>
+                        <div style="width: 46px; height: 40px; background: #1e40af; border: 2px solid #000; border-radius: 3px; margin-top: -2px; position: relative; z-index: 2; display: flex; justify-content: center; align-items: center;">
+                            <div style="font-size: 11px; font-weight: bold; color: #facc15; font-family: sans-serif;">⭐</div>
                         </div>
                         
-                        <div style="position: absolute; left: -10px; top: 24px; width: 10px; height: 34px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLegRight 0.3s infinite alternate ease-in-out;"></div>
-                        <div style="position: absolute; right: -10px; top: 24px; width: 10px; height: 34px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLegLeft 0.3s infinite alternate ease-in-out;"></div>
+                        <div style="position: absolute; left: -11px; top: 24px; width: 10px; height: 34px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: limbSwingRight 0.25s infinite alternate ease-in-out;"></div>
+                        <div style="position: absolute; right: -11px; top: 24px; width: 10px; height: 34px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: limbSwingLeft 0.25s infinite alternate ease-in-out;"></div>
                         
-                        <div style="position: absolute; left: 6px; bottom: 12px; width: 12px; height: 26px; background: #1d4ed8; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLegLeft 0.3s infinite alternate ease-in-out;"></div>
-                        <div style="position: absolute; right: 6px; bottom: 12px; width: 12px; height: 26px; background: #1d4ed8; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLegRight 0.3s infinite alternate ease-in-out;"></div>
+                        <div style="position: absolute; left: 6px; bottom: 10px; width: 12px; height: 26px; background: #f43f5e; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: limbSwingLeft 0.25s infinite alternate ease-in-out;"></div>
+                        <div style="position: absolute; right: 6px; bottom: 10px; width: 12px; height: 26px; background: #f43f5e; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: limbSwingRight 0.25s infinite alternate ease-in-out;"></div>
                     </div>
                 </div>
 
-                <div style="font-family: monospace; font-size: 14px; color: #64748b; margin-bottom: 15px;">
-                    <span style="background: #1e293b; padding: 4px 10px; border-radius: 8px; border: 1px solid #334155;">
-                        PLAYER: <strong style="color: #0ea5e9;">${String(block.avatar || 'Warrior').toUpperCase()}</strong>
+                <div style="font-family: monospace; font-size: 13px; color: #94a3b8; margin-bottom: 12px;">
+                    <span style="background: #1e293b; padding: 4px 12px; border-radius: 8px; border: 1px solid #334155;">
+                        HERO: <strong style="color: #facc15;">${String(block.avatar || 'Warrior').toUpperCase()}</strong>
                     </span>
                 </div>
 
                 <div class="youtube-shorts-subtitles" style="
-                    background: rgba(0, 0, 0, 0.7);
+                    background: rgba(0, 0, 0, 0.85);
                     padding: 15px;
-                    border-radius: 12px;
+                    border-radius: 14px;
                     min-height: 70px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    border: 1px solid #1e293b;
+                    border: 1px solid #334155;
                 ">
                     <p id="shorts-text-target" style="
-                        font-size: 1.3rem; 
+                        font-size: 1.35rem; 
                         font-weight: 900; 
                         color: #facc15; 
                         text-transform: uppercase; 
                         letter-spacing: 1px;
-                        line-height: 1.3;
+                        line-height: 1.2;
                         margin: 0;
                         text-shadow: 2px 2px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000;
                     ">
-                        ${block.sub?.en || block.tx?.en || "FOCUS ON THE MISSION"}
+                        ${block.sub?.en || block.tx?.en || "STAY FOCUSED NOW"}
                     </p>
                 </div>
             </div>
         `;
-        // Vinculación automática del contenido actual al motor de voz rápida
         textToRead = block.sub?.en || block.tx?.en || "";
     }
     
@@ -399,7 +463,7 @@ function renderBlock(block, navHeader) {
     if (block.t !== "d") html += `<button id="continueBtn" disabled>NARRATING...</button>`;
     app.innerHTML = html;
 
-    narrate(textToRead, () => {
+    narrate(textToRead, isAvatarMode, () => {
         if (block.t === "breath_auto" || block.t === "br") {
             startCountdown(24, nextBlock);
             startGuidedBreathing();
@@ -408,11 +472,10 @@ function renderBlock(block, navHeader) {
             startCountdown(block.d || 24, nextBlock);
             unlockContinue("SKIP", nextBlock);
         } else if (block.t === "sim") {
-            // Duración estricta de 30 segundos por bloque de simulación con auto-flow progresivo
             startCountdown(block.d || 30, nextBlock);
-            unlockContinue("SKIP SHORTS", nextBlock);
+            unlockContinue("SKIP VIDEO", nextBlock);
         } else if (block.t === "d") {
-            // Espera pasiva de selección interactiva
+            // Espera pasiva de selección
         } else {
             setTimeout(nextBlock, 1500);
         }
@@ -448,14 +511,22 @@ function selectAnswer(index, correct, explanations) {
     const feedbackWrap = document.createElement("div");
     feedbackWrap.innerHTML = `<div class="card"><h3 style="color:${isCorrect ? '#22c55e' : '#ef4444'}">${isCorrect ? "EXCELLENT!" : "KEEP LEARNING"}</h3><p>${explanation}</p></div><button id="continueBtn" disabled>NARRATING...</button>`;
     document.getElementById("app").appendChild(feedbackWrap);
-    narrate(explanation, () => {
+    narrate(explanation, false, () => {
         unlockContinue("NEXT STEP", nextBlock);
     });
 }
 
-function nextBlock() { clearInterval(state.timer); state.currentBlock++; render(); }
+function nextBlock() { 
+    stopDopamineMusic();
+    clearInterval(state.timer); 
+    state.currentBlock++; 
+    render(); 
+}
+
 function startMission() { state.phase = "mission"; state.currentBlock = 0; render(); }
+
 function nextStory() {
+    stopDopamineMusic();
     state.currentIndex++;
     if (state.currentIndex >= state.missions.length) state.currentIndex = 0;
     state.phase = "story";
