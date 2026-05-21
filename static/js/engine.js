@@ -296,7 +296,7 @@ function renderBlock(block, navHeader) {
                 position: relative;
                 box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
             ">
-                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace; letter-spacing: 1px;">🔴 LIVE SHORTS</div>
+                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace; letter-spacing: 1px; animation: pulse 1s infinite alternate;">🔴 LIVE SHORTS</div>
                 <div style="position: absolute; top: 12px; right: 15px; font-size: 11px; color: #0ea5e9; font-family: monospace; font-weight: bold;">⚡ SPEED: 1.25x</div>
 
                 <div class="avatar-roblox-box" style="
@@ -324,7 +324,7 @@ function renderBlock(block, navHeader) {
                             <div style="font-size: 10px; font-weight: bold; color: white; font-family: sans-serif;">⚡</div>
                         </div>
                         <div style="position: absolute; left: -10px; top: 24px; width: 10px; height: 34px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingArm 0.3s infinite alternate;"></div>
-                        <div style="position: absolute; right: -10px; top: 24px; width: 10px; height: 34px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingArm 0.3s infinite alternate-reverse;"></div>
+                        <div style="position: absolute; right: -10px; top: 24px; width: 10px; height: 34px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; transform: scaleY(-1); animation: swingArm 0.3s infinite alternate-reverse;"></div>
                     </div>
                 </div>
 
@@ -353,6 +353,7 @@ function renderBlock(block, navHeader) {
                         line-height: 1.3;
                         margin: 0;
                         text-shadow: 2px 2px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000;
+                        animation: textPop 0.2s ease-out;
                     ">
                         ${block.sub?.en || ""}
                     </p>
