@@ -1,20 +1,17 @@
 /* =========================================================
-   KAMIZEN ENGINE V19 - FULL CINEMATIC MULTI-AVATAR SYSTEM
+   KAMIZEN ENGINE V20 - REAL LANDSCAPE AVATAR SYSTEM
    ✔ Persistencia Local Completa (LocalStorage)
-   ✔ Narración Rápida Estilo Contenido Corto (1.25x Base / 1.55x Avatar Overdrive)
-   ✔ Dual-Avatar Display (MICHAEL + JONATHAN / NOEL Intercalados)
-   ✔ Mecánica de Videojuego Arena Responsiva
-   ✔ Despedida Oficial de los Avatares Restaurada e Intacta al Finalizar
-   ✔ Avatares en Rewards: Visualización Dinámica en Bloques de Recompensa
-   ✔ Guía Vocal y Visual de Respiración Expandida
-   ✔ Botón JUMP/SKIP para navegación directa sin bloqueos
-   ✔ Soporte completo e intacto: v, h, story, br, sil, d, r, c, sim
-   ✔ Feedback de Respuestas Coloreado (Verde Éxito / Rojo Aprendizaje)
+   ✔ Registro de Nombre de Usuario para Despedida Personalizada
+   ✔ Dual-Avatar Completo con Brazos, Piernas y Pies Funcionales
+   ✔ Animación de Desplazamiento Lateral (Caminar y Ejercicios)
+   ✔ Entorno Visual de Paisaje Real Dinámico y Responsivo
+   ✔ Música de Dopamina Suave y Segura (Sine Wave + Low Pass Filter)
    ✔ Master Timer Reducido: 10 Minutes Total Focus
-   ✔ Sistema de Audio de Dopamina Nativa por Osciladores Activos
+   ✔ Soporte completo e intacto: v, h, story, br, sil, d, r, c, sim
    ========================================================= */
 
 let state = {
+    userName: "Warrior",
     stories: [],
     missions: [],
     currentIndex: 0,
@@ -28,6 +25,7 @@ let state = {
     audioCtx: null,
     oscillator: null,
     gainNode: null,
+    filterNode: null,
     musicInterval: null,
     companionToggle: true
 };
@@ -38,7 +36,8 @@ let state = {
 function saveProgress() {
     localStorage.setItem('kamizen_save', JSON.stringify({
         currentIndex: state.currentIndex,
-        currentBlock: state.currentBlock
+        currentBlock: state.currentBlock,
+        userName: state.userName
     }));
 }
 
@@ -48,6 +47,7 @@ function loadProgress() {
         const data = JSON.parse(saved);
         state.currentIndex = data.currentIndex || 0;
         state.currentBlock = data.currentBlock || 0;
+        state.userName = data.userName || "Warrior";
     }
 }
 
@@ -82,7 +82,7 @@ async function loadAllData() {
 }
 
 /* =========================
-   SISTEMA DE MÚSICA DE DOPAMINA NATIVA
+   SISTEMA DE MÚSICA DE DOPAMINA AGRADABLE Y SEGURA
 ========================= */
 function startDopamineMusic() {
     try {
@@ -92,26 +92,36 @@ function startDopamineMusic() {
         
         state.oscillator = state.audioCtx.createOscillator();
         state.gainNode = state.audioCtx.createGain();
+        state.filterNode = state.audioCtx.createBiquadFilter();
         
-        state.oscillator.type = 'sawtooth'; 
-        state.oscillator.frequency.setValueAtTime(220, state.audioCtx.currentTime); 
+        // Onda sinusoidal pura y suave para proteger el oído
+        state.oscillator.type = 'sine'; 
+        state.oscillator.frequency.setValueAtTime(288, state.audioCtx.currentTime); // Frecuencia de enfoque ideal
         
-        state.oscillator.frequency.linearRampToValueAtTime(440, state.audioCtx.currentTime + 0.3);
-        state.gainNode.gain.setValueAtTime(0.03, state.audioCtx.currentTime);
+        // Filtro de paso bajo para suavizar los picos de sonido
+        state.filterNode.type = 'lowpass';
+        state.filterNode.frequency.setValueAtTime(600, state.audioCtx.currentTime);
         
-        state.oscillator.connect(state.gainNode);
+        // Volumen sumamente sutil y ambiental
+        state.gainNode.gain.setValueAtTime(0.04, state.audioCtx.currentTime);
+        
+        state.oscillator.connect(state.filterNode);
+        state.filterNode.connect(state.gainNode);
         state.gainNode.connect(state.audioCtx.destination);
         state.oscillator.start();
         
+        // Melodía armónica relajante secuencial
+        const notes = [288, 324, 384, 432];
+        let noteIdx = 0;
         state.musicInterval = setInterval(() => {
             if (state.oscillator) {
-                let currentFreq = state.oscillator.frequency.value;
-                state.oscillator.frequency.setValueAtTime(currentFreq === 220 ? 330 : 220, state.audioCtx.currentTime);
+                noteIdx = (noteIdx + 1) % notes.length;
+                state.oscillator.frequency.linearRampToValueAtTime(notes[noteIdx], state.audioCtx.currentTime + 0.1);
             }
-        }, 150);
+        }, 800);
 
     } catch (e) {
-        console.log("Audio synthesis deferred.");
+        console.log("Audio deferred.");
     }
 }
 
@@ -143,11 +153,10 @@ function finishSession() {
     
     const app = document.getElementById("app");
     
-    // DESPEDIDA INTEGRAL DE LOS AVATARES RESTAURADA COMPLETAMENTE
     app.innerHTML = `
-        <div class="card center animated fadeIn" style="border: 4px solid #22c55e; padding: 25px;">
+        <div class="card center animated fadeIn" style="border: 4px solid #22c55e; padding: 25px; width: 100%; box-sizing: border-box;">
             <h2 style="color:#22c55e; font-size: 2rem; font-weight: 900;">🌟 SESSION COMPLETE! 🌟</h2>
-            <p style="font-size: 1.2rem; font-weight: bold; margin: 15px 0;">Awesome work, Michael, Jonathan, and Noel! You did incredible today!</p>
+            <p style="font-size: 1.2rem; font-weight: bold; margin: 15px 0;">Awesome work, MICHAEL and ${state.userName.toUpperCase()}! You did incredible today!</p>
             <p>Your brain and body only need a few focused minutes to grow stronger every day.</p>
             <p>KAMIZEN is designed to help you train calmly, not endlessly.</p>
             
@@ -166,7 +175,7 @@ function finishSession() {
         </div>
     `;
 
-    const vocalGoodbye = "Session complete! Awesome work, Michael, Jonathan, and Noel! You did incredible today! Now you are ready to start your class. Rest your mind, go play, talk with your family, and explore the real world. Come back tomorrow even stronger, warriors!";
+    const vocalGoodbye = `Session complete! Awesome work, Michael and ${state.userName}! You did incredible today! Now you are ready to start your class. Rest your mind, go play, talk with your family, and explore the real world. Come back tomorrow even stronger, warriors!`;
     narrate(vocalGoodbye, false);
 }
 
@@ -207,9 +216,6 @@ function goBack() {
     render();
 }
 
-// =========================================================
-// LÓGICA DE NARRACIÓN (CON CONFIGURACIÓN DE REVOLUCIÓN DE VOZ)
-// =========================================================
 function narrate(text, isAvatarActive, callback) {
     if (!text) { if (callback) callback(); return; }
     state.speechLocked = true;
@@ -232,6 +238,7 @@ function narrate(text, isAvatarActive, callback) {
 function restartSystem() {
     if(confirm("Are you sure you want to RESTART from zero?")) {
         localStorage.clear();
+        state.userName = "Warrior";
         state.currentIndex = 0;
         state.currentBlock = 0;
         state.phase = "story";
@@ -269,10 +276,21 @@ function showIntro() {
             <h1>KAMIZEN LIFE SYSTEM</h1>
             <p>Training • Awareness • Control</p>
             <p class="small">Range: Missions 1 - 63 Loaded</p>
-            <button onclick="startSystem()">CONTINUE MISSION</button>
+            <button onclick="askNameAndStart()">CONTINUE MISSION</button>
             <button onclick="restartSystem()" style="background:var(--danger);margin-top:10px;">RESET PROGRESS</button>
         </div>
     `;
+}
+
+function askNameAndStart() {
+    let nameInput = prompt("Please enter your name to begin training:");
+    if (nameInput && nameInput.trim() !== "") {
+        state.userName = nameInput.trim();
+    } else {
+        state.userName = "Warrior";
+    }
+    saveProgress();
+    startSystem();
 }
 
 function startSystem() {
@@ -325,8 +343,6 @@ function renderBlock(block, navHeader) {
     let textToRead = "";
     let isAvatarMode = (block.t === "sim");
 
-    const companionName = state.companionToggle ? "JONATHAN" : "NOEL";
-
     const timerUI = `
         <div class="card center" style="border: 3px solid var(--primary); background: #0f172a; margin-bottom: 10px; padding: 10px;">
             <h1 id="timerDisplay" style="font-size:2.5rem;margin:0; font-family: monospace;">00:00</h1>
@@ -346,39 +362,45 @@ function renderBlock(block, navHeader) {
     }
     
     // =========================================================
-    // MODO SIMULACIÓN INTERACTIVA DE VIDEOJUEGO RESPONSIBLE
+    // MODO SIMULACIÓN INTERACTIVA CON PAISAJE Y AVATARES COMPLETOS
     // =========================================================
     if (isAvatarMode) {
         startDopamineMusic();
-        state.companionToggle = !state.companionToggle;
         
         const basePhrase = block.sub?.en || block.tx?.en || "GO FIGHT FOR MAXIMUM ENERGY RIGHT NOW";
         const safetyEnrichment = " SPEED UP YOUR MIND AND STAY IN TOTAL CONTROL.";
-        textToRead = `Attention ${companionName} and MICHAEL! ` + basePhrase + safetyEnrichment;
+        textToRead = `Attention ${state.userName.toUpperCase()} and MICHAEL! ` + basePhrase + safetyEnrichment;
 
         html += `
         <style>
-            @keyframes leftHeroSeek {
-                0% { transform: scale(0.85) translateX(-15px) rotate(-6deg); opacity: 1; }
-                30% { transform: scale(1.4) translateY(10px) translateX(5px); z-index: 50; }
-                60% { transform: scale(0.6) translateY(-15px); opacity: 0.4; }
-                100% { transform: scale(0.85) translateX(10px) rotate(6deg); opacity: 1; }
+            /* Animación de Caminar + Ejercicio Físico Lateral Completo */
+            @keyframes walkAndExerciseLeft {
+                0% { left: 5%; transform: translateY(0px) rotate(0deg); }
+                25% { transform: translateY(-8px) rotate(3deg); }
+                50% { left: 40%; transform: translateY(0px) rotate(-3deg); }
+                75% { transform: translateY(-12px) rotate(4deg); }
+                100% { left: 5%; transform: translateY(0px) rotate(0deg); }
             }
-            @keyframes rightHeroSeek {
-                0% { transform: scale(0.85) translateX(10px) rotate(6deg); opacity: 1; }
-                40% { transform: scale(0.6) translateY(-15px); opacity: 0.3; }
-                75% { transform: scale(1.4) translateY(10px) translateX(-5px); z-index: 50; opacity: 1; }
-                100% { transform: scale(0.85) translateX(-15px) rotate(-6deg); opacity: 1; }
+            @keyframes walkAndExerciseRight {
+                0% { right: 5%; transform: translateY(0px) rotate(0deg); }
+                30% { transform: translateY(-10px) rotate(-4deg); }
+                50% { right: 42%; transform: translateY(0px) rotate(3deg); }
+                70% { transform: translateY(-6px) rotate(-2deg); }
+                100% { right: 5%; transform: translateY(0px) rotate(0deg); }
             }
-            @keyframes cyberGridLoop {
-                from { background-position: 0 0; }
-                to { background-position: 0 40px; }
+            @keyframes swingLimb {
+                0% { transform: rotate(-25deg); }
+                100% { transform: rotate(25deg); }
+            }
+            @keyframes moveClouds {
+                from { background-position-x: 0px; }
+                to { background-position-x: 1000px; }
             }
         </style>
         ` + timerUI + `
             <div class="card sim-gaming-container" style="
                 border: 4px solid #facc15; 
-                background: linear-gradient(180deg, #020617 0%, #0f172a 100%); 
+                background: #020617; 
                 padding: 15px; 
                 border-radius: 20px; 
                 text-align: center;
@@ -387,50 +409,51 @@ function renderBlock(block, navHeader) {
                 width: 100%;
                 box-sizing: border-box;
             ">
-                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace;">🎮 LIVE ARENA</div>
-                <div style="position: absolute; top: 12px; right: 15px; font-size: 11px; color: #facc15; font-family: monospace; font-weight: bold;">⚡ OVERDRIVE 1.55x</div>
+                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace; z-index:10;">🎮 LIVE ARENA</div>
+                <div style="position: absolute; top: 12px; right: 15px; font-size: 11px; color: #facc15; font-family: monospace; font-weight: bold; z-index:10;">⚡ OVERDRIVE 1.55x</div>
 
-                <div class="video-game-background" style="
-                    display: flex;
-                    justify-content: space-around;
-                    background-color: #020617;
-                    background-image: linear-gradient(rgba(14, 165, 233, 0.1) 2px, transparent 2px), linear-gradient(90deg, rgba(14, 165, 233, 0.1) 2px, transparent 2px);
-                    background-size: 20px 20px;
-                    animation: cyberGridLoop 2s linear infinite;
+                <div class="landscape-background" style="
+                    display: block;
+                    height: 180px;
+                    background: linear-gradient(180deg, #bae6fd 0%, #e0f2fe 60%, #4ade80 60%, #22c55e 100%);
                     border: 3px solid #334155;
                     border-radius: 20px;
-                    padding: 25px 5px;
                     margin: 25px auto 15px auto;
                     overflow: hidden;
                     position: relative;
                     width: 100%;
                     box-sizing: border-box;
                 ">
-                    <div style="text-align: center; width: 45%; position: relative;">
-                        <div style="font-family: monospace; font-size: 12px; color: #0ea5e9; margin-bottom: 8px; font-weight: bold; text-shadow: 0 0 5px #0ea5e9;">MICHAEL</div>
-                        <div style="width: 100%; max-width: 100px; height: 115px; margin: 0 auto; background: rgba(30, 41, 59, 0.85); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 2.5px solid #0ea5e9; box-shadow: 0 0 10px #0ea5e9;">
-                            <div class="cube-model-inner" style="width: 45px; height: 85px; position: relative; transform-origin: center center; animation: leftHeroSeek 4s infinite ease-in-out;">
-                                <div style="width: 24px; height: 24px; background: #ffdbac; border-radius: 4px; border: 2px solid #000; margin: 0 auto; position: relative;">
-                                    <div style="display:flex; justify-content:space-around; margin-top:5px;"><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div></div>
-                                </div>
-                                <div style="width: 42px; height: 36px; background: #0ea5e9; border: 2px solid #000; border-radius: 3px; margin-top: -2px; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 10px;">M</div>
-                                <div style="position: absolute; left: 4px; bottom: 0; width: 10px; height: 22px; background: #1e293b; border: 1.5px solid #000;"></div>
-                                <div style="position: absolute; right: 4px; bottom: 0; width: 10px; height: 22px; background: #1e293b; border: 1.5px solid #000;"></div>
+                    <div style="position: absolute; top: 10px; left:0; width:100%; height:40px; background: radial-gradient(circle, #fff 20%, transparent 20%) 0 0, radial-gradient(circle, #fff 20%, transparent 20%) 40px 10px; background-size: 80px 40px; opacity: 0.5; animation: moveClouds 25s linear infinite;"></div>
+                    
+                    <div style="position: absolute; bottom: 40%; left: 20%; width: 0; height: 0; border-left: 45px solid transparent; border-right: 45px solid transparent; border-bottom: 40px solid #86efac; opacity:0.7;"></div>
+                    <div style="position: absolute; bottom: 40%; left: 50%; width: 0; height: 0; border-left: 60px solid transparent; border-right: 60px solid transparent; border-bottom: 50px solid #65a30d; opacity:0.5;"></div>
+
+                    <div style="position: absolute; bottom: 15px; width: 60px; height: 110px; animation: walkAndExerciseLeft 6s infinite linear;">
+                        <div style="font-family: monospace; font-size: 11px; color: #0369a1; font-weight: bold; text-align:center; margin-bottom:2px;">MICHAEL</div>
+                        <div style="width: 44px; height: 85px; position: relative; margin: 0 auto;">
+                            <div style="width: 24px; height: 24px; background: #ffdbac; border-radius: 4px; border: 2px solid #000; margin: 0 auto; position: relative; z-index:5;">
+                                <div style="display:flex; justify-content:space-around; margin-top:5px;"><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div></div>
                             </div>
+                            <div style="width: 40px; height: 34px; background: #0ea5e9; border: 2px solid #000; border-radius: 3px; margin-top: -2px; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 10px; position:relative; z-index:4;">M</div>
+                            <div style="position: absolute; left: -8px; top: 24px; width: 8px; height: 26px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate ease-in-out;"></div>
+                            <div style="position: absolute; right: -8px; top: 24px; width: 8px; height: 26px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate-reverse ease-in-out;"></div>
+                            <div style="position: absolute; left: 4px; bottom: 0; width: 10px; height: 24px; background: #1e293b; border: 1.5px solid #000; border-radius:0 0 4px 4px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate-reverse ease-in-out;"></div>
+                            <div style="position: absolute; right: 4px; bottom: 0; width: 10px; height: 24px; background: #1e293b; border: 1.5px solid #000; border-radius:0 0 4px 4px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate ease-in-out;"></div>
                         </div>
                     </div>
 
-                    <div style="text-align: center; width: 45%; position: relative;">
-                        <div style="font-family: monospace; font-size: 12px; color: #f43f5e; margin-bottom: 8px; font-weight: bold; text-shadow: 0 0 5px #f43f5e;">${companionName}</div>
-                        <div style="width: 100%; max-width: 100px; height: 115px; margin: 0 auto; background: rgba(30, 41, 59, 0.85); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 2.5px solid #f43f5e; box-shadow: 0 0 10px #f43f5e;">
-                            <div class="cube-model-inner" style="width: 45px; height: 85px; position: relative; transform-origin: center center; animation: rightHeroSeek 4s infinite ease-in-out;">
-                                <div style="width: 24px; height: 24px; background: #ffdcbe; border-radius: 4px; border: 2px solid #000; margin: 0 auto; position: relative;">
-                                    <div style="display:flex; justify-content:space-around; margin-top:5px;"><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div></div>
-                                </div>
-                                <div style="width: 42px; height: 36px; background: #f43f5e; border: 2px solid #000; border-radius: 3px; margin-top: -2px; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 10px;">${companionName[0]}</div>
-                                <div style="position: absolute; left: 4px; bottom: 0; width: 10px; height: 22px; background: #111827; border: 1.5px solid #000;"></div>
-                                <div style="position: absolute; right: 4px; bottom: 0; width: 10px; height: 22px; background: #111827; border: 1.5px solid #000;"></div>
+                    <div style="position: absolute; bottom: 15px; width: 60px; height: 110px; animation: walkAndExerciseRight 6s infinite linear;">
+                        <div style="font-family: monospace; font-size: 11px; color: #9f1239; font-weight: bold; text-align:center; margin-bottom:2px;">${state.userName.toUpperCase()}</div>
+                        <div style="width: 44px; height: 85px; position: relative; margin: 0 auto;">
+                            <div style="width: 24px; height: 24px; background: #ffdcbe; border-radius: 4px; border: 2px solid #000; margin: 0 auto; position: relative; z-index:5;">
+                                <div style="display:flex; justify-content:space-around; margin-top:5px;"><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div></div>
                             </div>
+                            <div style="width: 40px; height: 34px; background: #f43f5e; border: 2px solid #000; border-radius: 3px; margin-top: -2px; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 10px; position:relative; z-index:4;">${state.userName[0].toUpperCase()}</div>
+                            <div style="position: absolute; left: -8px; top: 24px; width: 8px; height: 26px; background: #ffdcbe; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate-reverse ease-in-out;"></div>
+                            <div style="position: absolute; right: -8px; top: 24px; width: 8px; height: 26px; background: #ffdcbe; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate ease-in-out;"></div>
+                            <div style="position: absolute; left: 4px; bottom: 0; width: 10px; height: 24px; background: #111827; border: 1.5px solid #000; border-radius:0 0 4px 4px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate ease-in-out;"></div>
+                            <div style="position: absolute; right: 4px; bottom: 0; width: 10px; height: 24px; background: #111827; border: 1.5px solid #000; border-radius:0 0 4px 4px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate-reverse ease-in-out;"></div>
                         </div>
                     </div>
                 </div>
@@ -476,12 +499,12 @@ function renderBlock(block, navHeader) {
                 </div>
                 <div style="animation: rewardJump 0.3s infinite alternate-reverse ease-in-out; text-align:center;">
                     <div style="width: 14px; height: 14px; background: #ffdcbe; border: 1px solid #000; border-radius: 2px; margin: 0 auto;"></div>
-                    <div style="width: 22px; height: 18px; background: #f43f5e; border: 1px solid #000; border-radius: 2px; color: white; font-size: 7px; font-weight: bold; display:flex; align-items:center; justify-content:center;">${companionName[0]}</div>
-                    <span style="font-size: 9px; color: #f43f5e; font-family: monospace; font-weight: bold;">${companionName}</span>
+                    <div style="width: 22px; height: 18px; background: #f43f5e; border: 1px solid #000; border-radius: 2px; color: white; font-size: 7px; font-weight: bold; display:flex; align-items:center; justify-content:center;">${state.userName[0].toUpperCase()}</div>
+                    <span style="font-size: 9px; color: #f43f5e; font-family: monospace; font-weight: bold;">${state.userName.toUpperCase()}</span>
                 </div>
             </div>
         </div>`; 
-        textToRead = `${block.tx || "Reward unlocked"}. Excellent work Michael and ${companionName}, you earned ${block.p} experience points.`; 
+        textToRead = `${block.tx || "Reward unlocked"}. Excellent work Michael and ${state.userName}, you earned ${block.p} experience points.`; 
     }
     
     if (block.t === "d") {
