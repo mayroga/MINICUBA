@@ -1,14 +1,14 @@
 /* =========================================================
-   KAMIZEN ENGINE V18 - FULL CINEMATIC MULTI-AVATAR SYSTEM
+   KAMIZEN ENGINE V19 - FULL CINEMATIC MULTI-AVATAR SYSTEM
    ✔ Persistencia Local Completa (LocalStorage)
    ✔ Narración Rápida Estilo Contenido Corto (1.25x Base / 1.55x Avatar Overdrive)
    ✔ Dual-Avatar Display (MICHAEL + JONATHAN / NOEL Intercalados)
-   ✔ Mecánica Original de Videojuego: Hide & Seek Block Arena
+   ✔ Mecánica de Videojuego Arena Responsiva
+   ✔ Despedida Oficial de los Avatares Restaurada e Intacta al Finalizar
    ✔ Avatares en Rewards: Visualización Dinámica en Bloques de Recompensa
    ✔ Guía Vocal y Visual de Respiración Expandida
    ✔ Botón JUMP/SKIP para navegación directa sin bloqueos
    ✔ Soporte completo e intacto: v, h, story, br, sil, d, r, c, sim
-   ✔ Entorno y Fondo Animado Estilo Videojuego Retro-Futurista
    ✔ Feedback de Respuestas Coloreado (Verde Éxito / Rojo Aprendizaje)
    ✔ Master Timer Reducido: 10 Minutes Total Focus
    ✔ Sistema de Audio de Dopamina Nativa por Osciladores Activos
@@ -141,34 +141,33 @@ function finishSession() {
     stopDopamineMusic();
     clearInterval(state.timer);
     
-    const currentMissionId = state.missions[state.currentIndex]?.id || 0;
+    const app = document.getElementById("app");
     
-    if (typeof renderValidationScreen === "function") {
-        renderValidationScreen(currentMissionId, {
-            timeSpent: "10:00",
-            status: "Complete"
-        });
-    } else {
-        const app = document.getElementById("app");
-        const notes = [
-            `<h2>🌟 GREAT JOB TODAY</h2>`,
-            `<p>You completed your KAMIZEN session.</p>`,
-            `<p>Your brain and body only need a few focused minutes to grow stronger.</p>`,
-            `<p>KAMIZEN is designed to help you train calmly, not endlessly.</p>`,
-            `<p>Now it is time to:</p>`,
-            `<ul style="text-align:left; display:inline-block;">`,
-            `    <li>✔ Now you are ready to start your class</li>`,
-            `    <li>✔ Rest your mind</li>`,
-            `    <li>✔ Go play</li>`,
-            `    <li>✔ Talk with your family</li>`,
-            `    <li>✔ Explore the real world</li>`,
-            `    <li>✔ Come back tomorrow stronger</li>`,
-            `</ul>`,
-            `<p>Small daily training creates powerful minds. See you next session, warrior. 🛡️</p>`
-        ];
-        app.innerHTML = `<div class="card center animated fadeIn">${notes[0]}<button onclick="location.reload()" style="margin-top:20px;">FINISH SESSION</button></div>`;
-        narrate(app.innerText.replace(/✔/g, ""), false);
-    }
+    // DESPEDIDA INTEGRAL DE LOS AVATARES RESTAURADA COMPLETAMENTE
+    app.innerHTML = `
+        <div class="card center animated fadeIn" style="border: 4px solid #22c55e; padding: 25px;">
+            <h2 style="color:#22c55e; font-size: 2rem; font-weight: 900;">🌟 SESSION COMPLETE! 🌟</h2>
+            <p style="font-size: 1.2rem; font-weight: bold; margin: 15px 0;">Awesome work, Michael, Jonathan, and Noel! You did incredible today!</p>
+            <p>Your brain and body only need a few focused minutes to grow stronger every day.</p>
+            <p>KAMIZEN is designed to help you train calmly, not endlessly.</p>
+            
+            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; margin: 20px 0; text-align: left; border-left: 5px solid #22c55e;">
+                <h4 style="margin: 0 0 10px 0; color: #facc15; text-transform: uppercase;">🚀 Your Next Tasks:</h4>
+                <p style="margin: 5px 0; font-weight: bold;">✔ Now you are ready to start your class</p>
+                <p style="margin: 5px 0;">✔ Rest your mind and body</p>
+                <p style="margin: 5px 0;">✔ Go play and have fun</p>
+                <p style="margin: 5px 0;">✔ Talk and share with your family</p>
+                <p style="margin: 5px 0;">✔ Explore the real world outside</p>
+                <p style="margin: 5px 0; font-weight: bold; color: #22c55e;">✔ Come back tomorrow even stronger!</p>
+            </div>
+            
+            <p style="font-style: italic; color: #94a3b8;">Small daily training creates powerful minds. See you next session, warriors! 🛡️</p>
+            <button onclick="location.reload()" style="margin-top:25px; width: 100%; background: #22c55e; padding: 15px; font-weight: 900; font-size: 1.2rem;">FINISH SESSION</button>
+        </div>
+    `;
+
+    const vocalGoodbye = "Session complete! Awesome work, Michael, Jonathan, and Noel! You did incredible today! Now you are ready to start your class. Rest your mind, go play, talk with your family, and explore the real world. Come back tomorrow even stronger, warriors!";
+    narrate(vocalGoodbye, false);
 }
 
 /* =========================
@@ -347,28 +346,28 @@ function renderBlock(block, navHeader) {
     }
     
     // =========================================================
-    // MODO SIMULACIÓN INTERACTIVA: HIDE AND SEEK ARENA
+    // MODO SIMULACIÓN INTERACTIVA DE VIDEOJUEGO RESPONSIBLE
     // =========================================================
     if (isAvatarMode) {
         startDopamineMusic();
         state.companionToggle = !state.companionToggle;
         
-        const basePhrase = block.sub?.en || block.tx?.en || "GO HIDE OR SEEK FOR MAXIMUM ENERGY RIGHT NOW";
-        const safetyEnrichment = " HIDE AND SEEK MODE ENGAGED. SPEED UP YOUR MIND AND STAY IN TOTAL CONTROL.";
+        const basePhrase = block.sub?.en || block.tx?.en || "GO FIGHT FOR MAXIMUM ENERGY RIGHT NOW";
+        const safetyEnrichment = " SPEED UP YOUR MIND AND STAY IN TOTAL CONTROL.";
         textToRead = `Attention ${companionName} and MICHAEL! ` + basePhrase + safetyEnrichment;
 
         html += `
         <style>
             @keyframes leftHeroSeek {
                 0% { transform: scale(0.85) translateX(-15px) rotate(-6deg); opacity: 1; }
-                30% { transform: scale(1.6) translateY(15px) translateX(5px); z-index: 50; }
-                60% { transform: scale(0.5) translateY(-20px); opacity: 0.3; } /* Escondiéndose */
+                30% { transform: scale(1.4) translateY(10px) translateX(5px); z-index: 50; }
+                60% { transform: scale(0.6) translateY(-15px); opacity: 0.4; }
                 100% { transform: scale(0.85) translateX(10px) rotate(6deg); opacity: 1; }
             }
             @keyframes rightHeroSeek {
                 0% { transform: scale(0.85) translateX(10px) rotate(6deg); opacity: 1; }
-                40% { transform: scale(0.5) translateY(-20px); opacity: 0.2; } /* Escondiéndose */
-                75% { transform: scale(1.6) translateY(15px) translateX(-5px); z-index: 50; opacity: 1; }
+                40% { transform: scale(0.6) translateY(-15px); opacity: 0.3; }
+                75% { transform: scale(1.4) translateY(10px) translateX(-5px); z-index: 50; opacity: 1; }
                 100% { transform: scale(0.85) translateX(-15px) rotate(-6deg); opacity: 1; }
             }
             @keyframes cyberGridLoop {
@@ -385,8 +384,10 @@ function renderBlock(block, navHeader) {
                 text-align: center;
                 position: relative;
                 box-shadow: 0 0 25px rgba(250, 204, 21, 0.5);
+                width: 100%;
+                box-sizing: border-box;
             ">
-                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace;">🎮 HIDE & SEEK</div>
+                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace;">🎮 LIVE ARENA</div>
                 <div style="position: absolute; top: 12px; right: 15px; font-size: 11px; color: #facc15; font-family: monospace; font-weight: bold;">⚡ OVERDRIVE 1.55x</div>
 
                 <div class="video-game-background" style="
@@ -398,14 +399,16 @@ function renderBlock(block, navHeader) {
                     animation: cyberGridLoop 2s linear infinite;
                     border: 3px solid #334155;
                     border-radius: 20px;
-                    padding: 25px 10px;
+                    padding: 25px 5px;
                     margin: 25px auto 15px auto;
                     overflow: hidden;
                     position: relative;
+                    width: 100%;
+                    box-sizing: border-box;
                 ">
                     <div style="text-align: center; width: 45%; position: relative;">
                         <div style="font-family: monospace; font-size: 12px; color: #0ea5e9; margin-bottom: 8px; font-weight: bold; text-shadow: 0 0 5px #0ea5e9;">MICHAEL</div>
-                        <div style="width: 100px; height: 115px; margin: 0 auto; background: rgba(30, 41, 59, 0.85); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 2.5px solid #0ea5e9; box-shadow: 0 0 10px #0ea5e9;">
+                        <div style="width: 100%; max-width: 100px; height: 115px; margin: 0 auto; background: rgba(30, 41, 59, 0.85); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 2.5px solid #0ea5e9; box-shadow: 0 0 10px #0ea5e9;">
                             <div class="cube-model-inner" style="width: 45px; height: 85px; position: relative; transform-origin: center center; animation: leftHeroSeek 4s infinite ease-in-out;">
                                 <div style="width: 24px; height: 24px; background: #ffdbac; border-radius: 4px; border: 2px solid #000; margin: 0 auto; position: relative;">
                                     <div style="display:flex; justify-content:space-around; margin-top:5px;"><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div></div>
@@ -419,7 +422,7 @@ function renderBlock(block, navHeader) {
 
                     <div style="text-align: center; width: 45%; position: relative;">
                         <div style="font-family: monospace; font-size: 12px; color: #f43f5e; margin-bottom: 8px; font-weight: bold; text-shadow: 0 0 5px #f43f5e;">${companionName}</div>
-                        <div style="width: 100px; height: 115px; margin: 0 auto; background: rgba(30, 41, 59, 0.85); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 2.5px solid #f43f5e; box-shadow: 0 0 10px #f43f5e;">
+                        <div style="width: 100%; max-width: 100px; height: 115px; margin: 0 auto; background: rgba(30, 41, 59, 0.85); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 2.5px solid #f43f5e; box-shadow: 0 0 10px #f43f5e;">
                             <div class="cube-model-inner" style="width: 45px; height: 85px; position: relative; transform-origin: center center; animation: rightHeroSeek 4s infinite ease-in-out;">
                                 <div style="width: 24px; height: 24px; background: #ffdcbe; border-radius: 4px; border: 2px solid #000; margin: 0 auto; position: relative;">
                                     <div style="display:flex; justify-content:space-around; margin-top:5px;"><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div></div>
@@ -432,7 +435,7 @@ function renderBlock(block, navHeader) {
                     </div>
                 </div>
 
-                <div class="youtube-shorts-subtitles">
+                <div class="youtube-shorts-subtitles" style="width: 100%; box-sizing: border-box;">
                     <p id="shorts-text-target" style="
                         font-size: 1.35rem; 
                         font-weight: 900; 
@@ -461,7 +464,7 @@ function renderBlock(block, navHeader) {
                 100% { transform: translateY(-12px) scale(1.05); }
             }
         </style>
-        <div class="card center" style="border: 3px solid #eab308; background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%); padding: 20px;">
+        <div class="card center" style="border: 3px solid #eab308; background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%); padding: 20px; width: 100%; box-sizing: border-box;">
             <h2 style="color:#eab308; font-size: 1.8rem; text-transform: uppercase; margin-bottom: 5px;">⭐ ${block.tx || "REWARD UNLOCKED"}</h2>
             <p style="font-size:2rem; font-weight:900; color:#fff; margin: 5px 0;">+${block.p || 0} XP</p>
             
@@ -482,14 +485,14 @@ function renderBlock(block, navHeader) {
     }
     
     if (block.t === "d") {
-        html += `<div class="card"><h3>${block.q?.en || ""}</h3>`;
+        html += `<div class="card" style="width:100%; box-sizing:border-box;"><h3>${block.q?.en || ""}</h3>`;
         block.op?.forEach((opt, i) => {
             html += `<div class="answer" id="opt-${i}" onclick="selectAnswer(${i}, ${block.c}, ${JSON.stringify(block.ex).replace(/"/g, '&quot;')})">${opt}</div>`;
         });
         html += `</div>`;
         textToRead = `${block.q?.en}. Your options are: ${block.op.join(". ")}`;
     }
-    if (block.t === "c") { html += `<div class="card"><p>${block.tx?.en || ""}</p></div>`; textToRead = block.tx?.en; }
+    if (block.t === "c") { html += `<div class="card" style="width:100%; box-sizing:border-box;"><p>${block.tx?.en || ""}</p></div>`; textToRead = block.tx?.en; }
 
     if (block.t !== "d") html += `<button id="continueBtn" disabled>NARRATING...</button>`;
     app.innerHTML = html;
@@ -543,12 +546,14 @@ function selectAnswer(index, correct, explanations) {
     const isCorrect = index === correct;
     const explanation = explanations?.[index] || "";
     const feedbackWrap = document.createElement("div");
+    feedbackWrap.style.width = "100%";
+    feedbackWrap.style.boxSizing = "border-box";
     
     const headerColor = isCorrect ? '#22c55e' : '#ef4444';
     const headerText = isCorrect ? "EXCELLENT!" : "KEEP LEARNING";
     
     feedbackWrap.innerHTML = `
-        <div class="card" style="border: 3px solid ${headerColor};">
+        <div class="card" style="border: 3px solid ${headerColor}; width: 100%; box-sizing: border-box;">
             <h3 style="color:${headerColor}; font-weight: 900; text-transform: uppercase;">${headerText}</h3>
             <p>${explanation}</p>
         </div>
