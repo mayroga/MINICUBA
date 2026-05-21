@@ -1,0 +1,517 @@
+{
+  "sys": "KAMIZEN LIFE SYSTEM",
+  "ch": 5,
+  "rng": "29-35",
+  "ui": {
+    "fw": [
+      "VISION",
+      "CALM",
+      "CONTROL",
+      "FOCUS",
+      "TRUTH",
+      "AWARENESS",
+      "SAFETY",
+      "ACTION"
+    ]
+  },
+  "rules": [
+    "Obs>React",
+    "Calm>Impulse",
+    "Awareness=Safety",
+    "Truth=Protection",
+    "Focus>Noise",
+    "Breath=Control"
+  ],
+  "missions": [
+    {
+      "id": 29,
+      "cat": "systems_awareness",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 29: SYSTEM AWARENESS"}},
+        {"t": "h", "tx": {"en": "Everything you do affects something else"}},
+        {"story": {"en": "Your actions are part of a system: school, family, friends, and environment."}},
+        {
+          "t": "breath_auto",
+          "d": 25,
+          "tx": {"en": "Breathe slowly and observe connections around you"},
+          "inf": {"en": "This improves systems thinking and global awareness in decision-making"}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What shows systems thinking?"},
+          "op": [
+            "Thinking only about now",
+            "Understanding consequences",
+            "Ignoring others",
+            "Reacting fast"
+          ],
+          "c": 1,
+          "ex": [
+            "Only now = short-term thinking",
+            "Consequences = systems awareness",
+            "Ignoring = isolation thinking",
+            "Reaction = low foresight"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 15,
+          "scene": "living_room",
+          "avatar": "roblox_suit_avatar",
+          "anim": "alert_walk",
+          "sub": {"en": "POV: You throw a toxic comment in the chat or drop trash on the floor thinking it's an isolated action. Big error! Every move ripples through the home server and network. You aren't playing a solo map. Map the domino effects before you execute a move."}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What improves long-term decision quality?"},
+          "op": [
+            "Ignoring outcomes",
+            "Thinking about future effects",
+            "Reacting emotionally",
+            "Acting without reflection"
+          ],
+          "c": 1,
+          "ex": [
+            "Ignoring outcomes reduces awareness",
+            "Future thinking improves system understanding",
+            "Emotion alone creates bias",
+            "No reflection increases mistakes"
+          ]
+        },
+        {"t": "r", "tx": "+Vision", "p": 30},
+        {
+          "t": "sil",
+          "d": 60,
+          "tx": {"en": "Think how one action affects others"},
+          "inf": {"en": "Builds causal reasoning and responsibility awareness"}
+        },
+        {
+          "t": "breath_auto",
+          "d": 25,
+          "tx": {"en": "Inhale awareness... exhale noise"},
+          "inf": {"en": "Reduces cognitive fragmentation and improves clarity"}
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "cat": "identity_responsibility",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 30: IDENTITY AND RESPONSIBILITY"}},
+        {"t": "h", "tx": {"en": "Your habits build your identity"}},
+        {"story": {"en": "What you repeat becomes who you are."}},
+        {
+          "t": "breath_auto",
+          "d": 25,
+          "tx": {"en": "Breathe slowly and reflect on your actions"},
+          "inf": {"en": "Strengthens self-regulation and behavioral awareness"}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What builds identity?"},
+          "op": [
+            "Random actions",
+            "Repeated habits",
+            "One big event",
+            "Other people's opinion"
+          ],
+          "c": 1,
+          "ex": [
+            "Random = unstable identity",
+            "Habits = consistent identity",
+            "Single event = temporary impact",
+            "Opinions = external control"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 18,
+          "scene": "kid_bedroom",
+          "avatar": "quiet_kid_avatar",
+          "anim": "nod_approval",
+          "sub": {"en": "Every time you skip the grind, blame your teammates, or dodge responsibility, you bake that directly into your character code. Stop respawning with a victim build. Own the mistake, debug your routine, and craft a high-tier identity line by line."}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What strengthens responsibility?"},
+          "op": [
+            "Blaming others",
+            "Owning your actions",
+            "Avoiding consequences",
+            "Ignoring mistakes"
+          ],
+          "c": 1,
+          "ex": [
+            "Blame removes accountability",
+            "Ownership builds maturity",
+            "Avoidance weakens growth",
+            "Ignoring mistakes prevents learning"
+          ]
+        },
+        {"t": "r", "tx": "+Identity", "p": 30},
+        {
+          "t": "sil",
+          "d": 90,
+          "tx": {"en": "Observe who you are becoming"},
+          "inf": {"en": "Builds self-reflective awareness and long-term identity formation"}
+        },
+        {
+          "t": "breath_auto",
+          "d": 25,
+          "tx": {"en": "Inhale responsibility... exhale distraction"},
+          "inf": {"en": "Strengthens behavioral alignment with values"}
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "cat": "social_pressure_systems",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 31: SOCIAL SYSTEM PRESSURE"}},
+        {"t": "h", "tx": {"en": "Groups influence behavior more than words"}},
+        {"story":{"en": "People adapt to groups automatically. Awareness breaks automatic conformity."}},
+        {
+          "t": "breath_auto",
+          "d": 25,
+          "tx": {"en": "Breathe slowly and notice social influence"},
+          "inf": {"en": "Reduces conformity bias and increases independent thinking"}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What is strongest thinking?"},
+          "op": [
+            "Following group automatically",
+            "Thinking independently",
+            "Doing nothing",
+            "Copying behavior"
+          ],
+          "c": 1,
+          "ex": [
+            "Automatic following = low awareness",
+            "Independent thinking = control",
+            "Doing nothing = disengagement",
+            "Copying = loss of identity"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 20,
+          "scene": "school_hallway",
+          "avatar": "gamer_kid_lowpoly",
+          "anim": "fast_talk_pov",
+          "sub": {"en": "The whole squad is laughing at a bad joke or rushing to copy an unpatched trend. Your system pressure is spiking to blend in and match their lobby energy. Break the loop! Copy-pasting behavior is a default-skin move. Stand firm and run your own independent engine."}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What reduces unhealthy conformity?"},
+          "op": [
+            "Blind imitation",
+            "Questioning social pressure",
+            "Fear of rejection",
+            "Automatic agreement"
+          ],
+          "c": 1,
+          "ex": [
+            "Imitation weakens individuality",
+            "Questioning builds awareness",
+            "Fear increases dependency",
+            "Automatic agreement reduces control"
+          ]
+        },
+        {"t": "r", "tx": "+Character", "p": 30},
+        {
+          "t": "sil",
+          "d": 120,
+          "tx": {"en": "Separate your thoughts from group pressure"},
+          "inf": {"en": "Strengthens cognitive independence under social influence"}
+        },
+        {
+          "t": "breath_auto",
+          "d": 25,
+          "tx": {"en": "Inhale independence... exhale pressure"},
+          "inf": {"en": "Reduces social conformity reflexes"}
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "cat": "decision_under_complexity",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 32: COMPLEX DECISIONS"}},
+        {"t": "h", "tx": {"en": "Real life has multiple factors at once"}},
+        {"story": {"en": "Good decisions balance safety, truth, and consequences."}},
+        {
+          "t": "breath_auto",
+          "d": 25,
+          "tx": {"en": "Slow breathing before choosing"},
+          "inf": {"en": "Activates executive function for multi-factor reasoning"}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What is best decision style?"},
+          "op": [
+            "Rush without thinking",
+            "Analyze calmly",
+            "Ignore details",
+            "Follow emotion"
+          ],
+          "c": 1,
+          "ex": [
+            "Rush = errors",
+            "Analysis = clarity",
+            "Ignoring = incomplete data",
+            "Emotion = bias"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 18,
+          "scene": "gaming_room",
+          "avatar": "roblox_blocky_mentor",
+          "anim": "urgent_pointing",
+          "sub": {"en": "Multiple inputs hitting your UI at once: peer hype, urgent deadlines, and internal panic signals. Spreading your attention too thin crashes the logic drive. Freeze the noise. Load every element onto your tactical layout, evaluate the threat levels, and make a clean, structured choice."}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What improves complex decision accuracy?"},
+          "op": [
+            "Impulsive action",
+            "Evaluating multiple factors",
+            "Ignoring consequences",
+            "Random choices"
+          ],
+          "c": 1,
+          "ex": [
+            "Impulsivity reduces clarity",
+            "Multiple-factor thinking improves reasoning",
+            "Ignoring outcomes creates risk",
+            "Random choices reduce stability"
+          ]
+        },
+        {"t": "r", "tx": "+Clarity", "p": 30},
+        {
+          "t": "sil",
+          "d": 120,
+          "tx": {"en": "Hold all factors in mind before deciding"},
+          "inf": {"en": "Improves cognitive integration and decision accuracy"}
+        },
+        {
+          "t": "breath_auto",
+          "d": 25,
+          "tx": {"en": "Inhale structure... exhale confusion"},
+          "inf": {"en": "Stabilizes reasoning under complexity"}
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "cat": "stress_mastery",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 33: STRESS MASTERY"}},
+        {"t": "h", "tx": {"en": "Stress is energy without direction"}},
+        {"story": {"en": "Controlled stress improves performance. Uncontrolled stress reduces clarity."}},
+        {
+          "t": "breath_auto",
+          "d": 25,
+          "tx": {"en": "Deep slow breathing into abdomen"},
+          "inf": {"en": "Activates parasympathetic regulation for stress control"}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What transforms stress into control?"},
+          "op": [
+            "Panic",
+            "Structured breathing",
+            "Avoiding situation",
+            "Overreacting"
+          ],
+          "c": 1,
+          "ex": [
+            "Panic = loss of control",
+            "Breathing = regulation",
+            "Avoidance = unresolved stress",
+            "Overreaction = escalation"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 15,
+          "scene": "school_classroom",
+          "avatar": "security_guard_avatar",
+          "anim": "typing_fast",
+          "sub": {"en": "The heat is on, your heart rate is maxing out, and the environment is pure friction. Stress is throwing raw voltage at your brain. Don't let it cook the motherboard. Channel that surge into hyper-focus. Control the respiration rhythm and direct the energy straight to your target."}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What increases resilience under pressure?"},
+          "op": [
+            "Calm focus",
+            "Mental shutdown",
+            "Fear escalation",
+            "Impulsive reaction"
+          ],
+          "c": 0,
+          "ex": [
+            "Focus stabilizes performance",
+            "Shutdown blocks adaptation",
+            "Escalation increases stress",
+            "Impulsivity reduces control"
+          ]
+        },
+        {"t": "r", "tx": "+Calm", "p": 30},
+        {
+          "t": "sil",
+          "d": 150,
+          "tx": {"en": "Stay present inside pressure without reacting"},
+          "inf": {"en": "Builds resilience and emotional stability under stress"}
+        },
+        {
+          "t": "breath_auto",
+          "d": 25,
+          "tx": {"en": "Inhale stability... exhale tension"},
+          "inf": {"en": "Balances nervous system response"}
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "cat": "metacognition_mastery",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 34: THINKING ABOUT THINKING"}},
+        {"t": "h", "tx": {"en": "You are the observer of your thoughts"}},
+        {"story": {"en": "Awareness of thought patterns creates freedom from automatic reactions."}},
+        {
+          "t": "breath_auto",
+          "d": 25,
+          "tx": {"en": "Observe breath and thoughts at the same time"},
+          "inf": {"en": "Enhances metacognitive awareness and self-monitoring"}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What is highest mental skill?"},
+          "op": [
+            "React instantly",
+            "Observe thoughts",
+            "Ignore thinking",
+            "Act randomly"
+          ],
+          "c": 1,
+          "ex": [
+            "Instant reaction = low awareness",
+            "Observation = mastery",
+            "Ignoring = unconscious behavior",
+            "Random action = chaos"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 22,
+          "scene": "public_mall",
+          "avatar": "gamer_kid_lowpoly",
+          "anim": "alert_walk",
+          "sub": {"en": "POV: Your mind is spawning automated negative pop-ups: 'You can't clutch this,' 'You are going to fail.' Look at those thoughts directly. They aren't system facts, they are just temporary scripts rendering in background tasks. Observe the pop-up, don't click it, and let it clear."}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What improves self-awareness most?"},
+          "op": [
+            "Watching thoughts calmly",
+            "Automatic reactions",
+            "Avoiding reflection",
+            "Constant distraction"
+          ],
+          "c": 0,
+          "ex": [
+            "Observation strengthens metacognition",
+            "Automatic behavior reduces awareness",
+            "Avoidance blocks learning",
+            "Distraction weakens focus"
+          ]
+        },
+        {"t": "r", "tx": "+Mastery", "p": 35},
+        {
+          "t": "sil",
+          "d": 180,
+          "tx": {"en": "Observe mind without attachment or judgment"},
+          "inf": {"en": "Develops advanced self-awareness and cognitive control"}
+        },
+        {
+          "t": "breath_auto",
+          "d": 25,
+          "tx": {"en": "Final integration breathing cycle"},
+          "inf": {"en": "Stabilizes full cognitive-emotional system"}
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "cat": "life_mastery",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 35: LIFE MASTERY"}},
+        {"t": "h", "tx": {"en": "You are not your reactions, you are your choices"}},
+        {"story": {"en": "Mastery is not perfection. It is awareness, calm, and conscious action over time."}},
+        {
+          "t": "breath_auto",
+          "d": 30,
+          "tx": {"en": "Breathe slowly and fully integrate everything you learned"},
+          "inf": {"en": "This breathing consolidates emotional, cognitive, and behavioral regulation"}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What defines mastery?"},
+          "op": [
+            "No mistakes ever",
+            "Consistent awareness and control",
+            "Fast reactions",
+            "Avoiding all problems"
+          ],
+          "c": 1,
+          "ex": [
+            "No mistakes = unrealistic",
+            "Consistency = mastery",
+            "Fast reaction = instability",
+            "Avoidance = no growth"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 25,
+          "scene": "living_room",
+          "avatar": "roblox_suit_avatar",
+          "anim": "gesture_smirk",
+          "sub": {"en": "Ultimate Level Reached! Look back at the entire architecture. You are no longer a bot blindly running basic reaction subroutines. You are the system administrator of your own mind. The environment will drop chaos, but you possess the layout, the focus, and the code to rule it."}
+        },
+        {
+          "t": "d",
+          "q": {"en": "What strengthens long-term self-mastery?"},
+          "op": [
+            "Daily conscious choices",
+            "Impulsive behavior",
+            "Ignoring self-reflection",
+            "Avoiding challenges"
+          ],
+          "c": 0,
+          "ex": [
+            "Conscious action builds mastery",
+            "Impulsivity weakens control",
+            "No reflection reduces awareness",
+            "Avoidance blocks growth"
+          ]
+        },
+        {"t": "r", "tx": "+Mastery", "p": 50},
+        {
+          "t": "sil",
+          "d": 240,
+          "tx": {"en": "Full system reflection: who are you becoming?"},
+          "inf": {"en": "Integrates identity, awareness, and behavioral systems"}
+        },
+        {
+          "t": "breath_auto",
+          "d": 30,
+          "tx": {"en": "Final grounding breath: inhale clarity, exhale confusion"},
+          "inf": {"en": "Resets nervous system and consolidates learning state"}
+        }
+      ]
+    }
+  ]
+}
