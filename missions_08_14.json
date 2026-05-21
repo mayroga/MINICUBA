@@ -1,0 +1,411 @@
+{
+  "sys": "KAMIZEN LIFE SYSTEM",
+  "ch": 2,
+  "rng": "8-14",
+
+  "ui": {"fw": ["AWARENESS", "SAFETY", "CALM", "ACTION", "TRUTH", "CONTROL", "HELP", "FOCUS"]},
+
+  "rules": [
+    "Awareness>Reaction",
+    "Safety>Impulse",
+    "AskForHelp=Strength",
+    "Distance>Conflict",
+    "Calm=Better Decisions",
+    "Truth=Protection"
+  ],
+
+  "missions": [
+    {
+      "id": 8,
+      "cat": "awareness_public_space",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 8: PUBLIC SPACE AWARENESS"}},
+        {"t": "h", "tx": {"en": "What you notice first can protect you later"}},
+        {"story": {"en": "Most accidents and mistakes happen when people are distracted. Awareness is your invisible protection."}},
+        {
+          "t": "breath_auto", "d": 25,
+          "tx": {"en": "Breathe slowly and scan your surroundings with your eyes"},
+          "inf": {"en": "This breathing activates calm attention and reduces mental autopilot behavior"}
+        },
+        {
+          "t": "d", "q": {"en": "You are in a store and your parents are nearby. What is the safest habit?"},
+          "op": ["Stay aware of exits and parents", "Look only at phone", "Walk far away alone", "Ignore surroundings"],
+          "c": 0,
+          "ex": [
+            "Awareness keeps you safe and oriented",
+            "Phone reduces attention",
+            "Walking alone increases risk",
+            "Ignoring surroundings reduces reaction ability"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 20,
+          "scene": "public_mall",
+          "avatar": "quiet_kid_avatar",
+          "anim": "fast_talk_pov",
+          "sub": {"en": "POV: You are in a massive store and your phone screen is glued to your eyes. Dead end! You just lost your radar. Look up right now. Spot the exit. Keep your family in your field of vision. Real tactical advantage is knowing the map before anything happens!"}
+        },
+        {
+          "t": "d", "q": {"en": "If you feel lost in a crowded place, what is best?"},
+          "op": ["Run randomly", "Stay still and find staff", "Follow strangers", "Hide alone"],
+          "c": 1,
+          "ex": [
+            "Running increases confusion",
+            "Staff help reunite safely",
+            "Strangers are not safe guides",
+            "Hiding delays help"
+          ]
+        },
+        {"t": "r", "tx": "+Awareness", "p": 25},
+        {"t": "c", "tx": {"en": "Your attention is your first safety system"}},
+        {
+          "t": "sil", "d": 45,
+          "tx": {"en": "Notice sounds, people, and exits quietly"},
+          "inf": {"en": "This improves environmental mapping in the brain"}
+        },
+        {
+          "t": "breath_auto", "d": 20,
+          "tx": {"en": "Inhale focus... exhale distraction"},
+          "inf": {"en": "This improves sensory clarity and reduces stress noise"}
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "cat": "social_pressure",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 9: SOCIAL PRESSURE CONTROL"}},
+        {"t": "h", "tx": {"en": "Your reaction defines your power"}},
+        {"story": {"en": "People may test your emotions. The one who stays calm keeps control of the situation."}},
+        {
+          "t": "breath_auto", "d": 25,
+          "tx": {"en": "Breathe slowly and relax your shoulders"},
+          "inf": {"en": "This reduces emotional reactivity and improves control"}
+        },
+        {
+          "t": "d", "q": {"en": "Someone pressures you to do something you don’t like. What is strongest?"},
+          "op": ["Agree to fit in", "Say no calmly and move away", "Get angry", "Stay silent and follow"],
+          "c": 1,
+          "ex": [
+            "Agreeing removes boundaries",
+            "Saying no protects control",
+            "Anger escalates conflict",
+            "Silent following reduces safety"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 15,
+          "scene": "school_hallway",
+          "avatar": "roblox_blocky_mentor",
+          "anim": "gesture_smirk",
+          "sub": {"en": "They are surrounding you, laughing, telling you 'just do it, don't be scared.' Big mistake from them! They expect you to fold or cry. Instead, look them dead in the eyes, drop a cold, absolute 'No', and break the circle. You own your choices, not the crowd."}
+        },
+        {
+          "t": "d", "q": {"en": "If pressure continues, what should you do?"},
+          "op": ["Tell a trusted adult", "Ignore forever", "Fight back", "Accept it"],
+          "c": 0,
+          "ex": [
+            "Adults help solve patterns",
+            "Ignoring may not stop it",
+            "Fighting increases risk",
+            "Accepting weakens boundaries"
+          ]
+        },
+        {"t": "r", "tx": "+Control", "p": 25},
+        {"t": "c", "tx": {"en": "Boundaries are a form of self-respect"}},
+        {
+          "t": "sil", "d": 60,
+          "tx": {"en": "Observe your emotions without reacting"},
+          "inf": {"en": "This builds emotional intelligence and delay control"}
+        },
+        {
+          "t": "breath_auto", "d": 25,
+          "tx": {"en": "Inhale calm... exhale tension"},
+          "inf": {"en": "This stabilizes emotional responses"}
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "cat": "stranger_boundaries",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 10: TRUST AND BOUNDARIES"}},
+        {"t": "h", "tx": {"en": "Safe people respect your time and space"}},
+        {"story": {"en": "Strangers who pressure you or rush you are not safe signals. Trust takes time."}},
+        {
+          "t": "breath_auto", "d": 25,
+          "tx": {"en": "Breathe slowly and keep your body still"},
+          "inf": {"en": "This improves decision stability under uncertainty"}
+        },
+        {
+          "t": "d", "q": {"en": "A stranger offers you something and asks you to follow them. What do you do?"},
+          "op": ["Follow immediately", "Say no and move to safe adults", "Keep it secret", "Take the offer"],
+          "c": 1,
+          "ex": [
+            "Immediate follow is unsafe",
+            "No + safe adults is protection",
+            "Secrets increase vulnerability",
+            "Accepting unknown offers is risky"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 22,
+          "scene": "public_mall",
+          "avatar": "security_guard_avatar",
+          "anim": "urgent_pointing",
+          "sub": {"en": "'Hey kid! Come to my car, I have a reward for your game!' Freeze. Red alert. Unknown profiles in real life don't give gifts for free. Your safety rule is simple: step back, cut the talk, and walk straight into your safe zone where your adults are. Block the contact immediately!"}
+        },
+        {
+          "t": "d", "q": {"en": "What is a safe boundary?"},
+          "op": ["Doing everything asked", "Saying no when uncomfortable", "Ignoring feelings", "Following anyone friendly"],
+          "c": 1,
+          "ex": [
+            "Blind obedience is unsafe",
+            "No protects your limits",
+            "Ignoring feelings reduces awareness",
+            "Not all friendly people are safe"
+          ]
+        },
+        {"t": "r", "tx": "+Protection", "p": 25},
+        {"t": "c", "tx": {"en": "Boundaries protect your body and mind"}},
+        {
+          "t": "sil", "d": 75,
+          "tx": {"en": "Think: who are my trusted adults?"},
+          "inf": {"en": "This builds mental safety mapping"}
+        },
+        {
+          "t": "breath_auto", "d": 25,
+          "tx": {"en": "Inhale safety... exhale pressure"},
+          "inf": {"en": "This reduces impulsive compliance"}
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "cat": "emergency_response",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 11: FAST SAFE RESPONSE"}},
+        {"t": "h", "tx": {"en": "Clear action reduces danger"}},
+        {"story": {"en": "In unexpected situations, following instructions from trusted adults keeps everyone safer."}},
+        {
+          "t": "breath_auto", "d": 20,
+          "tx": {"en": "Breathe slowly to stay calm and alert"},
+          "inf": {"en": "This reduces panic response and improves clarity"}
+        },
+        {
+          "t": "d", "q": {"en": "Your teacher says to follow instructions immediately. What is correct?"},
+          "op": ["Ignore", "Follow calmly", "Run alone", "Do opposite"],
+          "c": 1,
+          "ex": [
+            "Ignoring removes structure",
+            "Following ensures safety",
+            "Running alone increases risk",
+            "Opposite action increases danger"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 18,
+          "scene": "school_classroom",
+          "avatar": "roblox_suit_avatar",
+          "anim": "fast_talk_pov",
+          "sub": {"en": "When a real emergency grid activates, there is zero time for debate or playing around. The absolute rules are: zip your lips, focus on the teacher's voice, and execute the exact steps. Running solo makes you a target; staying with the squad keeps you completely protected."}
+        },
+        {
+          "t": "d", "q": {"en": "If you are confused, what should you do first?"},
+          "op": ["Panic", "Stay near adults", "Leave alone", "Hide randomly"],
+          "c": 1,
+          "ex": [
+            "Panic reduces thinking ability",
+            "Adults guide safety actions",
+            "Leaving alone increases risk",
+            "Random hiding delays help"
+          ]
+        },
+        {"t": "r", "tx": "+Action", "p": 30},
+        {"t": "c", "tx": {"en": "Following instructions is protection, not weakness"}},
+        {
+          "t": "sil", "d": 90,
+          "tx": {"en": "Focus only on breathing and listening"},
+          "inf": {"en": "This builds emergency attention control"}
+        },
+        {
+          "t": "breath_auto", "d": 25,
+          "tx": {"en": "Inhale clarity... exhale confusion"},
+          "inf": {"en": "This improves decision precision"}
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "cat": "digital_control",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 12: DIGITAL CONTROL"}},
+        {"t": "h", "tx": {"en": "What you share cannot always be taken back"}},
+        {"story": {"en": "Online actions can spread fast. Thinking before sharing protects your identity."}},
+        {
+          "t": "breath_auto", "d": 25,
+          "tx": {"en": "Breathe slowly before touching screens"},
+          "inf": {"en": "This reduces impulsive digital reactions"}
+        },
+        {
+          "t": "d", "q": {"en": "Someone online asks for your location or personal info. What is best?"},
+          "op": ["Share it", "Tell trusted adult", "Ignore safety rules", "Send everything"],
+          "c": 1,
+          "ex": [
+            "Sharing is unsafe",
+            "Adults protect your safety",
+            "Ignoring rules increases risk",
+            "Sending everything removes privacy"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 20,
+          "scene": "gaming_room",
+          "avatar": "gamer_kid_lowpoly",
+          "anim": "typing_fast",
+          "sub": {"en": "Listen up! Once you hit 'send' on a photo, a link, or your location, you lose the master key forever. It copies, it saves, it loops. Before you drop any real data on Discord, Roblox, or chats, hit the internal pause button. Keep your coordinates private!"}
+        },
+        {
+          "t": "d", "q": {"en": "What helps you stay safe online?"},
+          "op": ["Click everything", "Pause before sharing", "Trust everyone", "Ignore warnings"],
+          "c": 1,
+          "ex": [
+            "Clicking everything is risky",
+            "Pausing improves judgment",
+            "Trusting everyone is unsafe",
+            "Ignoring warnings increases danger"
+          ]
+        },
+        {"t": "r", "tx": "+Security", "p": 30},
+        {"t": "c", "tx": {"en": "Pause creates protection"}},
+        {
+          "t": "sil", "d": 90,
+          "tx": {"en": "Disconnect attention from screens briefly"},
+          "inf": {"en": "This resets digital overload in the brain"}
+        },
+        {
+          "t": "breath_auto", "d": 25,
+          "tx": {"en": "Inhale awareness... exhale distraction"},
+          "inf": {"en": "This restores focus balance"}
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "cat": "money_decisions",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 13: MONEY AND CHOICES"}},
+        {"t": "h", "tx": {"en": "Small choices build your future"}},
+        {"story": {"en": "Money decisions teach responsibility. Impulse today can become stress tomorrow."}},
+        {
+          "t": "breath_auto", "d": 25,
+          "tx": {"en": "Breathe slowly and think before choosing"},
+          "inf": {"en": "This improves patience and planning ability"}
+        },
+        {
+          "t": "d", "q": {"en": "You want something expensive, but money is limited. What is best?"},
+          "op": ["Insist immediately", "Wait and plan", "Take without asking", "Ignore reality"],
+          "c": 1,
+          "ex": [
+            "Insisting creates pressure",
+            "Planning builds discipline",
+            "Taking without asking is wrong",
+            "Ignoring reality removes control"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 15,
+          "scene": "living_room",
+          "avatar": "roblox_suit_avatar",
+          "anim": "nod_approval",
+          "sub": {"en": "Blowing every single coin on an instant skin or toy gives you a 5-second hype, then absolute zero. Real players save up and execute strategic investments. Control the hype impulse today, rule your setup tomorrow. Plan the vault!"}
+        },
+        {
+          "t": "d", "q": {"en": "What builds strong habits?"},
+          "op": ["Impulse spending", "Saving small amounts", "Spending everything", "Avoiding thinking"],
+          "c": 1,
+          "ex": [
+            "Impulse reduces control",
+            "Saving builds discipline",
+            "Spending everything removes future options",
+            "Avoiding thinking weakens decisions"
+          ]
+        },
+        {"t": "r", "tx": "+Discipline", "p": 30},
+        {"t": "c", "tx": {"en": "Habits are stronger than impulses"}},
+        {
+          "t": "sil", "d": 90,
+          "tx": {"en": "Think about future consequences"},
+          "inf": {"en": "This strengthens long-term planning"}
+        },
+        {
+          "t": "breath_auto", "d": 25,
+          "tx": {"en": "Inhale discipline... exhale impulse"},
+          "inf": {"en": "This supports self-control in decisions"}
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "cat": "family_emotions",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 14: EMOTIONAL CONTROL"}},
+        {"t": "h", "tx": {"en": "Calm people solve problems better"}},
+        {"story": {"en": "In family or school conflict, staying calm helps create solutions instead of more problems."}},
+        {
+          "t": "breath_auto", "d": 25,
+          "tx": {"en": "Breathe slowly and relax your body"},
+          "inf": {"en": "This reduces emotional intensity and improves control"}
+        },
+        {
+          "t": "d", "q": {"en": "What helps solve conflict best?"},
+          "op": ["Shouting", "Listening calmly", "Running away angry", "Ignoring everything"],
+          "c": 1,
+          "ex": [
+            "Shouting increases conflict",
+            "Listening creates solutions",
+            "Running away avoids resolution",
+            "Ignoring delays repair"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 15,
+          "scene": "kid_bedroom",
+          "avatar": "quiet_kid_avatar",
+          "anim": "gesture_smirk",
+          "sub": {"en": "When a house argument flares up, screaming back is just adding fuel to the glitch. Drop the volume completely. Speak low, breathe steady. The one who drops the anger first controls the board. Calm isn't passive; it's high-level strategy."}
+        },
+        {
+          "t": "d", "q": {"en": "What is strong emotional control?"},
+          "op": ["Reacting instantly", "Pausing before speaking", "Yelling louder", "Hiding feelings forever"],
+          "c": 1,
+          "ex": [
+            "Instant reaction reduces control",
+            "Pausing improves decisions",
+            "Yelling escalates problems",
+            "Hiding forever blocks communication"
+          ]
+        },
+        {"t": "r", "tx": "+Respect", "p": 30},
+        {"t": "c", "tx": {"en": "Control creates better outcomes than reaction"}},
+        {
+          "t": "sil", "d": 120,
+          "tx": {"en": "Stay calm and observe your thoughts"},
+          "inf": {"en": "This builds emotional maturity and patience"}
+        },
+        {
+          "t": "breath_auto", "d": 25,
+          "tx": {"en": "Inhale calm strength... exhale tension"},
+          "inf": {"en": "This stabilizes emotional regulation"}
+        }
+      ]
+    }
+  ]
+}
