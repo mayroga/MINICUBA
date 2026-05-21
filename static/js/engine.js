@@ -2,7 +2,7 @@
    KAMIZEN ENGINE V14 - FULL VERSION WITH GAMING ROBLOX SIM
    ✔ Persistencia Local (LocalStorage)
    ✔ Narración Rápida Estilo YouTube Shorts (1.25x Speed + Pitch)
-   ✔ Avatar Animado Estilo Roblox (CSS Blocky Bounce)
+   ✔ Avatar Animado Estilo Roblox (CSS Blocky Walking)
    ✔ Guía Vocal de Respiración (Visual)
    ✔ Botón JUMP/SKIP para navegación directa
    ✔ Soporte completo: v, h, story, br, sil, d, r, c, sim
@@ -79,7 +79,7 @@ function startMasterTimer() {
     state.sessionStartTime = Date.now();
     setTimeout(() => {
         finishSession();
-    }, 10 * 60 * 1000); // Reducido a 10 minutos exactos de alto rendimiento
+    }, 10 * 60 * 1000); 
 }
 
 function finishSession() {
@@ -161,7 +161,6 @@ function narrate(text, callback) {
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-US";
     
-    // Configuración optimizada de velocidad ultra-dinámica
     speech.rate = 1.25; 
     speech.pitch = 1.1; 
     
@@ -283,10 +282,26 @@ function renderBlock(block, navHeader) {
     }
     
     // =========================================================
-    // NUEVA INTEGRACIÓN: MODO SHORTS GAMING CON AVATAR ROBLOX
+    // INTEGRACIÓN AVANZADA: MODO SHORTS GAMING (AVATAR CAMINANDO)
     // =========================================================
     if (block.t === "sim") {
-        html += timerUI + `
+        // Estilos CSS inyectados para añadir la animación de caminata realista (Cuerpo + Extremidades independientes)
+        html += `
+        <style>
+            @keyframes walkRun {
+                0% { transform: translateY(0px) rotate(-3deg); }
+                100% { transform: translateY(-8px) rotate(3deg); }
+            }
+            @keyframes swingLegLeft {
+                0% { transform: rotate(-25deg); }
+                100% { transform: rotate(25deg); }
+            }
+            @keyframes swingLegRight {
+                0% { transform: rotate(25deg); }
+                100% { transform: rotate(-25deg); }
+            }
+        </style>
+        ` + timerUI + `
             <div class="card sim-gaming-container" style="
                 border: 3px solid #0ea5e9; 
                 background: linear-gradient(180deg, #0f172a 0%, #020617 100%); 
@@ -296,12 +311,12 @@ function renderBlock(block, navHeader) {
                 position: relative;
                 box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
             ">
-                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace; letter-spacing: 1px; animation: pulse 1s infinite alternate;">🔴 LIVE SHORTS</div>
+                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace; letter-spacing: 1px;">🔴 LIVE SHORTS</div>
                 <div style="position: absolute; top: 12px; right: 15px; font-size: 11px; color: #0ea5e9; font-family: monospace; font-weight: bold;">⚡ SPEED: 1.25x</div>
 
                 <div class="avatar-roblox-box" style="
                     width: 130px;
-                    height: 130px;
+                    height: 150px;
                     margin: 25px auto 15px auto;
                     background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
                     border: 4px solid #0ea5e9;
@@ -313,18 +328,25 @@ function renderBlock(block, navHeader) {
                     position: relative;
                     overflow: hidden;
                 ">
-                    <div class="roblox-character" style="width: 60px; height: 90px; position: relative; display: flex; flex-direction: column; align-items: center; animation: bounce 0.4s infinite alternate;">
+                    <div class="roblox-character" style="width: 60px; height: 110px; position: relative; display: flex; flex-direction: column; align-items: center; animation: walkRun 0.3s infinite alternate ease-in-out;">
+                        
+                        <div style="position: absolute; top: -4px; width: 32px; height: 8px; background: #3b82f6; border-radius: 3px; z-index: 4; border: 1px solid #000;"></div>
+                        
                         <div style="width: 26px; height: 26px; background: #ffdbac; border-radius: 4px; border: 2px solid #000; position: relative; z-index: 3;">
                             <div style="position: absolute; top: 6px; left: 4px; width: 4px; height: 6px; background: #000; border-radius: 1px;"></div>
                             <div style="position: absolute; top: 6px; right: 4px; width: 4px; height: 6px; background: #000; border-radius: 1px;"></div>
                             <div style="position: absolute; bottom: 4px; left: 7px; width: 8px; height: 3px; background: #000; border-radius: 2px;"></div>
                         </div>
-                        <div style="position: absolute; top: -4px; width: 32px; height: 8px; background: #3b82f6; border-radius: 3px; z-index: 4; border: 1px solid #000;"></div>
+                        
                         <div style="width: 44px; height: 38px; background: #3b82f6; border: 2px solid #000; border-radius: 2px; margin-top: -2px; position: relative; z-index: 2; display: flex; justify-content: center; align-items: center;">
                             <div style="font-size: 10px; font-weight: bold; color: white; font-family: sans-serif;">⚡</div>
                         </div>
-                        <div style="position: absolute; left: -10px; top: 24px; width: 10px; height: 34px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingArm 0.3s infinite alternate;"></div>
-                        <div style="position: absolute; right: -10px; top: 24px; width: 10px; height: 34px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; transform: scaleY(-1); animation: swingArm 0.3s infinite alternate-reverse;"></div>
+                        
+                        <div style="position: absolute; left: -10px; top: 24px; width: 10px; height: 34px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLegRight 0.3s infinite alternate ease-in-out;"></div>
+                        <div style="position: absolute; right: -10px; top: 24px; width: 10px; height: 34px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLegLeft 0.3s infinite alternate ease-in-out;"></div>
+                        
+                        <div style="position: absolute; left: 6px; bottom: 12px; width: 12px; height: 26px; background: #1d4ed8; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLegLeft 0.3s infinite alternate ease-in-out;"></div>
+                        <div style="position: absolute; right: 6px; bottom: 12px; width: 12px; height: 26px; background: #1d4ed8; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLegRight 0.3s infinite alternate ease-in-out;"></div>
                     </div>
                 </div>
 
@@ -345,7 +367,7 @@ function renderBlock(block, navHeader) {
                     border: 1px solid #1e293b;
                 ">
                     <p id="shorts-text-target" style="
-                        font-size: 1.4rem; 
+                        font-size: 1.3rem; 
                         font-weight: 900; 
                         color: #facc15; 
                         text-transform: uppercase; 
@@ -353,14 +375,14 @@ function renderBlock(block, navHeader) {
                         line-height: 1.3;
                         margin: 0;
                         text-shadow: 2px 2px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000;
-                        animation: textPop 0.2s ease-out;
                     ">
-                        ${block.sub?.en || ""}
+                        ${block.sub?.en || block.tx?.en || "FOCUS ON THE MISSION"}
                     </p>
                 </div>
             </div>
         `;
-        textToRead = block.sub?.en || "";
+        // Vinculación automática del contenido actual al motor de voz rápida
+        textToRead = block.sub?.en || block.tx?.en || "";
     }
     
     if (block.t === "d") {
