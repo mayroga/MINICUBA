@@ -214,6 +214,9 @@ function goBack() {
     render();
 }
 
+/* =========================
+   SISTEMA DE NARRACIÓN NORMALIZADO (VOZ FIRME Y FLUIDA)
+========================= */
 function narrate(text, isAvatarActive, callback) {
     if (!text) { if (callback) callback(); return; }
     state.speechLocked = true;
@@ -225,12 +228,20 @@ function narrate(text, isAvatarActive, callback) {
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-US";
     
-    if (isAvatarActive) {
-        speech.rate = 1.55; 
-        speech.pitch = 1.35; 
-    } else {
-        speech.rate = 1.25; 
-        speech.pitch = 1.1; 
+    // Configuración unificada para una voz masculina estándar, natural y con presencia
+    speech.rate = 1.0;   // Velocidad completamente normal y fluida sin cortes
+    speech.pitch = 1.0;  // Tono natural equilibrado (masculino/neutral)
+    
+    // Selección directa de voz masculina en inglés según disponibilidad del navegador
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+        const maleVoice = voices.find(v => 
+            v.lang.startsWith("en") && 
+            (v.name.toLowerCase().includes("male") || v.name.toLowerCase().includes("google") || v.name.toLowerCase().includes("david") || v.name.toLowerCase().includes("microsoft"))
+        );
+        if (maleVoice) {
+            speech.voice = maleVoice;
+        }
     }
     
     speech.onend = () => { 
@@ -238,6 +249,7 @@ function narrate(text, isAvatarActive, callback) {
         elements.forEach(el => el.classList.remove("talking-avatar"));
         if (callback) callback(); 
     };
+    
     window.speechSynthesis.speak(speech);
 }
 
@@ -313,32 +325,32 @@ function showPrefaceGuide() {
     
     app.innerHTML = `
         <div class="card animated fadeIn" style="border: 4px solid #0ea5e9; padding: 20px; width: 100%; box-sizing: border-box;">
-            <h2 style="color:#facc15; font-size: 1.7rem; text-align: center; font-weight: 900; margin-bottom: 10px;">🗺️ THE 6 KINGDOMS OF POWER</h2>
+            <h2 style="color:#facc15; font-size: 1.7rem; text-align: center; font-weight: 900; margin-bottom: 10px;">🗺️ THE 6 REINOS OF POWER</h2>
             <p style="font-size: 1rem; color: #cbd5e1; text-align: center; margin-bottom: 20px;">Complete all 63 maps to find real life treasures! Here is your quest:</p>
             
             <div style="display: flex; flex-direction: column; gap: 10px; background: rgba(15, 23, 42, 0.8); padding: 15px; border-radius: 12px; max-height: 280px; overflow-y: auto;">
                 <div style="border-left: 4px solid #ef4444; padding-left: 8px;">
-                    <strong style="color:#ef4444; font-size:1rem;">🛡️ KINGDOM 1: RESPECT FIELD (Missions 1-10)</strong>
+                    <strong style="color:#ef4444; font-size:1rem;">🛡️ REINO 1: RESPECT FIELD (Missions 1-10)</strong>
                     <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Learn honor, value family rules, and guard your clean mind.</span>
                 </div>
                 <div style="border-left: 4px solid #f43f5e; padding-left: 8px;">
-                    <strong style="color:#f43f5e; font-size:1rem;">🏡 KINGDOM 2: LOVE CASTLE (Missions 11-20)</strong>
+                    <strong style="color:#f43f5e; font-size:1rem;">🏡 REINO 2: LOVE CASTLE (Missions 11-20)</strong>
                     <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Build happy homes, help team mates, and grow emotional power.</span>
                 </div>
                 <div style="border-left: 4px solid #38bdf8; padding-left: 8px;">
-                    <strong style="color:#38bdf8; font-size:1rem;">📚 KINGDOM 3: BRAIN FOCUS ZONE (Missions 21-30)</strong>
+                    <strong style="color:#38bdf8; font-size:1rem;">📚 REINO 3: BRAIN FOCUS ZONE (Missions 21-30)</strong>
                     <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Read powerful books, double task speed, and master high attention.</span>
                 </div>
                 <div style="border-left: 4px solid #10b981; padding-left: 8px;">
-                    <strong style="color:#10b981; font-size:1rem;">🏎️ KINGDOM 4: HEALTHY ENGINE (Missions 31-40)</strong>
+                    <strong style="color:#10b981; font-size:1rem;">🏎️ REINO 4: HEALTHY ENGINE (Missions 31-40)</strong>
                     <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Energize the body, optimize breathing, and run like a race car.</span>
                 </div>
                 <div style="border-left: 4px solid #eab308; padding-left: 8px;">
-                    <strong style="color:#eab308; font-size:1rem;">🪙 KINGDOM 5: GOLDEN JOY ARENA (Missions 41-50)</strong>
+                    <strong style="color:#eab308; font-size:1rem;">🪙 REINO 5: GOLDEN JOY ARENA (Missions 41-50)</strong>
                     <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Multiply high energy feelings, create real wealth, and smile daily.</span>
                 </div>
                 <div style="border-left: 4px solid #a855f7; padding-left: 8px;">
-                    <strong style="color:#a855f7; font-size:1rem;">🏰 KINGDOM 6: TOTAL WEALTH EMPIRE (Missions 51-63)</strong>
+                    <strong style="color:#a855f7; font-size:1rem;">🏰 REINO 6: TOTAL WEALTH EMPIRE (Missions 51-63)</strong>
                     <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Rule your lifestyle, manage properties, and become a grandmaster.</span>
                 </div>
             </div>
@@ -348,7 +360,7 @@ function showPrefaceGuide() {
     `;
     
     navigator.id = "preface";
-    narrate("Welcome to the six Kingdoms of power. Respect field, love castle, brain focus zone, healthy engine, golden joy arena, and total wealth empire. Complete sixty three levels to win. Let us start your quest now.", false);
+    narrate("Welcome to the six reinos of power. Respect field, love castle, brain focus zone, healthy engine, golden joy arena, and total wealth empire. Complete sixty three levels to win. Let us start your quest now.", false);
 }
 
 function exitPreface() {
@@ -476,7 +488,6 @@ function renderBlock(block, navHeader) {
                 0% { left: 5%; transform: translateY(0px); }
                 40% { left: 35%; }
                 50% { left: 35%; }
-                /* El brazo izquierdo se extiende físicamente hacia adelante al llegar al objeto */
                 55% { left: 35%; }
                 100% { left: 5%; transform: translateY(0px); }
             }
@@ -484,25 +495,24 @@ function renderBlock(block, navHeader) {
                 0% { right: 5%; transform: translateY(0px); }
                 40% { right: 35%; }
                 50% { right: 35%; }
-                /* El brazo derecho se extiende físicamente hacia adelante al llegar al objeto */
                 55% { right: 35%; }
                 100% { right: 5%; transform: translateY(0px); }
             }
             @keyframes swingArmL {
                 0% { transform: rotate(-15deg); }
-                40% { transform: rotate(70deg) cubic-bezier(0.175, 0.885, 0.32, 1.275); } /* Extiende la mano para tomarlo */
+                40% { transform: rotate(70deg) cubic-bezier(0.175, 0.885, 0.32, 1.275); }
                 100% { transform: rotate(-15deg); }
             }
             @keyframes swingArmR {
                 0% { transform: rotate(15deg); }
-                40% { transform: rotate(-70deg) cubic-bezier(0.175, 0.885, 0.32, 1.275); } /* Extiende la mano para tomarlo */
+                40% { transform: rotate(-70deg) cubic-bezier(0.175, 0.885, 0.32, 1.275); }
                 100% { transform: rotate(15deg); }
             }
             @keyframes itemFloat {
                 0% { transform: scale(0) translateY(40px); opacity:0; }
                 30% { transform: scale(1.3) translateY(-10px); opacity:1; }
                 50% { transform: scale(1) translateY(0); opacity:1; }
-                52% { transform: scale(0.6) translateY(-20px); opacity:0.5; } /* Al ser tomado por las manos */
+                52% { transform: scale(0.6) translateY(-20px); opacity:0.5; }
                 100% { transform: scale(0) translateY(-40px); opacity:0; }
             }
             @keyframes moveClouds {
@@ -589,157 +599,16 @@ function renderBlock(block, navHeader) {
                     <span style="color:#0ea5e9; font-size:11px; font-weight:900; display:block; text-transform:uppercase; font-family:monospace;">💡 KID'S KNOWLEDGE LOGIC:</span>
                     <p style="color:#f8fafc; font-size:0.95rem; margin: 3px 0 0 0; line-height:1.4; font-weight:500;">${kidsLesson}</p>
                 </div>
-
-                <div class="youtube-shorts-subtitles" style="width: 100%; box-sizing: border-box; margin-top: 10px;">
-                    <p id="shorts-text-target" style="
-                        font-size: 1.25rem; 
-                        font-weight: 900; 
-                        color: #facc15; 
-                        text-transform: uppercase; 
-                        letter-spacing: 0.5px;
-                        line-height: 1.3;
-                        margin: 0;
-                        text-shadow: 2px 2px 0px #000;
-                    ">
-                        ${basePhrase}
-                    </p>
-                </div>
             </div>
         `;
     }
-    
-    // =========================================================
-    // BLOQUE REWARD CON DISEÑO DE AVATARES CELEBRANDO
-    // =========================================================
-    if (block.t === "r") { 
-        html += `
-        <style>
-            @keyframes rewardJump {
-                0% { transform: translateY(0) scale(1); }
-                100% { transform: translateY(-12px) scale(1.05); }
-            }
-        </style>
-        <div class="card center" style="border: 3px solid #eab308; background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%); padding: 20px; width: 100%; box-sizing: border-box;">
-            <h2 style="color:#eab308; font-size: 1.8rem; text-transform: uppercase; margin-bottom: 5px;">⭐ ${block.tx || "REWARD UNLOCKED"}</h2>
-            <p style="font-size:2rem; font-weight:900; color:#fff; margin: 5px 0;">+${block.p || 0} XP</p>
-            
-            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 12px; border: 1px dashed #eab308;">
-                <div style="animation: rewardJump 0.3s infinite alternate ease-in-out; text-align:center;">
-                    <div style="width: 14px; height: 14px; background: #ffdbac; border: 1px solid #000; border-radius: 2px; margin: 0 auto;"></div>
-                    <div style="width: 22px; height: 18px; background: #0ea5e9; border: 1px solid #000; border-radius: 2px; color: white; font-size: 7px; font-weight: bold; display:flex; align-items:center; justify-content:center;">M</div>
-                    <span style="font-size: 9px; color: #0ea5e9; font-family: monospace; font-weight: bold;">MICHAEL</span>
-                </div>
-                <div style="animation: rewardJump 0.3s infinite alternate-reverse ease-in-out; text-align:center;">
-                    <div style="width: 14px; height: 14px; background: #ffdcbe; border: 1px solid #000; border-radius: 2px; margin: 0 auto;"></div>
-                    <div style="width: 22px; height: 18px; background: #f43f5e; border: 1px solid #000; border-radius: 2px; color: white; font-size: 7px; font-weight: bold; display:flex; align-items:center; justify-content:center;">${state.userName[0].toUpperCase()}</div>
-                    <span style="font-size: 9px; color: #f43f5e; font-family: monospace; font-weight: bold;">${state.userName.toUpperCase()}</span>
-                </div>
-            </div>
-        </div>`; 
-        textToRead = `${block.tx || "Reward unlocked"}. Excellent work Michael and ${state.userName}, you earned ${block.p} experience points.`; 
-    }
-    
-    if (block.t === "d") {
-        html += `<div class="card" style="width:100%; box-sizing:border-box;"><h3>${block.q?.en || ""}</h3>`;
-        block.op?.forEach((opt, i) => {
-            html += `<div class="answer" id="opt-${i}" onclick="selectAnswer(${i}, ${block.c}, ${JSON.stringify(block.ex).replace(/"/g, '&quot;')})">${opt}</div>`;
-        });
-        html += `</div>`;
-        textToRead = `${block.q?.en}. Your options are: ${block.op.join(". ")}`;
-    }
-    if (block.t === "c") { html += `<div class="card" style="width:100%; box-sizing:border-box;"><p>${block.tx?.en || ""}</p></div>`; textToRead = block.tx?.en; }
 
-    if (block.t !== "d") html += `<button id="continueBtn" disabled>NARRATING...</button>`;
     app.innerHTML = html;
-
-    narrate(textToRead, isAvatarMode, () => {
-        if (block.t === "breath_auto" || block.t === "br") {
-            startCountdown(24, nextBlock);
-            startGuidedBreathing();
-            unlockContinue("SKIP", nextBlock);
-        } else if (block.t === "sil") {
-            startCountdown(block.d || 24, nextBlock);
-            unlockContinue("SKIP", nextBlock);
-        } else if (block.t === "sim") {
-            startCountdown(block.d || 30, nextBlock);
-            unlockContinue("SKIP SHORTS", nextBlock);
-        } else if (block.t === "d") {
-            // Espera pasiva de selección interactiva
-        } else {
-            setTimeout(nextBlock, 1500);
-        }
-    });
-}
-
-/* =========================
-   GUÍA VISUAL DE RESPIRACIÓN
-========================= */
-function startGuidedBreathing() {
-    const circle = document.getElementById("breathCircle");
-    const label = document.getElementById("breathLabel");
-    if (!circle || !label) return;
-    let inhale = true;
-    const step = () => {
-        if (!document.getElementById("breathCircle") || state.timeLeft <= 0) return;
-        label.innerText = inhale ? "INHALE" : "EXHALE";
-        circle.style.transition = "transform 4000ms ease-in-out";
-        circle.style.transform = inhale ? "scale(1.4)" : "scale(0.8)";
-        inhale = !inhale;
-    };
-    step();
-    const aniInterval = setInterval(() => {
-        if (!document.getElementById("breathCircle") || state.timeLeft <= 0) { clearInterval(aniInterval); return; }
-        step();
-    }, 4000);
-}
-
-/* =========================
-   SISTEMA DE CORRECCIÓN COLOREADO CON FEEDBACK REFORZADO
-========================= */
-function selectAnswer(index, correct, explanations) {
-    if (state.speechLocked) return;
-    const isCorrect = index === correct;
-    const explanation = explanations?.[index] || "";
-    const feedbackWrap = document.createElement("div");
-    feedbackWrap.style.width = "100%";
-    feedbackWrap.style.boxSizing = "border-box";
     
-    const headerColor = isCorrect ? '#22c55e' : '#ef4444';
-    const headerText = isCorrect ? "EXCELLENT!" : "KEEP LEARNING";
-    
-    feedbackWrap.innerHTML = `
-        <div class="card" style="border: 3px solid ${headerColor}; width: 100%; box-sizing: border-box;">
-            <h3 style="color:${headerColor}; font-weight: 900; text-transform: uppercase;">${headerText}</h3>
-            <p>${explanation}</p>
-        </div>
-        <button id="continueBtn" disabled>NARRATING...</button>
-    `;
-    
-    document.getElementById("app").appendChild(feedbackWrap);
-    narrate(explanation, false, () => {
-        unlockContinue("NEXT STEP", nextBlock);
-    });
-}
-
-function nextBlock() { 
-    stopDopamineMusic();
-    clearInterval(state.timer); 
-    state.currentBlock++; 
-    render(); 
-}
-
-function startMission() { state.phase = "mission"; state.currentBlock = 0; render(); }
-
-function nextStory() {
-    stopDopamineMusic();
-    state.currentIndex++;
-    if (state.currentIndex >= state.missions.length) state.currentIndex = 0;
-    state.phase = "story";
-    state.currentBlock = 0;
-    render();
-}
-
-function unlockContinue(label, action) {
-    const btn = document.getElementById("continueBtn");
-    if (btn) { btn.disabled = false; btn.innerText = label; btn.onclick = action; }
+    if (block.t === "v" || block.t === "h" || block.story || isAvatarMode) {
+        narrate(textToRead, isAvatarMode, () => {
+            const btn = document.getElementById("continueBtn");
+            if (btn) { btn.disabled = false; btn.innerText = "CONTINUE PROGRESS"; btn.onclick = nextBlock; }
+        });
+    }
 }
