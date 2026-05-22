@@ -348,7 +348,7 @@ function showPrefaceGuide() {
     `;
     
     navigator.id = "preface";
-    narrate("Welcome to the six reinos of power. Respect field, love castle, brain focus zone, healthy engine, golden joy arena, and total wealth empire. Complete sixty three levels to win. Let us start your quest now.", false);
+    narrate("Welcome to the six Kingdoms of power. Respect field, love castle, brain focus zone, healthy engine, golden joy arena, and total wealth empire. Complete sixty three levels to win. Let us start your quest now.", false);
 }
 
 function exitPreface() {
