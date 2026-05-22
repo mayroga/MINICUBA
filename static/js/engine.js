@@ -1,5 +1,5 @@
 /* =========================================================
-   MAYKAMI NEUROGAME ENGINE - ALL RIGHTS RESERVED
+   MAYKAMI NEUROGAME ENGINE - ALL RIGHTS RESERVED (COMPLETE)
    ========================================================= */
 
 const state = {
@@ -18,7 +18,6 @@ let currentUtterance = null;
 let dopamineInterval = null;
 let audioCtx = null;
 
-// Inicialización de Audio de Fondos Frecuenciales Básicos
 function initAudio() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 }
@@ -32,7 +31,6 @@ function playDopamineMusic() {
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
             osc.type = 'sine';
-            // Frecuencia armónica de enfoque (alrededor de 432Hz y variaciones integradas)
             osc.frequency.setValueAtTime(432 + Math.random() * 20, audioCtx.currentTime);
             gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.5);
@@ -48,33 +46,22 @@ function stopDopamineMusic() {
     if (dopamineInterval) { clearInterval(dopamineInterval); dopamineInterval = null; }
 }
 
-// Lógica Unificada de Narración
 function narrate(text, isAvatarMode, callback) {
     synth.cancel();
     state.speechLocked = true;
-    
-    if (isAvatarMode) playDopamineMusic();
-    else stopDopamineMusic();
+    if (isAvatarMode) playDopamineMusic(); else stopDopamineMusic();
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
     utterance.rate = 1.0;
     
-    utterance.onend = () => {
-        state.speechLocked = false;
-        if (callback) callback();
-    };
-    
-    utterance.onerror = () => {
-        state.speechLocked = false;
-        if (callback) callback();
-    };
+    utterance.onend = () => { state.speechLocked = false; if (callback) callback(); };
+    utterance.onerror = () => { state.speechLocked = false; if (callback) callback(); };
     
     currentUtterance = utterance;
     synth.speak(utterance);
 }
 
-// Contador Global Sincronizado Instantáneo
 function startCountdown(seconds, callback) {
     clearInterval(state.timer);
     state.timeLeft = seconds;
@@ -93,7 +80,6 @@ function startCountdown(seconds, callback) {
     }, 1000);
 }
 
-// Carga Inicial de Datos de Misiones
 document.addEventListener("DOMContentLoaded", () => {
     fetch('/static/data/missions.json')
         .then(res => res.json())
@@ -103,14 +89,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }).catch(err => console.error("Error loading missions:", err));
 });
 
-// Renderizador Central de Pantallas y Bloques Dinámicos
 function render() {
     const app = document.getElementById("app");
     if (!app || !state.missions.length) return;
 
     const currentMission = state.missions[state.currentIndex];
     
-    // PANTALLA 1: INTRODUCCIÓN DE LA HISTORIA
     if (state.phase === "story") {
         stopDopamineMusic();
         clearInterval(state.timer);
@@ -130,7 +114,6 @@ function render() {
         return;
     }
 
-    // PANTALLA 2: EJECUCIÓN DE BLOQUES DE LA MISIÓN
     if (state.currentBlock >= currentMission.blocks.length) {
         app.innerHTML = `
             <div class="card center" style="width:100%; box-sizing:border-box;">
@@ -148,33 +131,12 @@ function render() {
     let textToRead = "";
     let isAvatarMode = (block.t === "breath_auto" || block.t === "br" || block.t === "sil" || block.t === "sim");
 
-    // Construcción del UI del Temporizador si se requiere
     let timerUI = "";
     if (isAvatarMode) {
         let initialTime = block.t === "sim" ? (block.d || 30) : (block.d || 24);
-        timerUI = `
-            <div class="timer-badge" style="
-                background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
-                border: 2px solid #facc15;
-                color: white;
-                font-size: 24px;
-                font-weight: 900;
-                width: 60px;
-                height: 60px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 0 auto -15px auto;
-                position: relative;
-                z-index: 99;
-                box-shadow: 0 4px 10px rgba(239, 68, 68, 0.5);
-                font-family: monospace;
-            " id="timerDisplay">${initialTime}</div>
-        `;
+        timerUI = `<div class="timer-badge" style="background:linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); border:2px solid #facc15; color:white; font-size:24px; font-weight:900; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto -15px auto; position:relative; z-index:99; box-shadow:0 4px 10px rgba(239, 68, 68, 0.5); font-family:monospace;" id="timerDisplay">${initialTime}</div>`;
     }
 
-    // PROCESAMIENTO SEGÚN EL TIPO DE BLOQUE (A: Respiración, B: Silencio, C: Simulación, R: Recompensa, D: Pregunta, C: Texto)
     if (block.t === "breath_auto" || block.t === "br") {
         html += timerUI + `
             <div class="card center" style="width:100%; box-sizing:border-box; border: 3px solid #0ea5e9;">
@@ -185,7 +147,6 @@ function render() {
         `;
         textToRead = block.tx?.en || "Follow the visual guide. Inhale and exhale deeply.";
     } 
-    
     else if (block.t === "sil") {
         html += timerUI + `
             <div class="card center" style="width:100%; box-sizing:border-box; border: 3px solid #8b5cf6;">
@@ -195,7 +156,6 @@ function render() {
         `;
         textToRead = block.tx?.en || "Reflect in silence.";
     } 
-    
     else if (block.t === "sim") {
         let assetSymbol = block.asset || "💎";
         let powerWord = block.pw || "FOCUS";
@@ -224,7 +184,7 @@ function render() {
                         <div style="background: #1e1b4b; color: #facc15; font-size: 9px; font-weight: 900; padding: 2px 4px; border-radius: 4px; border: 1px solid #facc15; font-family:monospace; text-transform:uppercase;">${powerWord}</div>
                     </div>
 
-                    <!-- AVATAR izquierda: MICHAEL -->
+                    <!-- AVATAR MICHAEL -->
                     <div style="position: absolute; bottom: 15px; left: 15px; width: 60px; height: 110px;">
                         <div style="font-family: monospace; font-size: 11px; color: #0369a1; font-weight: bold; text-align:center; margin-bottom:2px;">MICHAEL</div>
                         <div class="cube-model-inner" style="width: 44px; height: 85px; position: relative; margin: 0 auto;">
@@ -240,7 +200,7 @@ function render() {
                         </div>
                     </div>
 
-                    <!-- AVATAR derecha: DINÁMICO -->
+                    <!-- AVATAR OPERARIO (DINÁMICO) -->
                     <div style="position: absolute; bottom: 15px; right: 15px; width: 60px; height: 110px;">
                         <div style="font-family: monospace; font-size: 11px; color: #9f1239; font-weight: bold; text-align:center; margin-bottom:2px;">${state.userName.toUpperCase()}</div>
                         <div class="cube-model-inner" style="width: 44px; height: 85px; position: relative; margin: 0 auto;">
@@ -269,7 +229,6 @@ function render() {
         `;
         textToRead = `${basePhrase}. ${kidsLesson}`;
     } 
-    
     else if (block.t === "r") { 
         html += `
         <style> @keyframes rewardJump { 0% { transform: translateY(0); } 100% { transform: translateY(-12px); } } </style>
@@ -292,7 +251,6 @@ function render() {
         </div>`; 
         textToRead = `${block.tx || "Reward unlocked"}. Excellent work Michael and ${state.userName}, you earned ${block.p || 0} experience points.`; 
     }
-    
     else if (block.t === "d") {
         html += `<div class="card" style="width:100%; box-sizing:border-box;"><h3>${block.q?.en || ""}</h3>`;
         block.op?.forEach((opt, i) => {
@@ -301,7 +259,6 @@ function render() {
         html += `</div>`;
         textToRead = `${block.q?.en}. Your options are: ${block.op.join(". ")}`;
     }
-    
     else if (block.t === "c") { 
         html += `<div class="card" style="width:100%; box-sizing:border-box;"><p>${block.tx?.en || ""}</p></div>`; 
         textToRead = block.tx?.en; 
@@ -310,7 +267,7 @@ function render() {
     if (block.t !== "d") html += `<button id="continueBtn" disabled>NARRATING...</button>`;
     app.innerHTML = html;
 
-    // CONTROL EXCLUSIVO DEL TEMPORIZADOR: Arranca junto con la escena inmediatamente sin esperar al callback de voz
+    // INYECCIÓN CRÍTICA DE TEMPORIZADOR: Sincronización exacta en paralelo con Web Speech API
     if (block.t === "breath_auto" || block.t === "br") {
         startCountdown(24, nextBlock);
         startGuidedBreathing();
@@ -320,7 +277,6 @@ function render() {
         startCountdown(block.d || 30, nextBlock);
     }
 
-    // Ejecución paralela de la narración de audio
     narrate(textToRead, isAvatarMode, () => {
         if (block.t === "breath_auto" || block.t === "br") {
             unlockContinue("SKIP", nextBlock);
@@ -329,14 +285,13 @@ function render() {
         } else if (block.t === "sim") {
             unlockContinue("SKIP SHORTS", nextBlock);
         } else if (block.t === "d") {
-            // Selección interactiva en espera pasiva
+            // El usuario debe seleccionar una de las respuestas de manera interactiva
         } else {
             setTimeout(nextBlock, 1500);
         }
     });
 }
 
-// Visualizador de Respiración Sincronizado
 function startGuidedBreathing() {
     const circle = document.getElementById("breathCircle");
     const label = document.getElementById("breathLabel");
@@ -356,7 +311,6 @@ function startGuidedBreathing() {
     }, 4000);
 }
 
-// Selección y Retroalimentación de Preguntas
 function selectAnswer(index, correct, explanations) {
     if (state.speechLocked) return;
     const isCorrect = index === correct;
