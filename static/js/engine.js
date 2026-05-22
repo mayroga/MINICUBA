@@ -1,13 +1,12 @@
 /* =========================================================
-   KAMIZEN ENGINE V21 - INTEL PREFACE & TREASURE HUNT SYSTEM
+   KAMIZEN ENGINE V22 - COMPREHENSIVE KIDS TREASURE SEARCH
    ✔ Persistencia Local Completa (LocalStorage)
    ✔ Registro de Nombre de Usuario para Despedida Personalizada
-   ✔ Ventana Inteligente / Guía de Prefacio al Inicio (Bloque por Bloque)
-   ✔ Animación de Habla Real en Avatares Sincronizada con Voces
-   ✔ Sistema Cinematic Treasure Hunt: Búsqueda y Aparición de Iconos Visuales
-   ✔ Palabras de Poder: Respect, Love, Focus, Well-being, Joy, Wealth
-   ✔ Objetos del Tesoro Dinámicos: Cars, Houses, Books, Coins (Según el bloque)
-   ✔ Interfaz Superior Limpia: Esquina Izquierda Vacía, Esquina Derecha con Speaker Status
+   ✔ Esquina Izquierda 100% Vacía (Purger de Idiomas / Sin EN/ES)
+   ✔ Esquina Derecha: Únicamente "🔊 SPEAKER ONLINE"
+   ✔ Ventana Inteligente: Prefacio Organizado en 6 Reinos del Tesoro Sencillos para Niños
+   ✔ Lógica de Recolección: Los Avatares Extienden sus Brazos y Toman el Objeto con la Mano
+   ✔ Significado Educativo Infantil Dinámico adaptado al Bloque Activo
    ✔ Música de Dopamina Suave y Segura (Sine Wave + Low Pass Filter)
    ✔ Master Timer Reducido: 10 Minutes Total Focus
    ✔ Soporte completo e intacto: v, h, story, br, sil, d, r, c, sim
@@ -220,7 +219,6 @@ function narrate(text, isAvatarActive, callback) {
     state.speechLocked = true;
     window.speechSynthesis.cancel();
     
-    // Activar visualmente la simulación de habla real en el DOM
     const elements = document.querySelectorAll(".cube-model-inner");
     elements.forEach(el => el.classList.add("talking-avatar"));
 
@@ -307,41 +305,50 @@ function startSystem() {
 }
 
 /* =========================================================
-   VENTANA INTELIGENTE: PREFACIO Y GUÍA DE BLOQUES INICIAL
+   VENTANA INTELIGENTE: PREFACIO AGRUPADO EN REINOS SENCILLOS
 ========================================================= */
 function showPrefaceGuide() {
     state.phase = "preface";
     const app = document.getElementById("app");
     
     app.innerHTML = `
-        <div class="card animated fadeIn" style="border: 3px solid #0ea5e9; padding: 20px; width: 100%; box-sizing: border-box;">
-            <h2 style="color:#0ea5e9; font-size: 1.6rem; text-align: center; font-weight: 900; margin-bottom: 15px;">🛡️ MISSION MAP & PREFACE 🛡️</h2>
-            <p style="font-size: 1.05rem; color: #cbd5e1; text-align: center; margin-bottom: 20px;">Welcome to your mental training map. Here is how your daily quest is structured block by block:</p>
+        <div class="card animated fadeIn" style="border: 4px solid #0ea5e9; padding: 20px; width: 100%; box-sizing: border-box;">
+            <h2 style="color:#facc15; font-size: 1.7rem; text-align: center; font-weight: 900; margin-bottom: 10px;">🗺️ THE 6 REINOS OF POWER</h2>
+            <p style="font-size: 1rem; color: #cbd5e1; text-align: center; margin-bottom: 20px;">Complete all 63 maps to find real life treasures! Here is your quest:</p>
             
-            <div style="display: flex; flex-direction: column; gap: 12px; background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 12px;">
-                <div style="border-left: 4px solid #38bdf8; padding-left: 10px;">
-                    <strong style="color:#38bdf8; display:block;">📖 1. STORY BREAKDOWN</strong>
-                    <span style="font-size: 0.9rem; color:#94a3b8;">Immersive narratives that expand your perspective and focus your mind.</span>
+            <div style="display: flex; flex-direction: column; gap: 10px; background: rgba(15, 23, 42, 0.8); padding: 15px; border-radius: 12px; max-height: 280px; overflow-y: auto;">
+                <div style="border-left: 4px solid #ef4444; padding-left: 8px;">
+                    <strong style="color:#ef4444; font-size:1rem;">🛡️ REINO 1: RESPECT FIELD (Missions 1-10)</strong>
+                    <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Learn honor, value family rules, and guard your clean mind.</span>
                 </div>
-                <div style="border-left: 4px solid #4ade80; padding-left: 10px;">
-                    <strong style="color:#4ade80; display:block;">🫁 2. GUIDED BREATHING & SILENCE</strong>
-                    <span style="font-size: 0.9rem; color:#94a3b8;">Automatic inhalation and exhalation rhythms to stabilize bio-energy.</span>
+                <div style="border-left: 4px solid #f43f5e; padding-left: 8px;">
+                    <strong style="color:#f43f5e; font-size:1rem;">🏡 REINO 2: LOVE CASTLE (Missions 11-20)</strong>
+                    <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Build happy homes, help team mates, and grow emotional power.</span>
                 </div>
-                <div style="border-left: 4px solid #facc15; padding-left: 10px;">
-                    <strong style="color:#facc15; display:block;">🎮 3. LIVE TREASURE ARENA</strong>
-                    <span style="font-size: 0.9rem; color:#94a3b8;">Avatars explore real landscapes finding hidden rewards, focus words, and assets.</span>
+                <div style="border-left: 4px solid #38bdf8; padding-left: 8px;">
+                    <strong style="color:#38bdf8; font-size:1rem;">📚 REINO 3: BRAIN FOCUS ZONE (Missions 21-30)</strong>
+                    <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Read powerful books, double task speed, and master high attention.</span>
                 </div>
-                <div style="border-left: 4px solid #f43f5e; padding-left: 10px;">
-                    <strong style="color:#f43f5e; display:block;">🧠 4. DECISION MATRIX</strong>
-                    <span style="font-size: 0.9rem; color:#94a3b8;">Interactive options with real-time corrective colored engineering feedback.</span>
+                <div style="border-left: 4px solid #10b981; padding-left: 8px;">
+                    <strong style="color:#10b981; font-size:1rem;">🏎️ REINO 4: HEALTHY ENGINE (Missions 31-40)</strong>
+                    <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Energize the body, optimize breathing, and run like a race car.</span>
+                </div>
+                <div style="border-left: 4px solid #eab308; padding-left: 8px;">
+                    <strong style="color:#eab308; font-size:1rem;">🪙 REINO 5: GOLDEN JOY ARENA (Missions 41-50)</strong>
+                    <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Multiply high energy feelings, create real wealth, and smile daily.</span>
+                </div>
+                <div style="border-left: 4px solid #a855f7; padding-left: 8px;">
+                    <strong style="color:#a855f7; font-size:1rem;">🏰 REINO 6: TOTAL WEALTH EMPIRE (Missions 51-63)</strong>
+                    <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Rule your lifestyle, manage properties, and become a grandmaster.</span>
                 </div>
             </div>
             
-            <button onclick="exitPreface()" style="margin-top: 25px; width: 100%; background: #0ea5e9; font-weight: 900; font-size: 1.1rem; padding: 15px;">INITIALIZE ADVENTURE</button>
+            <button onclick="exitPreface()" style="margin-top: 20px; width: 100%; background: #22c55e; font-weight: 900; font-size: 1.2rem; padding: 15px;">START QUEST NOW</button>
         </div>
     `;
     
-    narrate("Welcome to your mental training map. Here is how your mission is structured block by block. Story breakdown, guided breathing, live treasure arena, and decision matrix. Let us initialize your adventure.", false);
+    navigator.id = "preface";
+    narrate("Welcome to the six reinos of power. Respect field, love castle, brain focus zone, healthy engine, golden joy arena, and total wealth empire. Complete sixty three levels to win. Let us start your quest now.", false);
 }
 
 function exitPreface() {
@@ -419,30 +426,43 @@ function renderBlock(block, navHeader) {
     }
     
     // =========================================================
-    // MODO SIMULACIÓN: ECO-SISTEMA ARENA DE BÚSQUEDA DE TESOROS
+    // MODO SIMULACIÓN INTERACTIVA: RECOLECCIÓN FÍSICA CON SIGNIFICADO
     // =========================================================
     if (isAvatarMode) {
         startDopamineMusic();
         
-        // Selección de Palabras de Poder y Tesoros según el contexto del bloque actual
-        let currentPowerWord = "FOCUS";
-        let currentVisualAsset = "📚 BOOKS & KNOWLEDGE";
+        // Configuración de Tesoro con Lógica Educativa Infantil según Bloque Activo
+        let powerWord = "FOCUS";
+        let visualAsset = "📚 BOOKS";
         let assetSymbol = "📘";
+        let kidsLesson = "Books give you superpowers! Reading lets your brain grow smarter and win every single game.";
         
-        const blockIdHex = state.currentIndex % 6;
-        if (blockIdHex === 0) { currentPowerWord = "RESPECT"; currentVisualAsset = "🛡️ HONOR SHIELD"; assetSymbol = "🛡️"; }
-        else if (blockIdHex === 1) { currentPowerWord = "LOVE"; currentVisualAsset = "🏡 FAMILY HOME"; assetSymbol = "🏡"; }
-        else if (blockIdHex === 2) { currentPowerWord = "FOCUS"; currentVisualAsset = "📚 STUDY & BOOKS"; assetSymbol = "📘"; }
-        else if (blockIdHex === 3) { currentPowerWord = "WELL-BEING"; currentVisualAsset = "🏎️ ENERGY SPORTS CAR"; assetSymbol = "🏎️"; }
-        else if (blockIdHex === 4) { currentPowerWord = "JOY"; currentVisualAsset = "💎 HAPPINESS GOLD COINS"; assetSymbol = "🪙"; }
-        else { currentPowerWord = "WEALTH"; currentVisualAsset = "🏰 PROSPEROUS ESTATE"; assetSymbol = "🏰"; }
+        const blockSelector = state.currentIndex % 6;
+        if (blockSelector === 0) { 
+            powerWord = "RESPECT"; visualAsset = "🛡️ HONOR SHIELD"; assetSymbol = "🛡️"; 
+            kidsLesson = "The Shield of Respect means protecting your family rules and treating people with immense kindness.";
+        } else if (blockSelector === 1) { 
+            powerWord = "LOVE"; visualAsset = "🏡 FAMILY HOME"; assetSymbol = "🏡"; 
+            kidsLesson = "The Castle of Love teaches you that a happy home is built by sharing, helping your parents, and being an awesome son.";
+        } else if (blockSelector === 2) { 
+            powerWord = "FOCUS"; visualAsset = "📚 SCHOOL BOOKS"; assetSymbol = "📘"; 
+            kidsLesson = "Books give you ultimate knowledge. When you study with attention, you unlock the doors to master technology and software.";
+        } else if (blockSelector === 3) { 
+            powerWord = "WELL-BEING"; visualAsset = "🏎️ SPEED CAR"; assetSymbol = "🏎️"; 
+            kidsLesson = "A fast sports car needs clean fuel. Your body needs deep breathing and healthy meals to move with maximum speed.";
+        } else if (blockSelector === 4) { 
+            powerWord = "JOY"; visualAsset = "🪙 GOLD COINS"; assetSymbol = "🪙"; 
+            kidsLesson = "Golden coins are won through daily joy and discipline. When you complete your work happily, you attract abundance.";
+        } else { 
+            powerWord = "WEALTH"; visualAsset = "🏰 ESTATED REAL ESTATE"; assetSymbol = "🏰"; 
+            kidsLesson = "This prosperous estate means stability. Your focus today creates a solid future with massive physical assets.";
+        }
 
-        const basePhrase = block.sub?.en || block.tx?.en || "EXPLORE AND UNCOVER MENTAL TREASURES RIGHT NOW";
-        textToRead = `Attention ${state.userName.toUpperCase()} and MICHAEL! Look closely! They are moving to find the hidden treasure. Underneath the grass lies the power of ${currentPowerWord}! ${basePhrase}`;
+        const basePhrase = block.sub?.en || block.tx?.en || "COLLECT THE TARGET OBJECT NOW";
+        textToRead = `Michael and ${state.userName.toUpperCase()}! Grab the hidden treasure with your hands! Look at the ${visualAsset}. ${kidsLesson} ${basePhrase}`;
 
         html += `
         <style>
-            /* Animación de Habla Real Modulada */
             @keyframes mouthSpeak {
                 0% { transform: scaleY(0.3); }
                 100% { transform: scaleY(1.3); }
@@ -451,34 +471,43 @@ function renderBlock(block, navHeader) {
                 animation: mouthSpeak 0.15s infinite alternate ease-in-out;
             }
             
-            /* Movimiento Lateral de Exploración de Tesoros */
-            @keyframes walkAndExerciseLeft {
-                0% { left: 5%; transform: translateY(0px) rotate(0deg); }
-                25% { transform: translateY(-6px) rotate(3deg); }
-                50% { left: 40%; transform: translateY(0px) rotate(-3deg); }
-                75% { transform: translateY(-10px) rotate(4deg); }
-                100% { left: 5%; transform: translateY(0px) rotate(0deg); }
+            /* Animación de Brazos Estirándose para AGARRAR el Tesoro Central */
+            @keyframes grabAssetLeft {
+                0% { left: 5%; transform: translateY(0px); }
+                40% { left: 35%; }
+                50% { left: 35%; }
+                /* El brazo izquierdo se extiende físicamente hacia adelante al llegar al objeto */
+                55% { left: 35%; }
+                100% { left: 5%; transform: translateY(0px); }
             }
-            @keyframes walkAndExerciseRight {
-                0% { right: 5%; transform: translateY(0px) rotate(0deg); }
-                30% { transform: translateY(-8px) rotate(-4deg); }
-                50% { right: 42%; transform: translateY(0px) rotate(3deg); }
-                70% { transform: translateY(-5px) rotate(-2deg); }
-                100% { right: 5%; transform: translateY(0px) rotate(0deg); }
+            @keyframes grabAssetRight {
+                0% { right: 5%; transform: translateY(0px); }
+                40% { right: 35%; }
+                50% { right: 35%; }
+                /* El brazo derecho se extiende físicamente hacia adelante al llegar al objeto */
+                55% { right: 35%; }
+                100% { right: 5%; transform: translateY(0px); }
             }
-            @keyframes swingLimb {
-                0% { transform: rotate(-20deg); }
-                100% { transform: rotate(20deg); }
+            @keyframes swingArmL {
+                0% { transform: rotate(-15deg); }
+                40% { transform: rotate(70deg) cubic-bezier(0.175, 0.885, 0.32, 1.275); } /* Extiende la mano para tomarlo */
+                100% { transform: rotate(-15deg); }
+            }
+            @keyframes swingArmR {
+                0% { transform: rotate(15deg); }
+                40% { transform: rotate(-70deg) cubic-bezier(0.175, 0.885, 0.32, 1.275); } /* Extiende la mano para tomarlo */
+                100% { transform: rotate(15deg); }
+            }
+            @keyframes itemFloat {
+                0% { transform: scale(0) translateY(40px); opacity:0; }
+                30% { transform: scale(1.3) translateY(-10px); opacity:1; }
+                50% { transform: scale(1) translateY(0); opacity:1; }
+                52% { transform: scale(0.6) translateY(-20px); opacity:0.5; } /* Al ser tomado por las manos */
+                100% { transform: scale(0) translateY(-40px); opacity:0; }
             }
             @keyframes moveClouds {
                 from { background-position-x: 0px; }
                 to { background-position-x: 1000px; }
-            }
-            /* Cofre del Tesoro Emergiendo Dinámicamente */
-            @keyframes chestPop {
-                0% { transform: scale(0) translateY(30px); opacity: 0; }
-                70% { transform: scale(1.2) translateY(-5px); opacity: 1; }
-                100% { transform: scale(1) translateY(0); opacity: 1; }
             }
         </style>
         ` + timerUI + `
@@ -493,8 +522,8 @@ function renderBlock(block, navHeader) {
                 width: 100%;
                 box-sizing: border-box;
             ">
-                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace; z-index:10;">🎮 ADVENTURE ARENA</div>
-                <div style="position: absolute; top: 12px; right: 15px; font-size: 11px; color: #facc15; font-family: monospace; font-weight: bold; z-index:10;">⚡ LIVE TALK</div>
+                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace; z-index:10;">🎮 LIVE HUNT</div>
+                <div style="position: absolute; top: 12px; right: 15px; font-size: 11px; color: #10b981; font-family: monospace; font-weight: bold; z-index:10;">🤝 TOUCH & ACQUIRE</div>
 
                 <div class="landscape-background" style="
                     display: block;
@@ -509,58 +538,61 @@ function renderBlock(block, navHeader) {
                     box-sizing: border-box;
                 ">
                     <div style="position: absolute; top: 10px; left:0; width:100%; height:40px; background: radial-gradient(circle, #fff 20%, transparent 20%) 0 0, radial-gradient(circle, #fff 20%, transparent 20%) 40px 10px; background-size: 80px 40px; opacity: 0.5; animation: moveClouds 25s linear infinite;"></div>
-                    
                     <div style="position: absolute; bottom: 45%; left: 15%; width: 0; height: 0; border-left: 40px solid transparent; border-right: 40px solid transparent; border-bottom: 35px solid #86efac; opacity:0.6;"></div>
                     <div style="position: absolute; bottom: 45%; left: 60%; width: 0; height: 0; border-left: 55px solid transparent; border-right: 55px solid transparent; border-bottom: 45px solid #65a30d; opacity:0.5;"></div>
 
-                    <div style="position: absolute; bottom: 35px; left: calc(50% - 40px); width: 80px; text-align: center; animation: chestPop 2.5s ease-out forwards; z-index:8;">
-                        <div style="font-size: 24px; margin-bottom: 2px;">📦</div>
-                        <div style="background: rgba(0,0,0,0.7); color: #facc15; font-size: 9px; font-weight: 900; padding: 2px 5px; border-radius: 4px; font-family: monospace; border: 1px solid #facc15; text-transform: uppercase;">
-                            ${currentPowerWord}
+                    <div style="position: absolute; bottom: 45px; left: calc(50% - 40px); width: 80px; text-align: center; animation: itemFloat 6s infinite ease-in-out; z-index:8;">
+                        <div style="font-size: 32px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">${assetSymbol}</div>
+                        <div style="background: #1e1b4b; color: #facc15; font-size: 9px; font-weight: 900; padding: 2px 4px; border-radius: 4px; border: 1px solid #facc15; font-family:monospace; text-transform:uppercase;">
+                            ${powerWord}
                         </div>
                     </div>
 
-                    <div style="position: absolute; top: 35px; left: calc(50% - 50px); width: 100px; text-align: center; animation: chestPop 3.5s ease-out forwards; z-index:7;">
-                        <div style="font-size: 28px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));">${assetSymbol}</div>
-                        <div style="color: #0369a1; font-size: 8px; font-weight: 800; text-transform: uppercase; font-family: sans-serif; background: rgba(255,255,255,0.8); border-radius: 3px; padding: 1px;">
-                            ${currentVisualAsset.split(' ')[1] || "ASSET"}
-                        </div>
-                    </div>
-
-                    <div style="position: absolute; bottom: 15px; width: 60px; height: 110px; animation: walkAndExerciseLeft 6s infinite linear;">
+                    <div style="position: absolute; bottom: 15px; width: 60px; height: 110px; animation: grabAssetLeft 6s infinite ease-in-out;">
                         <div style="font-family: monospace; font-size: 11px; color: #0369a1; font-weight: bold; text-align:center; margin-bottom:2px;">MICHAEL</div>
-                        <div class="cube-model-inner" style="width: 44px; height: 85px; position: relative; margin: 0 auto; transform-origin: bottom center;">
+                        <div class="cube-model-inner" style="width: 44px; height: 85px; position: relative; margin: 0 auto;">
                             <div style="width: 24px; height: 24px; background: #ffdbac; border-radius: 4px; border: 2px solid #000; margin: 0 auto; position: relative; z-index:5;">
                                 <div style="display:flex; justify-content:space-around; margin-top:4px;"><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div></div>
-                                <div class="avatar-mouth" style="width: 8px; height: 3px; background: #7f1d1d; margin: 4px auto 0 auto; border-radius: 2px; transform-origin: center;"></div>
+                                <div class="avatar-mouth" style="width: 8px; height: 3px; background: #7f1d1d; margin: 4px auto 0 auto; border-radius: 2px;"></div>
                             </div>
                             <div style="width: 40px; height: 34px; background: #0ea5e9; border: 2px solid #000; border-radius: 3px; margin-top: -2px; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 10px; position:relative; z-index:4;">M</div>
-                            <div style="position: absolute; left: -8px; top: 24px; width: 8px; height: 26px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate ease-in-out;"></div>
-                            <div style="position: absolute; right: -8px; top: 24px; width: 8px; height: 26px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate-reverse ease-in-out;"></div>
-                            <div style="position: absolute; left: 4px; bottom: 0; width: 10px; height: 24px; background: #1e293b; border: 1.5px solid #000; border-radius:0 0 4px 4px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate-reverse ease-in-out;"></div>
-                            <div style="position: absolute; right: 4px; bottom: 0; width: 10px; height: 24px; background: #1e293b; border: 1.5px solid #000; border-radius:0 0 4px 4px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate ease-in-out;"></div>
+                            <div style="position: absolute; left: -8px; top: 24px; width: 8px; height: 26px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingArmL 6s infinite ease-in-out;">
+                                <div style="position: absolute; bottom: -4px; left: 0; width: 8px; height: 4px; background: #000; border-radius: 50%;"></div> </div>
+                            <div style="position: absolute; right: -8px; top: 24px; width: 8px; height: 26px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingArmR 6s infinite ease-in-out;">
+                                <div style="position: absolute; bottom: -4px; left: 0; width: 8px; height: 4px; background: #000; border-radius: 50%;"></div> </div>
+                            <div style="position: absolute; left: 4px; bottom: 0; width: 10px; height: 24px; background: #1e293b; border: 1.5px solid #000; border-radius:0 0 4px 4px;"></div>
+                            <div style="position: absolute; right: 4px; bottom: 0; width: 10px; height: 24px; background: #1e293b; border: 1.5px solid #000; border-radius:0 0 4px 4px;"></div>
                         </div>
                     </div>
 
-                    <div style="position: absolute; bottom: 15px; width: 60px; height: 110px; animation: walkAndExerciseRight 6s infinite linear;">
+                    <div style="position: absolute; bottom: 15px; width: 60px; height: 110px; animation: grabAssetRight 6s infinite ease-in-out;">
                         <div style="font-family: monospace; font-size: 11px; color: #9f1239; font-weight: bold; text-align:center; margin-bottom:2px;">${state.userName.toUpperCase()}</div>
-                        <div class="cube-model-inner" style="width: 44px; height: 85px; position: relative; margin: 0 auto; transform-origin: bottom center;">
+                        <div class="cube-model-inner" style="width: 44px; height: 85px; position: relative; margin: 0 auto;">
                             <div style="width: 24px; height: 24px; background: #ffdcbe; border-radius: 4px; border: 2px solid #000; margin: 0 auto; position: relative; z-index:5;">
                                 <div style="display:flex; justify-content:space-around; margin-top:4px;"><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div></div>
-                                <div class="avatar-mouth" style="width: 8px; height: 3px; background: #7f1d1d; margin: 4px auto 0 auto; border-radius: 2px; transform-origin: center;"></div>
+                                <div class="avatar-mouth" style="width: 8px; height: 3px; background: #7f1d1d; margin: 4px auto 0 auto; border-radius: 2px;"></div>
                             </div>
                             <div style="width: 40px; height: 34px; background: #f43f5e; border: 2px solid #000; border-radius: 3px; margin-top: -2px; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 10px; position:relative; z-index:4;">${state.userName[0].toUpperCase()}</div>
-                            <div style="position: absolute; left: -8px; top: 24px; width: 8px; height: 26px; background: #ffdcbe; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate-reverse ease-in-out;"></div>
-                            <div style="position: absolute; right: -8px; top: 24px; width: 8px; height: 26px; background: #ffdcbe; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate ease-in-out;"></div>
-                            <div style="position: absolute; left: 4px; bottom: 0; width: 10px; height: 24px; background: #111827; border: 1.5px solid #000; border-radius:0 0 4px 4px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate ease-in-out;"></div>
-                            <div style="position: absolute; right: 4px; bottom: 0; width: 10px; height: 24px; background: #111827; border: 1.5px solid #000; border-radius:0 0 4px 4px; transform-origin: top center; animation: swingLimb 0.4s infinite alternate-reverse ease-in-out;"></div>
+                            <div style="position: absolute; left: -8px; top: 24px; width: 8px; height: 26px; background: #ffdcbe; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingArmL 6s infinite ease-in-out;">
+                                <div style="position: absolute; bottom: -4px; left: 0; width: 8px; height: 4px; background: #000; border-radius: 50%;"></div>
+                            </div>
+                            <div style="position: absolute; right: -8px; top: 24px; width: 8px; height: 26px; background: #ffdcbe; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingArmR 6s infinite ease-in-out;">
+                                <div style="position: absolute; bottom: -4px; left: 0; width: 8px; height: 4px; background: #000; border-radius: 50%;"></div>
+                            </div>
+                            <div style="position: absolute; left: 4px; bottom: 0; width: 10px; height: 24px; background: #111827; border: 1.5px solid #000; border-radius:0 0 4px 4px;"></div>
+                            <div style="position: absolute; right: 4px; bottom: 0; width: 10px; height: 24px; background: #111827; border: 1.5px solid #000; border-radius:0 0 4px 4px;"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="youtube-shorts-subtitles" style="width: 100%; box-sizing: border-box;">
+                <div style="background: rgba(15,23,42,0.9); border: 2px solid #0ea5e9; border-radius: 12px; padding: 10px; margin-top: 10px; text-align: left;">
+                    <span style="color:#0ea5e9; font-size:11px; font-weight:900; display:block; text-transform:uppercase; font-family:monospace;">💡 KID'S KNOWLEDGE LOGIC:</span>
+                    <p style="color:#f8fafc; font-size:0.95rem; margin: 3px 0 0 0; line-height:1.4; font-weight:500;">${kidsLesson}</p>
+                </div>
+
+                <div class="youtube-shorts-subtitles" style="width: 100%; box-sizing: border-box; margin-top: 10px;">
                     <p id="shorts-text-target" style="
-                        font-size: 1.35rem; 
+                        font-size: 1.25rem; 
                         font-weight: 900; 
                         color: #facc15; 
                         text-transform: uppercase; 
@@ -569,7 +601,7 @@ function renderBlock(block, navHeader) {
                         margin: 0;
                         text-shadow: 2px 2px 0px #000;
                     ">
-                        ${textToRead}
+                        ${basePhrase}
                     </p>
                 </div>
             </div>
