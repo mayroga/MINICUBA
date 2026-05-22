@@ -306,146 +306,71 @@
     },
     {
       "id": 54,
-  "cat": "school_security",
-  "b": [
-    {
-      "t": "v",
-      "tx": {
-        "en": "MISSION 54: SCHOOL RADAR"
-      }
-    },
-
-    {
-      "t": "h",
-      "tx": {
-        "en": "Stay calm. Think clearly. Follow safety steps."
-      }
-    },
-
-    {
-      "story": {
-        "en": "Learn your exits, safe rooms, and trusted adults at school. In a serious emergency, stay calm and listen carefully to teachers, staff, or emergency responders. If danger appears, remember the safety steps: Hide if needed, stay quiet, protect yourself, or leave the area safely if instructed and possible. Preparation helps your brain react faster and safer."
-      }
-    },
-
-    {
-      "t": "breath_auto",
-      "d": 35,
-      "tx": {
-        "en": "Breathe slowly and visualize your safe exits"
-      },
-      "inf": {
-        "en": "Preparation helps reduce panic"
-      }
-    },
-
-    {
-      "t": "d",
-      "q": {
-        "en": "If there is a dangerous emergency at school, what is the safest first action?"
-      },
-      "op": [
-        "Run randomly and scream",
-        "Stay calm and follow safety instructions",
-        "Ignore teachers and record videos",
-        "Open doors for everyone"
-      ],
-      "c": 1,
-      "ex": [
-        "Random panic can create more danger",
-        "Listening to trained adults improves safety",
-        "Recording wastes valuable time",
-        "Opening doors can be unsafe"
-      ]
-    },
-
-    {
-      "t": "sim",
-      "d": 30,
-      "scene": "school_classroom",
-      "avatar": "roblox_suit_avatar",
-      "anim": "alert_walk",
-      "sub": {
-        "en": "Emergency alert detected on the school map. Stay calm. Follow teacher instructions immediately. Move away from danger if directed. Stay quiet, protect your position, silence devices, and wait for official instructions before leaving safety zones."
-      }
-    },
-
-    {
-      "t": "d",
-      "q": {
-        "en": "Why is staying quiet important during an emergency?"
-      },
-      "op": [
-        "It helps everyone stay hidden and focused",
-        "It makes the emergency longer",
-        "It confuses helpers",
-        "It wastes time"
-      ],
-      "c": 0,
-      "ex": [
-        "Silence can improve safety",
-        "Noise may increase danger",
-        "Emergency teams need calm environments",
-        "Quiet focus helps decision making"
-      ]
-    },
-
-    {
-      "t": "d",
-      "q": {
-        "en": "Who should you listen to during a serious school emergency?"
-      },
-      "op": [
-        "Random students online",
-        "Teachers, staff, and emergency responders",
-        "Social media rumors",
-        "People yelling in panic"
-      ],
-      "c": 1,
-      "ex": [
-        "Rumors create confusion",
-        "Trained adults guide safety procedures",
-        "Social media may contain false information",
-        "Panic makes situations harder"
-      ]
-    },
-
-    {
-      "t": "sim",
-      "d": 25,
-      "scene": "school_hallway",
-      "avatar": "student_guardian",
-      "anim": "calm_signal",
-      "sub": {
-        "en": "The team stays low, quiet, and alert. Phones are silenced. Everyone waits calmly while trained adults secure the area. Safety comes from preparation, teamwork, and clear thinking."
-      }
-    },
-
-    {
-      "t": "r",
-      "tx": "+Protection",
-      "p": 30
-    },
-
-    {
-      "t": "sil",
-      "d": 80,
-      "tx": {
-        "en": "Visualize your safe place and trusted adults"
-      },
-      "inf": {
-        "en": "Mental preparation builds resilience"
-      }
-    },
-
-    {
-      "t": "breath_auto",
-      "d": 30,
-      "tx": {
-        "en": "Inhale calm... exhale fear"
-      },
-      "inf": {
-        "en": "Calm thinking improves safety"
+      "cat": "school_security",
+      "b": [
+        {"t": "v", "tx": {"en": "MISSION 54: SCHOOL RADAR"}},
+        {"t": "h", "tx": {"en": "Be the master of your hallways"}},
+        {"story": {"en": "Memorize every door in school. Know who to follow in an emergency. If there is a threat, remember: Hide, Stay Safe, and Run if you can. You are prepared, so you are not afraid."}},
+        {
+          "t": "breath_auto",
+          "d": 35,
+          "tx": {"en": "Breathe and visualize your exits"},
+          "inf": {"en": "Preparation removes fear"}
+        },
+        {
+          "t": "d",
+          "q": {"en": "If there is a big danger at school, what do you do?"},
+          "op": [
+            "Cry",
+            "Hide, stay safe, or run",
+            "Freeze",
+            "Call for friends"
+          ],
+          "c": 1,
+          "ex": [
+            "Crying blocks action",
+            "Hide/Safe/Run is the protocol",
+            "Freezing is dangerous",
+            "Following protocol saves lives"
+          ]
+        },
+        {
+          "t": "sim",
+          "d": 20,
+          "scene": "school_classroom",
+          "avatar": "roblox_suit_avatar",
+          "anim": "alert_walk",
+          "sub": {"en": "An unverified anomaly or hazard enters the server map. No panic, no lag. The team stays low, quiet, and alert. Phones are silenced. Everyone waits calmly while trained adults secure the area. Execute the built-in safety protocols step by step: Hide in protected cover, lock down your defensive position, or clear the area toward an extraction exit. Your preparation overrides any fear virus. Safety comes from preparation, teamwork, and clear thinking."}
+        },
+        {
+          "t": "d",
+          "q": {"en": "Why is preparation important?"},
+          "op": [
+            "It helps you react safely",
+            "It creates panic",
+            "It wastes energy",
+            "It causes confusion"
+          ],
+          "c": 0,
+          "ex": [
+            "Preparation improves response",
+            "Fear grows when unprepared",
+            "Planning saves energy",
+            "Preparation reduces confusion"
+          ]
+        },
+        {"t": "r", "tx": "+Protection", "p": 30},
+        {
+          "t": "sil",
+          "d": 80,
+          "tx": {"en": "Think of your safe spot. Visualize your safe place and trusted adults"},
+          "inf": {"en": "Builds mental resilience. Strong mind"}
+        },
+        {
+          "t": "breath_auto",
+          "d": 30,
+          "tx": {"en": "Inhale safety... exhale fear"},
+          "inf": {"en": "Prepares your response"}
         }
       ]
     },
