@@ -313,32 +313,32 @@ function showPrefaceGuide() {
     
     app.innerHTML = `
         <div class="card animated fadeIn" style="border: 4px solid #0ea5e9; padding: 20px; width: 100%; box-sizing: border-box;">
-            <h2 style="color:#facc15; font-size: 1.7rem; text-align: center; font-weight: 900; margin-bottom: 10px;">🗺️ THE 6 REINOS OF POWER</h2>
+            <h2 style="color:#facc15; font-size: 1.7rem; text-align: center; font-weight: 900; margin-bottom: 10px;">🗺️ THE 6 KINGDOMS OF POWER</h2>
             <p style="font-size: 1rem; color: #cbd5e1; text-align: center; margin-bottom: 20px;">Complete all 63 maps to find real life treasures! Here is your quest:</p>
             
             <div style="display: flex; flex-direction: column; gap: 10px; background: rgba(15, 23, 42, 0.8); padding: 15px; border-radius: 12px; max-height: 280px; overflow-y: auto;">
                 <div style="border-left: 4px solid #ef4444; padding-left: 8px;">
-                    <strong style="color:#ef4444; font-size:1rem;">🛡️ REINO 1: RESPECT FIELD (Missions 1-10)</strong>
+                    <strong style="color:#ef4444; font-size:1rem;">🛡️ KINGDOM 1: RESPECT FIELD (Missions 1-10)</strong>
                     <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Learn honor, value family rules, and guard your clean mind.</span>
                 </div>
                 <div style="border-left: 4px solid #f43f5e; padding-left: 8px;">
-                    <strong style="color:#f43f5e; font-size:1rem;">🏡 REINO 2: LOVE CASTLE (Missions 11-20)</strong>
+                    <strong style="color:#f43f5e; font-size:1rem;">🏡 KINGDOM 2: LOVE CASTLE (Missions 11-20)</strong>
                     <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Build happy homes, help team mates, and grow emotional power.</span>
                 </div>
                 <div style="border-left: 4px solid #38bdf8; padding-left: 8px;">
-                    <strong style="color:#38bdf8; font-size:1rem;">📚 REINO 3: BRAIN FOCUS ZONE (Missions 21-30)</strong>
+                    <strong style="color:#38bdf8; font-size:1rem;">📚 KINGDOM 3: BRAIN FOCUS ZONE (Missions 21-30)</strong>
                     <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Read powerful books, double task speed, and master high attention.</span>
                 </div>
                 <div style="border-left: 4px solid #10b981; padding-left: 8px;">
-                    <strong style="color:#10b981; font-size:1rem;">🏎️ REINO 4: HEALTHY ENGINE (Missions 31-40)</strong>
+                    <strong style="color:#10b981; font-size:1rem;">🏎️ KINGDOM 4: HEALTHY ENGINE (Missions 31-40)</strong>
                     <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Energize the body, optimize breathing, and run like a race car.</span>
                 </div>
                 <div style="border-left: 4px solid #eab308; padding-left: 8px;">
-                    <strong style="color:#eab308; font-size:1rem;">🪙 REINO 5: GOLDEN JOY ARENA (Missions 41-50)</strong>
+                    <strong style="color:#eab308; font-size:1rem;">🪙 KINGDOM 5: GOLDEN JOY ARENA (Missions 41-50)</strong>
                     <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Multiply high energy feelings, create real wealth, and smile daily.</span>
                 </div>
                 <div style="border-left: 4px solid #a855f7; padding-left: 8px;">
-                    <strong style="color:#a855f7; font-size:1rem;">🏰 REINO 6: TOTAL WEALTH EMPIRE (Missions 51-63)</strong>
+                    <strong style="color:#a855f7; font-size:1rem;">🏰 KINGDOM 6: TOTAL WEALTH EMPIRE (Missions 51-63)</strong>
                     <span style="font-size: 0.85rem; color:#94a3b8; display:block;">Rule your lifestyle, manage properties, and become a grandmaster.</span>
                 </div>
             </div>
