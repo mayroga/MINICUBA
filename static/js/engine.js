@@ -1,128 +1,217 @@
 // =========================================================
-// KAMIZEN ENGINE OPTIMIZED FULL VERSION
+// KAMIZEN ENGINE V4 - FULL SYSTEM (AVATARS + OBSTACLES + TREASURE RUN + 10MIN HARD STOP)
 // =========================================================
 
-let state={userName:"Warrior",stories:[],missions:[],currentIndex:0,currentBlock:0,phase:"loading",speechLocked:false,initialized:false,timer:null,timeLeft:0,sessionStartTime:null,audioCtx:null,oscillator:null,gainNode:null,filterNode:null,musicInterval:null,companionToggle:true,player:{x:78,y:0,holding:false,score:0},sessionEnded:false,masterTimeout:null,keyboardEnabled:false};
+let state={
+userName:"Warrior",
+stories:[],missions:[],currentIndex:0,currentBlock:0,
+phase:"loading",
+speechLocked:false,
+initialized:false,
+timer:null,timeLeft:0,
+sessionStartTime:null,
+masterTimer:null,
 
-const $=e=>document.getElementById(e),card=t=>`<div class="card">${t}</div>`,timerUI=`<div class="card center timerCard"><h1 id="timerDisplay">00:00</h1></div>`;
+audioCtx:null,oscillator:null,gainNode:null,filterNode:null,musicInterval:null,
 
-const loot=[["RESPECT","🛡️"],["LOVE","🏡"],["FOCUS","📚"],["HEALTH","🏎️"],["JOY","🪙"],["WEALTH","🏰"]];
+player:{x:50,y:0,vy:0,onGround:true,alive:true,score:0},
 
-function avatar(name,color,id=""){
-return `<div ${id?`id="${id}"`:""} class="avatarWrap" style="position:absolute;bottom:15px;${id?`left:${state.player.x}%;transition:left .08s linear;`:`left:8%;`}width:60px;height:110px;"><div class="avatarName" style="font-size:11px;font-weight:bold;color:${color}">${name.toUpperCase()}</div><div class="cube-model-inner"><div class="avatarHead" style="width:24px;height:24px;background:#ffdbac;border-radius:4px;border:2px solid #000;margin:auto;"><div style="display:flex;justify-content:space-around;margin-top:5px"><span style="width:4px;height:4px;background:#000;border-radius:50%"></span><span style="width:4px;height:4px;background:#000;border-radius:50%"></span></div><div class="avatar-mouth" style="width:8px;height:3px;background:#7f1d1d;margin:4px auto"></div></div><div class="avatarBody" style="width:40px;height:34px;background:${color};border:2px solid #000;margin:auto;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold">${name[0].toUpperCase()}</div></div></div>`;
+obstacles:[],keys:{},treasure:{x:85,y:40,collected:false,active:false}
+};
+
+const $=id=>document.getElementById(id);
+const card=t=>`<div class="card">${t}</div>`;
+
+// =========================================================
+// LOAD
+// =========================================================
+
+window.addEventListener("load",async()=>{loadProgress();await loadAll();intro();});
+
+function loadProgress(){const s=localStorage.getItem("kamizen");if(s)Object.assign(state,JSON.parse(s));}
+function save(){localStorage.setItem("kamizen",JSON.stringify(state));}
+
+async function loadAll(){
+const app=$("app");app.innerHTML=card("LOADING...");
+const [a,b]=await Promise.all([fetch("/api/stories"),fetch("/api/missions")]);
+state.stories=(await a.json()).stories||[];
+state.missions=(await b.json()).missions||[];
+state.initialized=true;
 }
 
-function saveProgress(){localStorage.setItem('kamizen_save',JSON.stringify({currentIndex:state.currentIndex,currentBlock:state.currentBlock,userName:state.userName,player:state.player}))}
+// =========================================================
+// 10 MIN HARD STOP
+// =========================================================
 
-function loadProgress(){const s=localStorage.getItem('kamizen_save');if(!s)return;const d=JSON.parse(s);state.currentIndex=d.currentIndex||0;state.currentBlock=d.currentBlock||0;state.userName=d.userName||"Warrior";if(d.player)state.player=d.player}
+function startMasterTimer(){
+clearTimeout(state.masterTimer);
+state.masterTimer=setTimeout(endSession,600000);
+}
 
-addEventListener("load",async()=>{loadProgress();await loadAllData();showIntro()});
+function endSession(){
+stopAll();
+document.getElementById("app").innerHTML=card(`<h2>SESSION COMPLETE</h2><p>${state.userName} finished training</p>`);
+narrate("Session complete. Good job.");
+}
 
-async function loadAllData(){const app=$("app");app.innerHTML=card("<h2>SYSTEM BOOTING...</h2><p>Loading Missions...</p>");try{const[r1,r2]=await Promise.all([fetch('/api/stories'),fetch('/api/missions')]);const s=await r1.json(),m=await r2.json();state.stories=Array.isArray(s.stories)?s.stories.sort((a,b)=>a.id-b.id):[];state.missions=Array.isArray(m.missions)?m.missions.sort((a,b)=>a.id-b.id):[];state.initialized=true}catch(e){console.error(e);app.innerHTML=card('<h2>BOOT ERROR</h2>')}}
+function stopAll(){
+speechSynthesis.cancel();
+clearInterval(state.timer);
+state.obstacles=[];
+state.treasure.collected=false;
+}
 
-function startDopamineMusic(){try{if(!state.audioCtx)state.audioCtx=new(window.AudioContext||window.webkitAudioContext)();state.oscillator=state.audioCtx.createOscillator();state.gainNode=state.audioCtx.createGain();state.filterNode=state.audioCtx.createBiquadFilter();state.oscillator.type='sine';state.oscillator.frequency.setValueAtTime(288,state.audioCtx.currentTime);state.filterNode.type='lowpass';state.filterNode.frequency.setValueAtTime(600,state.audioCtx.currentTime);state.gainNode.gain.setValueAtTime(.04,state.audioCtx.currentTime);state.oscillator.connect(state.filterNode);state.filterNode.connect(state.gainNode);state.gainNode.connect(state.audioCtx.destination);state.oscillator.start();const notes=[288,324,384,432];let i=0;state.musicInterval=setInterval(()=>{if(state.oscillator){i=(i+1)%notes.length;state.oscillator.frequency.linearRampToValueAtTime(notes[i],state.audioCtx.currentTime+.1)}},800)}catch(e){}}
+// =========================================================
+// SPEECH (READ EVERYTHING)
+// =========================================================
 
-function stopDopamineMusic(){if(state.musicInterval)clearInterval(state.musicInterval);if(state.oscillator){try{state.oscillator.stop();state.oscillator.disconnect()}catch(e){}state.oscillator=null}}
+function narrate(t){
+if(!t)return;
+state.speechLocked=true;
+speechSynthesis.cancel();
+const u=new SpeechSynthesisUtterance(t);
+u.onend=()=>state.speechLocked=false;
+speechSynthesis.speak(u);
+}
 
-function startMasterTimer(){clearTimeout(state.masterTimeout);state.masterTimeout=setTimeout(()=>{state.sessionEnded=true;finishSession()},600000)}
+// =========================================================
+// INTRO
+// =========================================================
 
-function finishSession(){state.sessionEnded=true;window.speechSynthesis.cancel();stopDopamineMusic();clearInterval(state.timer);$("app").innerHTML=`<div class="card center"><h2 style="color:#22c55e">🌟 SESSION COMPLETE 🌟</h2><p>Amazing work ${state.userName.toUpperCase()}!</p><div class="rewardCard"><p>✔ Start your class</p><p>✔ Go play outside</p><p>✔ Talk with your family</p><p>✔ Come back tomorrow stronger</p></div><button onclick="location.reload()">FINISH SESSION</button></div>`;narrate(`Session complete ${state.userName}. Go enjoy the real world now.`,false)}
+function intro(){
+app.innerHTML=`
 
-function narrate(text,isAvatar,cb){if(!text||state.sessionEnded){if(cb)cb();return}state.speechLocked=true;window.speechSynthesis.cancel();document.querySelectorAll('.cube-model-inner').forEach(e=>e.classList.add('talking-avatar'));const s=new SpeechSynthesisUtterance(text);s.lang='en-US';s.rate=1;s.pitch=1.1;s.onend=()=>{state.speechLocked=false;document.querySelectorAll('.cube-model-inner').forEach(e=>e.classList.remove('talking-avatar'));if(cb)cb()};speechSynthesis.speak(s)}
+<div class="card center">
+<h1>KAMIZEN ENGINE</h1>
+<button onclick="start()">START</button>
+</div>`;
+}
 
-function setupPlayerControls(){if(state.keyboardEnabled)return;state.keyboardEnabled=true;addEventListener('keydown',e=>{if(state.sessionEnded)return;if(e.key==='ArrowLeft'||e.key==='a')state.player.x-=3;if(e.key==='ArrowRight'||e.key==='d')state.player.x+=3;state.player.x=Math.max(0,Math.min(90,state.player.x));updatePlayerPosition();detectGrab()});const g=document.querySelector('.landscape-background');if(g)g.onmousemove=e=>{const r=g.getBoundingClientRect();state.player.x=Math.max(0,Math.min(90,((e.clientX-r.left)/r.width)*100));updatePlayerPosition();detectGrab()}}
+function start(){startMasterTimer();showStory();}
 
-function updatePlayerPosition(){const a=$("playerAvatar");if(a)a.style.left=state.player.x+'%'}
+// =========================================================
+// STORY
+// =========================================================
 
-function detectGrab(){if(state.player.holding)return;const p=$("playerAvatar"),o=$("gameObject");if(!p||!o)return;const a=p.getBoundingClientRect(),b=o.getBoundingClientRect();const c=a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;if(c){state.player.holding=true;state.player.score++;o.style.transform='scale(1.8)';o.style.opacity='0';playGrabEffect();narrate(`Excellent ${state.userName}! Treasure collected!`,true)}}
+function showStory(){
+const s=state.stories[state.currentIndex]||{t:"Story",en:"Training begins"};
+app.innerHTML=card(`<h2>${s.t}</h2><p>${s.en}</p>`)+`<button onclick='startMission()'>CONTINUE</button>`;
+narrate(s.t+". "+s.en);
+}
 
-function playGrabEffect(){try{const c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.frequency.value=880;g.gain.value=.03;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.15)}catch(e){}}
+function startMission(){state.currentBlock=0;state.phase="game";startLoop();}
 
-function jumpToBlock(){if(state.sessionEnded)return;const id=prompt('MISSION ID');if(id!==null&&id!==""){const idx=state.missions.findIndex(m=>m.id===Number(id));if(idx!==-1){speechSynthesis.cancel();stopDopamineMusic();clearInterval(state.timer);state.currentIndex=idx;state.currentBlock=0;state.phase='story';render()}else alert('Mission not found')}}
+// =========================================================
+// OBSTACLES + GAME WORLD
+// =========================================================
 
-function goBack(){if(state.sessionEnded)return;speechSynthesis.cancel();stopDopamineMusic();clearInterval(state.timer);state.speechLocked=false;if(state.currentBlock>0)state.currentBlock--;else if(state.currentIndex>0){state.currentIndex--;state.currentBlock=0;state.phase='story'}render()}
+function spawnObstacle(){
+const type=Math.random()<0.6?"rock":"bad";
+state.obstacles.push({x:100,y:0,type});
+}
 
-function restartSystem(){if(confirm('Restart all progress?')){localStorage.clear();state.userName='Warrior';state.currentIndex=0;state.currentBlock=0;state.player={x:78,y:0,holding:false,score:0};state.phase='story';render()}}
+function update(){
+if(state.phase!="game")return;
 
-function startCountdown(sec,done){clearInterval(state.timer);state.timeLeft=sec;const d=$("timerDisplay");state.timer=setInterval(()=>{if(state.sessionEnded){clearInterval(state.timer);return}state.timeLeft--;const m=Math.floor(state.timeLeft/60),s=state.timeLeft%60;if(d)d.innerText=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;if(state.timeLeft<=0){clearInterval(state.timer);if(done)done()}},1000)}
+// physics
+state.player.vy-=0.8;
+state.player.y+=state.player.vy;
+if(state.player.y<0){state.player.y=0;state.player.vy=0;state.player.onGround=true;}
 
-function showIntro(){$('app').innerHTML=`<div class="card center"><h1>KAMIZEN LIFE SYSTEM</h1><p>Training • Awareness • Control</p><button onclick="askNameAndStart()">CONTINUE</button><button onclick="restartSystem()" style="background:#ef4444;margin-top:10px">RESET</button></div>`}
+// move obstacles
+state.obstacles.forEach(o=>o.x-=2.2);
 
-function askNameAndStart(){const n=prompt('Enter your name');state.userName=n&&n.trim()!==''?n.trim():'Warrior';saveProgress();startSystem()}
+// spawn terrain irregularities
+if(Math.random()<0.05)spawnObstacle();
 
-function startSystem(){startMasterTimer();showPrefaceGuide()}
+// collision
+state.obstacles.forEach(o=>{
+if(o.x<22 && o.x>15 && state.player.y<8){
+state.player.alive=false;
+narrate("Obstacle hit. Mission failed.");
+}
+});
 
-function showPrefaceGuide(){$('app').innerHTML=`<div class="card"><h2>🗺️ THE 6 KINGDOMS</h2><div class="rewardCard"><p>🛡️ RESPECT FIELD</p><p>🏡 LOVE CASTLE</p><p>📚 FOCUS ZONE</p><p>🏎️ HEALTH ENGINE</p><p>🪙 GOLDEN JOY</p><p>🏰 WEALTH EMPIRE</p></div><button onclick="exitPreface()">START QUEST</button></div>`;narrate('Welcome to the six kingdoms.',false)}
+// treasure logic (moves toward player)
+if(!state.treasure.collected){
+state.treasure.x-=0.3;
+if(state.player.alive && state.player.y>0 && state.treasure.x<25){
+state.treasure.collected=true;
+state.player.score++;
+narrate("Treasure captured!");
+}
+}
 
-function exitPreface(){state.phase='story';render()}
+renderGame();
+requestAnimationFrame(update);
+}
 
-function render(){if(!state.initialized||state.sessionEnded)return;saveProgress();const app=$("app"),story=state.stories[state.currentIndex],mission=state.missions[state.currentIndex];if(!story||!mission){state.currentIndex=0;state.currentBlock=0;state.phase='story';return render()}const nav=`<div class="navBar"><div></div><div style="display:flex;gap:5px"><button onclick="goBack()">BACK</button><button onclick="jumpToBlock()">JUMP</button><button onclick="restartSystem()">RESET</button></div><div>🎮 GAME ONLINE</div></div>`;if(state.phase==='story'){app.innerHTML=nav+card(`<h2>STORY ${story.id}</h2><h3>${story.t||''}</h3><p>${story.en||''}</p>`)+`<button id="continueBtn" disabled>NARRATING...</button>`;narrate(`${story.t}. ${story.en}`,false,()=>setTimeout(startMission,1500))}else if(state.phase==='mission'){const block=mission.b[state.currentBlock];if(!block){nextStory();return}renderBlock(block,nav)}}
+function startLoop(){update();}
 
-function renderBlock(block,nav){const app=$("app");let html=nav,text="",sim=block.t==='sim';
+// =========================================================
+// CONTROLS (SPACE JUMP)
+// =========================================================
 
-if(block.t==='v'||block.t==='h'){html+=card(`<h2>${block.tx?.en||''}</h2>`);text=block.tx?.en}
-if(block.story){html+=card(`<p>${block.story.en||''}</p>`);text=block.story.en}
+addEventListener("keydown",e=>{
+if(e.code=="Space" && state.player.onGround){
+state.player.vy=12;
+state.player.onGround=false;
+}
+});
 
-if(block.t==='br'||block.t==='breath_auto'){html+=timerUI+card(`<div class="center"><div class="breath-circle" id="breathCircle"><span id="breathLabel">READY</span></div><h3>${block.tx?.en||''}</h3><p>${block.inf?.en||''}</p></div>`);text=`${block.tx?.en}. ${block.inf?.en}`}
+// =========================================================
+// RENDER GAME (IMPROVED AVATARS + LANDSCAPE)
+// =========================================================
 
-if(block.t==='sil'){html+=timerUI+card(`<h3>${block.tx?.en||''}</h3><p>${block.inf?.en||''}</p>`);text=`${block.tx?.en}. ${block.inf?.en}`}
+function renderGame(){
 
-if(block.t==='sim'){
-startDopamineMusic();
-state.player.holding=false;
-const[lbl,icon]=loot[state.currentIndex%6];
-const phrase=block.sub?.en||block.tx?.en||'COLLECT';
-text=`${state.userName}, avoid the obstacles and collect the treasure.`;
-html+=`${timerUI}
+let obs="";
+state.obstacles.forEach(o=>{
+obs+=`<div style='position:absolute;left:${o.x}%;bottom:20px;font-size:22px'>${o.type=="bad"?"⚠️":"🪨"}</div>`;
+});
 
-<style>
-@keyframes itemFloat{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
-@keyframes moveClouds{from{background-position-x:0}to{background-position-x:1000px}}
-@keyframes obstacleMove{from{right:-60px}to{right:120%}}
-@keyframes mouthSpeak{0%{transform:scaleY(.3)}100%{transform:scaleY(1.3)}}
-.talking-avatar .avatar-mouth{animation:mouthSpeak .15s infinite alternate}
-.obstacle{position:absolute;bottom:18px;width:34px;height:34px;background:#dc2626;border:3px solid #000;border-radius:8px;animation:obstacleMove 4s linear infinite;z-index:6}
-.jump{animation:jumpAnim .8s ease}
-@keyframes jumpAnim{0%{bottom:15px}50%{bottom:95px}100%{bottom:15px}}
-</style>
+const terrain=`linear-gradient(180deg,#bae6fd 0%,#e0f2fe 50%,#22c55e 50%,#15803d 100%)`;
 
-<div class="card sim-gaming-container" style="border:4px solid #facc15;background:#020617;padding:15px;border-radius:20px;text-align:center;position:relative;box-shadow:0 0 25px rgba(250,204,21,.5)">
-<div class="landscape-background" style="display:block;height:230px;background:linear-gradient(180deg,#7dd3fc 0%,#e0f2fe 55%,#4ade80 55%,#22c55e 100%);border:3px solid #334155;border-radius:20px;margin:auto;overflow:hidden;position:relative">
-<div style="position:absolute;top:10px;left:0;width:100%;height:40px;background:radial-gradient(circle,#fff 20%,transparent 20%) 0 0,radial-gradient(circle,#fff 20%,transparent 20%) 40px 10px;background-size:80px 40px;opacity:.5;animation:moveClouds 25s linear infinite"></div>
-<div style="position:absolute;bottom:45%;left:15%;width:0;height:0;border-left:40px solid transparent;border-right:40px solid transparent;border-bottom:35px solid #86efac;opacity:.6"></div>
-<div style="position:absolute;bottom:45%;left:60%;width:0;height:0;border-left:55px solid transparent;border-right:55px solid transparent;border-bottom:45px solid #65a30d;opacity:.5"></div>
-<div class="obstacle" id="obs1" style="animation-delay:0s"></div>
-<div class="obstacle" id="obs2" style="animation-delay:2s"></div>
-<div id="gameObject" style="position:absolute;bottom:58px;left:calc(50% - 40px);width:80px;text-align:center;animation:itemFloat 2s infinite ease-in-out;z-index:8"><div style="font-size:42px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.4))">${icon}</div><div style="background:#1e1b4b;color:#facc15;font-size:10px;font-weight:900;padding:3px 5px;border-radius:5px;border:1px solid #facc15">${lbl}</div></div>
-${avatar('Michael','#0ea5e9')}
-${avatar(state.userName,'#f43f5e','playerAvatar')}
+app.innerHTML=`
+
+<div class='card'><h2>MISSION RUN</h2><p>SPACE = JUMP • Avoid obstacles • Reach treasure</p></div>
+
+<div style='height:260px;position:relative;overflow:hidden;border-radius:20px;background:${terrain}'>
+
+<!-- TREASURE -->
+
+<div style='position:absolute;left:${state.treasure.x}%;bottom:${state.treasure.y}px;font-size:34px;transition:.2s'>💎</div>
+
+<!-- AVATARS (MORE REALISTIC) -->
+
+<div style='position:absolute;left:15%;bottom:${state.player.y}px;font-size:28px'>🧍‍♂️ MICHAEL</div>
+<div style='position:absolute;left:5%;bottom:0;font-size:28px'>🧍‍♂️ ${state.userName.toUpperCase()}</div>
+
+${obs}
+
 </div>
-<div class="rewardCard"><p>${phrase}</p><p>⬅️ ➡️ Move • SPACE Jump</p></div>
-</div>`}
 
-if(block.t==='d'){html+=`<div class="card"><h3>${block.q?.en||''}</h3>`;block.op?.forEach((o,i)=>html+=`<div class="answer" onclick="selectAnswer(${i},${block.c},${JSON.stringify(block.ex).replace(/"/g,'&quot;')})">${o}</div>`);html+='</div>';text=block.q?.en}
+<button onclick='tryCollect()'>ATTEMPT COLLECT</button>
+`;
 
-if(block.t==='c'){html+=card(`<p>${block.tx?.en||''}</p>`);text=block.tx?.en}
+// ALWAYS READ SCREEN
+narrate("Jump over obstacles. Avoid rocks and traps. Reach the moving treasure.");
+}
 
-if(block.t==='r'){html+=`<div class="card center rewardCard"><h2>⭐ ${block.tx||'REWARD'}</h2><p style="font-size:2rem">+${block.p||0} XP</p></div>`;text='Reward unlocked'}
+// =========================================================
+// COLLECT SYSTEM
+// =========================================================
 
-if(block.t!=='d')html+=`<button id="continueBtn" disabled>NARRATING...</button>`;
+function tryCollect(){
+if(state.player.alive && state.treasure.collected){
+narrate("Success. Treasure secured.");
+}else{
+narrate("Failed. Try again next mission.");
+}
+}
 
-app.innerHTML=html;
+// =========================================================
+// START GAME LOOP
+// =========================================================
 
-narrate(text,sim,()=>{
-if(block.t==='br'||block.t==='breath_auto'){startCountdown(24,nextBlock);startGuidedBreathing();unlockContinue('SKIP',nextBlock)}
-else if(block.t==='sil'){startCountdown(block.d||24,nextBlock);unlockContinue('SKIP',nextBlock)}
-else if(block.t==='sim'){startCountdown(block.d||30,nextBlock);setupPlayerControls();unlockContinue('SKIP GAME',nextBlock)}
-else if(block.t==='d'){}
-else setTimeout(nextBlock,1500)
-})}
-
-function startGuidedBreathing(){const c=$("breathCircle"),l=$("breathLabel");if(!c||!l)return;let inhale=true;const step=()=>{if(!$("breathCircle")||state.timeLeft<=0)return;l.innerText=inhale?'INHALE':'EXHALE';c.style.transition='transform 4000ms ease-in-out';c.style.transform=inhale?'scale(1.4)':'scale(.8)';inhale=!inhale};step();const i=setInterval(()=>{if(!$("breathCircle")||state.timeLeft<=0){clearInterval(i);return}step()},4000)}
-
-function selectAnswer(i,c,ex){if(state.speechLocked)return;const ok=i===c,msg=ex?.[i]||'';const w=document.createElement('div');w.innerHTML=`<div class="card" style="border:3px solid ${ok?'#22c55e':'#ef4444'}"><h3>${ok?'EXCELLENT':'KEEP LEARNING'}</h3><p>${msg}</p></div><button id="continueBtn" disabled>NARRATING...</button>`;$('app').appendChild(w);narrate(msg,false,()=>unlockContinue('NEXT STEP',nextBlock))}
-
-function nextBlock(){stopDopamineMusic();clearInterval(state.timer);state.currentBlock++;render()}
-function startMission(){state.phase='mission';state.currentBlock=0;render()}
-function nextStory(){stopDopamineMusic();state.currentIndex++;if(state.currentIndex>=state.missions.length)state.currentIndex=0;state.phase='story';state.currentBlock=0;render()}
-function unlockContinue(label,action){const b=$("continueBtn");if(b){b.disabled=false;b.innerText=label;b.onclick=action}}
+function startGameLoop(){update();}
