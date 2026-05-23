@@ -72,8 +72,33 @@ startDopamineMusic();
 state.player.holding=false;
 const[lbl,icon]=loot[state.currentIndex%6];
 const phrase=block.sub?.en||block.tx?.en||'COLLECT';
-text=`${state.userName}, collect the treasure.`;
-html+=`${timerUI}<div class="card sim-gaming-container"><div class="landscape-background" style="height:220px;background:linear-gradient(180deg,#bae6fd 0%,#e0f2fe 55%,#4ade80 55%,#22c55e 100%);border-radius:20px;position:relative;overflow:hidden"><div id="gameObject" style="position:absolute;bottom:55px;left:calc(50% - 40px);width:80px;text-align:center;animation:itemFloat 2s infinite;z-index:8"><div style="font-size:42px">${icon}</div><div style="background:#1e1b4b;color:#facc15;font-size:10px;font-weight:900;padding:3px 5px;border-radius:5px">${lbl}</div></div>${avatar('Michael','#0ea5e9')}${avatar(state.userName,'#f43f5e','playerAvatar')}</div><div class="rewardCard"><p>${phrase}</p></div></div>`}
+text=`${state.userName}, avoid the obstacles and collect the treasure.`;
+html+=`${timerUI}
+
+<style>
+@keyframes itemFloat{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+@keyframes moveClouds{from{background-position-x:0}to{background-position-x:1000px}}
+@keyframes obstacleMove{from{right:-60px}to{right:120%}}
+@keyframes mouthSpeak{0%{transform:scaleY(.3)}100%{transform:scaleY(1.3)}}
+.talking-avatar .avatar-mouth{animation:mouthSpeak .15s infinite alternate}
+.obstacle{position:absolute;bottom:18px;width:34px;height:34px;background:#dc2626;border:3px solid #000;border-radius:8px;animation:obstacleMove 4s linear infinite;z-index:6}
+.jump{animation:jumpAnim .8s ease}
+@keyframes jumpAnim{0%{bottom:15px}50%{bottom:95px}100%{bottom:15px}}
+</style>
+
+<div class="card sim-gaming-container" style="border:4px solid #facc15;background:#020617;padding:15px;border-radius:20px;text-align:center;position:relative;box-shadow:0 0 25px rgba(250,204,21,.5)">
+<div class="landscape-background" style="display:block;height:230px;background:linear-gradient(180deg,#7dd3fc 0%,#e0f2fe 55%,#4ade80 55%,#22c55e 100%);border:3px solid #334155;border-radius:20px;margin:auto;overflow:hidden;position:relative">
+<div style="position:absolute;top:10px;left:0;width:100%;height:40px;background:radial-gradient(circle,#fff 20%,transparent 20%) 0 0,radial-gradient(circle,#fff 20%,transparent 20%) 40px 10px;background-size:80px 40px;opacity:.5;animation:moveClouds 25s linear infinite"></div>
+<div style="position:absolute;bottom:45%;left:15%;width:0;height:0;border-left:40px solid transparent;border-right:40px solid transparent;border-bottom:35px solid #86efac;opacity:.6"></div>
+<div style="position:absolute;bottom:45%;left:60%;width:0;height:0;border-left:55px solid transparent;border-right:55px solid transparent;border-bottom:45px solid #65a30d;opacity:.5"></div>
+<div class="obstacle" id="obs1" style="animation-delay:0s"></div>
+<div class="obstacle" id="obs2" style="animation-delay:2s"></div>
+<div id="gameObject" style="position:absolute;bottom:58px;left:calc(50% - 40px);width:80px;text-align:center;animation:itemFloat 2s infinite ease-in-out;z-index:8"><div style="font-size:42px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.4))">${icon}</div><div style="background:#1e1b4b;color:#facc15;font-size:10px;font-weight:900;padding:3px 5px;border-radius:5px;border:1px solid #facc15">${lbl}</div></div>
+${avatar('Michael','#0ea5e9')}
+${avatar(state.userName,'#f43f5e','playerAvatar')}
+</div>
+<div class="rewardCard"><p>${phrase}</p><p>⬅️ ➡️ Move • SPACE Jump</p></div>
+</div>`}
 
 if(block.t==='d'){html+=`<div class="card"><h3>${block.q?.en||''}</h3>`;block.op?.forEach((o,i)=>html+=`<div class="answer" onclick="selectAnswer(${i},${block.c},${JSON.stringify(block.ex).replace(/"/g,'&quot;')})">${o}</div>`);html+='</div>';text=block.q?.en}
 
