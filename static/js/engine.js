@@ -118,63 +118,123 @@ function stopDopamineMusic() {
     }
 }
 /* =========================
-   KILL SWITCH GLOBAL (IMPOSIBLE DE EVADIR)
+   MASTER KILL SWITCH + UI COUNTDOWN (ROBUSTO)
 ========================= */
+
 state.killSwitch = {
     active: false,
-    timeoutId: null,
-    startTime: null
+    startTime: 0,
+    duration: 10 * 60 * 1000,
+    interval: null,
+    timeout: null
 };
-function startMasterTimer() {
-    // limpiar cualquier kill switch anterior
-    if (state.killSwitch.timeoutId) {
-        clearTimeout(state.killSwitch.timeoutId);
+
+/* UI TIMER (esquina superior derecha) */
+function renderGlobalTimer() {
+    let el = document.getElementById("globalTimer");
+
+    if (!el) {
+        el = document.createElement("div");
+        el.id = "globalTimer";
+        el.style.position = "fixed";
+        el.style.top = "10px";
+        el.style.right = "10px";
+        el.style.zIndex = "99999";
+        el.style.padding = "8px 12px";
+        el.style.background = "#0f172a";
+        el.style.color = "#22c55e";
+        el.style.fontFamily = "monospace";
+        el.style.fontWeight = "900";
+        el.style.border = "2px solid #22c55e";
+        el.style.borderRadius = "10px";
+        document.body.appendChild(el);
     }
+
+    return el;
+}
+
+function updateGlobalTimerUI() {
+    const el = renderGlobalTimer();
+    const elapsed = Date.now() - state.killSwitch.startTime;
+    const remaining = Math.max(0, state.killSwitch.duration - elapsed);
+
+    const m = Math.floor(remaining / 60000);
+    const s = Math.floor((remaining % 60000) / 1000);
+
+    el.innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+
+    if (remaining <= 0) {
+        forceKillSession("TIME_EXPIRED");
+    }
+}
+
+function startMasterTimer() {
+    // reset seguro
+    if (state.killSwitch.interval) clearInterval(state.killSwitch.interval);
+    if (state.killSwitch.timeout) clearTimeout(state.killSwitch.timeout);
+
     state.killSwitch.active = true;
     state.killSwitch.startTime = Date.now();
-    const TEN_MIN = 10 * 60 * 1000;
-    state.killSwitch.timeoutId = setTimeout(() => {
+
+    // UI ticker (esto ES lo que lo hace confiable)
+    state.killSwitch.interval = setInterval(updateGlobalTimerUI, 250);
+
+    // backup kill real
+    state.killSwitch.timeout = setTimeout(() => {
         forceKillSession("TIME_EXPIRED");
-    }, TEN_MIN);
-    // 🔒 doble verificación (backup watchdog cada 5s)
-    const watchdog = setInterval(() => {
-        if (!state.killSwitch.active) {
-            clearInterval(watchdog);
-            return;
-        }
-        const elapsed = Date.now() - state.killSwitch.startTime;
-        if (elapsed >= TEN_MIN) {
-            clearInterval(watchdog);
-            forceKillSession("WATCHDOG_TRIGGER");
-        }
-    }, 5000);
+    }, state.killSwitch.duration);
 }
+
 function forceKillSession(reason) {
-    // evitar doble ejecución
     if (!state.killSwitch.active) return;
     state.killSwitch.active = false;
-    try {
-        speechSynthesis.cancel();
-        stopDopamineMusic();
-        clearInterval(state.timer);
-        clearInterval(state.musicInterval);
-        // matar TODOS los timers posibles del sistema
-        const highestId = setTimeout(() => {}, 0);
-        for (let i = 0; i < highestId; i++) {
-            clearTimeout(i);
-            clearInterval(i);
-        }
-        document.getElementById("app").innerHTML = `
-            <div class="card center">
-                <h2>🌟 SESSION COMPLETE 🌟</h2>
-                <p>Reason: ${reason}</p>
-                <button onclick="location.reload()">FINISH</button>
+
+    // limpiar todo
+    speechSynthesis.cancel();
+    stopDopamineMusic();
+    clearInterval(state.timer);
+    clearInterval(state.killSwitch.interval);
+
+    const el = document.getElementById("globalTimer");
+    if (el) el.remove();
+
+    // 🔥 AQUÍ SE USA TU DESPEDIDA REAL (NO HTML NUEVO GENERICO)
+    finishSession(reason);
+}
+/* =========================
+   FINISH SESSION (TU ORIGINAL MEJORADO SOLO EN CONTROL)
+========================= */
+function finishSession(reason = "MANUAL") {
+    speechSynthesis.cancel();
+    stopDopamineMusic();
+    clearInterval(state.timer);
+    const app = document.getElementById("app");
+    app.innerHTML = `
+        <div class="card center animated fadeIn" style="border: 4px solid #22c55e; padding: 25px; width: 100%; box-sizing: border-box;">
+            <h2 style="color:#22c55e; font-size: 2rem; font-weight: 900;">🌟 SESSION COMPLETE! 🌟</h2>
+            <p style="font-size: 1.2rem; font-weight: bold; margin: 15px 0;">
+                Awesome work, MICHAEL and ${state.userName.toUpperCase()}! You did incredible today!
+            </p>
+            <p>Reason: ${reason}</p>
+            <p>Your brain and body only need a few focused minutes to grow stronger every day.</p>
+            <p>KAMIZEN is designed to help you train calmly, not endlessly.</p>
+            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; margin: 20px 0; text-align: left; border-left: 5px solid #22c55e;">
+                <h4 style="margin: 0 0 10px 0; color: #facc15;">🚀 Your Next Tasks:</h4>
+                <p>✔ Now you are ready to start your class</p>
+                <p>✔ Rest your mind and body</p>
+                <p>✔ Go play and have fun</p>
+                <p>✔ Talk and share with your family</p>
+                <p>✔ Explore the real world outside</p>
+                <p style="font-weight:bold; color:#22c55e;">✔ Come back tomorrow even stronger!</p>
             </div>
-        `;
-    } catch (e) {
-        console.log("Kill switch error:", e);
-        location.reload(); // último recurso absoluto
-    }
+            <button onclick="location.reload()" style="margin-top:25px; width:100%; background:#22c55e; padding:15px; font-weight:900;">
+                FINISH SESSION
+            </button>
+        </div>
+    `;
+    const vocalGoodbye =
+        `Session complete. Awesome work Michael and ${state.userName}. You did incredible today. Now you are ready to start your class. Rest your mind, go play, talk with your family, and explore the real world. Come back tomorrow even stronger.`;
+    narrate(vocalGoodbye, false);
 }
 /* =========================
    CONTROLES DE NAVEGACIÓN
