@@ -43,15 +43,15 @@
           "q": {"en": "What should you do when your body feels nervous?"},
           "op": [
             "Get scared",
-            "Breathe slowly",
             "Stop everything",
+            "Breathe slowly",
             "Run away"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Fear makes it stronger",
-            "Breathing calms your body",
             "Stopping blocks progress",
+            "Breathing calms your body",
             "Running away avoids learning"
           ]
         },
@@ -67,17 +67,17 @@
           "t": "d",
           "q": {"en": "What does a fast heartbeat usually mean during stress?"},
           "op": [
-            "Your body is preparing",
             "You are broken",
             "You must escape",
-            "You cannot continue"
+            "You cannot continue",
+            "Your body is preparing"
           ],
-          "c": 0,
+          "c": 3,
           "ex": [
-            "Correct. Your body is preparing for action.",
             "Your body is not broken.",
             "Escape is not always necessary.",
-            "You can still continue calmly."
+            "You can still continue calmly.",
+            "Correct. Your body is preparing for action."
           ]
         },
         {"t": "r", "tx": "+Body Calm", "p": 20},
@@ -113,16 +113,16 @@
           "q": {"en": "What is the best thing to do when you feel stress?"},
           "op": [
             "Ignore your body",
-            "Stay calm and notice it",
             "Panic",
-            "Compare with others"
+            "Compare with others",
+            "Stay calm and notice it"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Ignoring hides signals",
-            "Noticing gives control",
             "Panic makes it worse",
-            "Comparison creates stress"
+            "Comparison creates stress",
+            "Noticing gives control"
           ]
         },
         {
@@ -137,15 +137,15 @@
           "t": "d",
           "q": {"en": "Why should you avoid comparing your stress to others?"},
           "op": [
-            "Every body reacts differently",
             "Stress is fake",
+            "Every body reacts differently",
             "Only others feel stress",
             "Comparison solves fear"
           ],
-          "c": 0,
+          "c": 1,
           "ex": [
-            "Correct. Everyone experiences stress differently.",
             "Stress is real and normal.",
+            "Correct. Everyone experiences stress differently.",
             "All people can feel stress.",
             "Comparison often increases pressure."
           ]
@@ -183,16 +183,16 @@
           "q": {"en": "What should you do when you get distracted?"},
           "op": [
             "Give up",
-            "Coming back to the question",
             "Leave everything",
-            "Panic"
+            "Panic",
+            "Coming back to the question"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Giving up stops progress",
-            "Coming back builds focus",
             "Leaving breaks the task",
-            "Panic blocks thinking"
+            "Panic blocks thinking",
+            "Coming back builds focus"
           ]
         },
         {
@@ -207,15 +207,15 @@
           "t": "d",
           "q": {"en": "What helps your focus become stronger?"},
           "op": [
-            "Returning attention calmly",
             "Getting angry",
+            "Returning attention calmly",
             "Quitting the task",
             "Thinking about everything"
           ],
-          "c": 0,
+          "c": 1,
           "ex": [
-            "Correct. Returning attention trains focus.",
             "Anger creates more distraction.",
+            "Correct. Returning attention trains focus.",
             "Quitting weakens persistence.",
             "Too many thoughts reduce clarity."
           ]
@@ -252,15 +252,15 @@
           "t": "d",
           "q": {"en": "What helps you feel better during stress?"},
           "op": [
-            "Rush more",
             "Breathe slowly or drink water",
+            "Rush more",
             "Ignore your body",
             "Get more stressed"
           ],
-          "c": 1,
+          "c": 0,
           "ex": [
-            "Rushing increases stress",
             "Breathing helps calm down",
+            "Rushing increases stress",
             "Ignoring removes control",
             "Stress adds overload"
           ]
@@ -277,15 +277,15 @@
           "t": "d",
           "q": {"en": "Why are small calming actions important?"},
           "op": [
-            "They help your body feel safe",
             "They make stress bigger",
+            "They help your body feel safe",
             "They stop all feelings forever",
             "They create panic"
           ],
-          "c": 0,
+          "c": 1,
           "ex": [
-            "Correct. Small actions calm the nervous system.",
             "Calming actions reduce stress.",
+            "Correct. Small actions calm the nervous system.",
             "Feelings still exist naturally.",
             "They reduce panic instead."
           ]
@@ -323,15 +323,15 @@
           "q": {"en": "What should you do if you feel weak?"},
           "op": [
             "Stop trying",
-            "Keep going slowly",
             "Panic",
+            "Keep going slowly",
             "Quit"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Stopping ends progress",
-            "Going slowly keeps you moving",
             "Panic drains energy",
+            "Going slowly keeps you moving",
             "Quitting stops learning"
           ]
         },
@@ -347,17 +347,17 @@
           "t": "d",
           "q": {"en": "What builds confidence over time?"},
           "op": [
-            "Continuing step by step",
             "Giving up quickly",
             "Fear of mistakes",
-            "Avoiding challenges"
+            "Avoiding challenges",
+            "Continuing step by step"
           ],
-          "c": 0,
+          "c": 3,
           "ex": [
-            "Correct. Small progress builds confidence.",
             "Giving up weakens trust.",
             "Fear blocks growth.",
-            "Avoidance reduces resilience."
+            "Avoidance reduces resilience.",
+            "Correct. Small progress builds confidence."
           ]
         },
         {"t": "r", "tx": "+Resilience", "p": 25},
@@ -393,15 +393,15 @@
           "q": {"en": "What helps when you feel tired?"},
           "op": [
             "Push harder",
-            "Pause and breathe",
             "Panic",
+            "Pause and breathe",
             "Quit"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Push harder = burnout",
-            "Pause = recovery",
             "Panic = worse tiredness",
+            "Pause = recovery",
             "Quit = stop progress"
           ]
         },
@@ -463,15 +463,15 @@
           "q": {"en": "What is the strongest mindset?"},
           "op": [
             "I cannot do it",
-            "I go step by step",
             "I must be perfect",
+            "I go step by step",
             "I quit"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Cannot = fear",
-            "Step by step = control",
             "Perfection = pressure",
+            "Step by step = control",
             "Quitting = stop"
           ]
         },
@@ -487,15 +487,15 @@
           "t": "d",
           "q": {"en": "What helps you stay ready and calm?"},
           "op": [
-            "Trusting your practice",
             "Panicking early",
+            "Trusting your practice",
             "Thinking only about mistakes",
             "Giving up immediately"
           ],
-          "c": 0,
+          "c": 1,
           "ex": [
-            "Correct. Trust builds calm confidence.",
             "Panic reduces control.",
+            "Correct. Trust builds calm confidence.",
             "Mistake focus increases stress.",
             "Giving up removes growth."
           ]
