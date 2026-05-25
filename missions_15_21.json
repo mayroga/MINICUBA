@@ -41,15 +41,15 @@
           "q": {"en": "What creates real emotional control?"},
           "op": [
             "React immediately",
-            "Pause and breathe before acting",
             "Suppress feelings completely",
+            "Pause and breathe before acting",
             "Escalate response"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Immediate reaction = loss of control",
-            "Pause + breath = regulation and clarity",
             "Suppression = internal tension",
+            "Pause + breath = regulation and clarity",
             "Escalation = conflict increase"
           ]
         },
@@ -66,16 +66,16 @@
           "q": {"en": "If you feel angry, what is the smartest first step?"},
           "op": [
             "Act instantly",
-            "Stop and observe the feeling",
             "Shout",
-            "Leave without thinking"
+            "Leave without thinking",
+            "Stop and observe the feeling"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Instant action = impulsivity",
-            "Observation = awareness and control",
             "Shouting = escalation",
-            "Leaving without thinking = avoidance"
+            "Leaving without thinking = avoidance",
+            "Observation = awareness and control"
           ]
         },
         {"t": "r", "tx": "+Control", "p": 25},
@@ -110,15 +110,15 @@
           "t": "d",
           "q": {"en": "What creates deep progress?"},
           "op": [
-            "Doing many things at once",
             "Focusing on one task completely",
+            "Doing many things at once",
             "Checking phone frequently",
             "Working without attention"
           ],
-          "c": 1,
+          "c": 0,
           "ex": [
-            "Multitasking = shallow performance",
             "Single focus = deep progress",
+            "Multitasking = shallow performance",
             "Phone checking = attention fragmentation",
             "Lack of attention = inefficient output"
           ]
@@ -136,16 +136,16 @@
           "q": {"en": "What weakens concentration the most?"},
           "op": [
             "Single-task focus",
-            "Constant interruptions",
             "Breathing calmly",
+            "Constant interruptions",
             "Quiet observation"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Focus strengthens attention",
-            "Interruptions fragment cognitive processing",
             "Calm breathing improves regulation",
-            "Observation increases awareness"
+            "Interruptions fragment cognitive processing",
+            "Quiet observation increases awareness"
           ]
         },
         {"t": "r", "tx": "+Focus", "p": 25},
@@ -181,16 +181,16 @@
           "q": {"en": "You feel uncomfortable in a place. What is best?"},
           "op": [
             "Ignore feeling and stay",
-            "Move toward safe adults or exit",
             "Stay to prove bravery",
-            "Follow others blindly"
+            "Follow others blindly",
+            "Move toward safe adults or exit"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Ignoring reduces safety signals",
-            "Moving to safety improves protection",
             "Staying for pride increases exposure",
-            "Blind following removes judgment"
+            "Blind following removes judgment",
+            "Moving to safety improves protection"
           ]
         },
         {
@@ -251,15 +251,15 @@
           "q": {"en": "What builds real strength?"},
           "op": [
             "Hiding mistakes",
-            "Admitting truth",
             "Blaming others",
+            "Admitting truth",
             "Avoiding responsibility"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Hiding = weak adaptation",
-            "Truth = growth and trust",
             "Blame = no ownership",
+            "Truth = growth and trust",
             "Avoidance = stagnation"
           ]
         },
@@ -276,16 +276,16 @@
           "q": {"en": "What weakens identity over time?"},
           "op": [
             "Accepting reality",
-            "Avoiding truth constantly",
             "Learning from errors",
-            "Taking responsibility"
+            "Taking responsibility",
+            "Avoiding truth constantly"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Reality strengthens adaptation",
-            "Avoidance weakens self-development",
             "Learning improves growth",
-            "Responsibility builds integrity"
+            "Responsibility builds integrity",
+            "Avoidance weakens self-development"
           ]
         },
         {"t": "r", "tx": "+Integrity", "p": 25},
@@ -321,15 +321,15 @@
           "q": {"en": "What defines your character?"},
           "op": [
             "Always follow group",
-            "Think and decide for yourself",
             "Stop thinking",
+            "Think and decide for yourself",
             "Act only for approval"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Following = identity loss",
-            "Independent thinking = self-control",
             "No thinking = weak decisions",
+            "Independent thinking = self-control",
             "Approval seeking = external dependency"
           ]
         },
@@ -345,15 +345,15 @@
           "t": "d",
           "q": {"en": "What creates stronger independence?"},
           "op": [
-            "Blind imitation",
             "Personal evaluation before acting",
+            "Blind imitation",
             "Fear of rejection",
             "Constant approval seeking"
           ],
-          "c": 1,
+          "c": 0,
           "ex": [
-            "Blind imitation removes individuality",
             "Evaluation strengthens autonomy",
+            "Blind imitation removes individuality",
             "Fear limits action",
             "Approval dependency weakens confidence"
           ]
@@ -391,16 +391,16 @@
           "q": {"en": "What builds strong identity?"},
           "op": [
             "Quitting when hard",
-            "Continuing despite discomfort",
             "Avoiding effort",
-            "Waiting for motivation"
+            "Waiting for motivation",
+            "Continuing despite discomfort"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Quitting = unstable identity",
-            "Continuing = strong identity formation",
             "Avoidance = stagnation",
-            "Motivation dependency = inconsistency"
+            "Motivation dependency = inconsistency",
+            "Continuing = strong identity formation"
           ]
         },
         {
@@ -415,15 +415,15 @@
           "t": "d",
           "q": {"en": "What strengthens discipline most?"},
           "op": [
-            "Only acting when inspired",
             "Repeating useful actions consistently",
+            "Only acting when inspired",
             "Avoiding difficult tasks",
             "Stopping after failure"
           ],
-          "c": 1,
+          "c": 0,
           "ex": [
-            "Inspiration is temporary",
             "Consistency builds behavioral patterns",
+            "Inspiration is temporary",
             "Avoidance weakens resilience",
             "Stopping prevents growth"
           ]
@@ -461,15 +461,15 @@
           "q": {"en": "What creates mastery?"},
           "op": [
             "React instantly",
-            "Pause and evaluate",
             "Ignore everything",
+            "Pause and evaluate",
             "Act randomly"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Instant reaction = low control",
-            "Pause = high self-regulation",
             "Ignoring = reduced awareness",
+            "Pause = high self-regulation",
             "Random action = lack of structure"
           ]
         },
@@ -486,16 +486,16 @@
           "q": {"en": "What improves self-control most?"},
           "op": [
             "Impulsive behavior",
-            "Observing thoughts before acting",
             "Avoiding reflection",
-            "Immediate emotional reaction"
+            "Immediate emotional reaction",
+            "Observing thoughts before acting"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Impulsivity reduces regulation",
-            "Observation improves conscious choice",
             "Avoiding reflection weakens awareness",
-            "Emotional reaction reduces control"
+            "Emotional reaction reduces control",
+            "Observation improves conscious choice"
           ]
         },
         {"t": "r", "tx": "+Mastery", "p": 30},
