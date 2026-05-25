@@ -42,15 +42,15 @@
           "q": {"en": "What can you do if you feel lonely?"},
           "op": [
             "Cry all day",
-            "Use your imagination and plushies",
             "Wait forever",
+            "Use your imagination and plushies",
             "Get angry"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Crying alone does not solve loneliness",
-            "Imagination creates comfort and connection",
             "Waiting forever increases sadness",
+            "Imagination creates comfort and connection",
             "Anger hurts your emotions"
           ]
         },
@@ -66,15 +66,15 @@
           "t": "d",
           "q": {"en": "What helps you feel emotionally stronger?"},
           "op": [
-            "Staying isolated",
             "Creating positive thoughts",
+            "Staying isolated",
             "Ignoring feelings",
             "Giving up"
           ],
-          "c": 1,
+          "c": 0,
           "ex": [
-            "Isolation increases loneliness",
             "Positive imagination builds emotional support",
+            "Isolation increases loneliness",
             "Ignoring feelings removes awareness",
             "Giving up weakens confidence"
           ]
@@ -112,16 +112,16 @@
           "q": {"en": "What is a simple way to join a game?"},
           "op": [
             "Interrupt everyone",
-            "Join calmly where they are playing",
             "Stay alone forever",
-            "Ask too many questions"
+            "Ask too many questions",
+            "Join calmly where they are playing"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Interrupting creates tension",
-            "Joining calmly helps social connection",
             "Isolation blocks friendship",
-            "Too many questions stop the flow"
+            "Too many questions stop the flow",
+            "Joining calmly helps social connection"
           ]
         },
         {
@@ -137,15 +137,15 @@
           "q": {"en": "What helps you understand a group activity?"},
           "op": [
             "Ignoring everyone",
-            "Observing before acting",
             "Running away",
+            "Observing before acting",
             "Controlling the game"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Ignoring removes awareness",
-            "Observation helps understanding",
             "Running away prevents participation",
+            "Observation helps understanding",
             "Control creates conflict"
           ]
         },
@@ -181,15 +181,15 @@
           "t": "d",
           "q": {"en": "How can you learn if your eyes hurt?"},
           "op": [
-            "Close your ears",
             "Listen and memorize",
+            "Close your ears",
             "Give up completely",
             "Look harder"
           ],
-          "c": 1,
+          "c": 0,
           "ex": [
-            "Closing your ears removes learning input",
             "Listening helps protect your eyes",
+            "Closing your ears removes learning input",
             "Giving up stops progress",
             "Looking harder increases discomfort"
           ]
@@ -207,16 +207,16 @@
           "q": {"en": "What shows adaptability during discomfort?"},
           "op": [
             "Panic immediately",
-            "Use another strategy",
             "Quit the lesson",
-            "Ignore pain completely"
+            "Ignore pain completely",
+            "Use another strategy"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Panic reduces thinking",
-            "Adaptation keeps learning active",
             "Quitting stops growth",
-            "Ignoring pain removes awareness"
+            "Ignoring pain removes awareness",
+            "Adaptation keeps learning active"
           ]
         },
         {"t": "r", "tx": "+Adaptability", "p": 20},
@@ -252,15 +252,15 @@
           "q": {"en": "What keeps your brain sharp while using screens?"},
           "op": [
             "Play endlessly",
-            "Short balanced sessions",
             "Check notifications constantly",
+            "Short balanced sessions",
             "Ignore homework"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Endless play weakens focus",
-            "Balanced use protects attention",
             "Constant checking creates distraction",
+            "Balanced use protects attention",
             "Ignoring work creates problems"
           ]
         },
@@ -276,15 +276,15 @@
           "t": "d",
           "q": {"en": "What is a healthy use of technology?"},
           "op": [
-            "Using it without limits",
             "Using it with control",
+            "Using it without limits",
             "Playing during homework",
             "Never stopping"
           ],
-          "c": 1,
+          "c": 0,
           "ex": [
-            "No limits create overload",
             "Control builds discipline",
+            "No limits create overload",
             "Multitasking reduces learning",
             "Never stopping causes fatigue"
           ]
@@ -322,16 +322,16 @@
           "q": {"en": "What helps you improve at school?"},
           "op": [
             "Giving up quickly",
-            "Working consistently",
             "Avoiding homework",
-            "Waiting for luck"
+            "Waiting for luck",
+            "Working consistently"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Giving up blocks progress",
-            "Consistency builds excellence",
             "Avoidance weakens learning",
-            "Luck is unreliable"
+            "Luck is unreliable",
+            "Consistency builds excellence"
           ]
         },
         {
@@ -392,15 +392,15 @@
           "q": {"en": "Why is observation important?"},
           "op": [
             "To copy everything",
-            "To learn and stay safe",
             "To annoy others",
+            "To learn and stay safe",
             "To win prizes"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Copying is not the goal",
-            "Observation increases awareness and safety",
             "Annoying others creates problems",
+            "Observation increases awareness and safety",
             "Safety matters more than prizes"
           ]
         },
@@ -417,16 +417,16 @@
           "q": {"en": "What improves your awareness skills?"},
           "op": [
             "Ignoring details",
-            "Watching calmly and carefully",
             "Rushing constantly",
-            "Looking at nothing"
+            "Looking at nothing",
+            "Watching calmly and carefully"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Ignoring details reduces awareness",
-            "Calm observation improves learning",
             "Rushing misses information",
-            "No observation means no learning"
+            "No observation means no learning",
+            "Calm observation improves learning"
           ]
         },
         {"t": "r", "tx": "+Master Awareness", "p": 30},
@@ -461,15 +461,15 @@
           "t": "d",
           "q": {"en": "When should you stay attentive?"},
           "op": [
-            "Only at the beginning",
             "Until you are fully safe",
+            "Only at the beginning",
             "Only while talking",
             "For one second"
           ],
-          "c": 1,
+          "c": 0,
           "ex": [
-            "Beginning awareness is not enough",
             "Attention should continue until safety is complete",
+            "Beginning awareness is not enough",
             "Talking can create distraction",
             "One second is insufficient"
           ]
@@ -487,15 +487,15 @@
           "q": {"en": "What improves personal safety?"},
           "op": [
             "Ignoring movement",
-            "Observing your surroundings",
             "Walking distracted",
+            "Observing your surroundings",
             "Rushing without looking"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Ignoring movement reduces awareness",
-            "Observation improves protection",
             "Distraction creates risk",
+            "Observation improves protection",
             "Rushing increases danger"
           ]
         },
