@@ -41,15 +41,15 @@
           "q": {"en": "What increases your real safety in public places?"},
           "op": [
             "Ignoring surroundings",
-            "Observing people and exits",
             "Looking only at phone",
+            "Observing people and exits",
             "Walking distracted"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Ignoring = missed signals",
-            "Observation = early detection",
             "Phone focus = reduced awareness",
+            "Observation = early detection",
             "Distraction = delayed reaction"
           ]
         },
@@ -66,16 +66,16 @@
           "q": {"en": "What is a hidden risk signal?"},
           "op": [
             "Calm environment awareness",
-            "Unusual discomfort feeling",
             "Perfect silence always",
-            "Familiar routine only"
+            "Familiar routine only",
+            "Unusual discomfort feeling"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Calm awareness = normal state",
-            "Discomfort signal = intuition warning",
             "Silence is not always risk",
-            "Routine alone does not detect change"
+            "Routine alone does not detect change",
+            "Discomfort signal = intuition warning"
           ]
         },
         {"t": "r", "tx": "+Awareness", "p": 25},
@@ -110,15 +110,15 @@
           "t": "d",
           "q": {"en": "What creates emotional mastery?"},
           "op": [
-            "React instantly",
             "Pause and regulate",
+            "React instantly",
             "Suppress everything",
             "Escalate emotion"
           ],
-          "c": 1,
+          "c": 0,
           "ex": [
-            "Instant reaction = loss of control",
             "Pause + regulation = mastery",
+            "Instant reaction = loss of control",
             "Suppression = internal tension",
             "Escalation = emotional overload"
           ]
@@ -136,15 +136,15 @@
           "q": {"en": "When anger appears, what is first useful step?"},
           "op": [
             "Act immediately",
-            "Name the emotion silently",
             "Shout",
+            "Name the emotion silently",
             "Ignore completely"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Immediate action = impulsive error",
-            "Naming emotion = cognitive control",
             "Shouting = escalation",
+            "Naming emotion = cognitive control",
             "Ignoring = unresolved stress"
           ]
         },
@@ -181,16 +181,16 @@
           "q": {"en": "What produces best decision?"},
           "op": [
             "Rush immediately",
-            "Pause and evaluate",
             "Random choice",
-            "Avoid deciding"
+            "Avoid deciding",
+            "Pause and evaluate"
           ],
-          "c": 1,
+          "c": 3,
           "ex": [
             "Rush = low accuracy",
-            "Pause = structured thinking",
             "Random = no control",
-            "Avoidance = no progress"
+            "Avoidance = no progress",
+            "Pause = structured thinking"
           ]
         },
         {
@@ -206,15 +206,15 @@
           "q": {"en": "What improves complex thinking?"},
           "op": [
             "Multitasking",
-            "Single focused analysis",
             "Distracted thinking",
+            "Single focused analysis",
             "Emotional reaction"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Multitasking = fragmentation",
-            "Focus = deep processing",
             "Distraction = reduced accuracy",
+            "Focus = deep processing",
             "Emotion = bias increase"
           ]
         },
@@ -250,15 +250,15 @@
           "t": "d",
           "q": {"en": "What transforms mistakes into growth?"},
           "op": [
-            "Ignore them",
             "Analyze and learn",
+            "Ignore them",
             "Hide them",
             "Blame others"
           ],
-          "c": 1,
+          "c": 0,
           "ex": [
-            "Ignore = repetition",
             "Learning = adaptation",
+            "Ignore = repetition",
             "Hiding = stagnation",
             "Blame = no ownership"
           ]
@@ -276,15 +276,15 @@
           "q": {"en": "What weakens learning after failure?"},
           "op": [
             "Reflection",
-            "Avoiding responsibility",
             "Studying mistakes",
+            "Avoiding responsibility",
             "Trying again calmly"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Reflection improves adaptation",
-            "Avoidance prevents growth",
             "Studying mistakes builds skill",
+            "Avoidance prevents growth",
             "Trying again develops resilience"
           ]
         },
@@ -321,15 +321,15 @@
           "q": {"en": "What stabilizes thinking?"},
           "op": [
             "React immediately",
-            "Organize thoughts",
             "Ignore everything",
+            "Organize thoughts",
             "Overthink"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Reaction = instability",
-            "Organization = clarity",
             "Ignoring = unresolved signals",
+            "Organization = clarity",
             "Overthinking = overload loop"
           ]
         },
@@ -391,15 +391,15 @@
           "q": {"en": "What is strongest response under stress?"},
           "op": [
             "Panic",
-            "Stay calm",
             "React aggressively",
+            "Stay calm",
             "Escape blindly"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Panic = loss of control",
-            "Calm = stable reasoning",
             "Aggression = escalation",
+            "Calm = stable reasoning",
             "Blind escape = reduced awareness"
           ]
         },
@@ -461,15 +461,15 @@
           "q": {"en": "What creates mastery?"},
           "op": [
             "React fast",
-            "Observe patterns",
             "Ignore reality",
+            "Observe patterns",
             "Act randomly"
           ],
-          "c": 1,
+          "c": 2,
           "ex": [
             "Reaction = low control",
-            "Observation = mastery",
             "Ignoring = blindness",
+            "Observation = mastery",
             "Randomness = chaos"
           ]
         },
@@ -485,15 +485,15 @@
           "t": "d",
           "q": {"en": "What strengthens self-awareness most?"},
           "op": [
-            "Watching thoughts calmly",
             "Automatic impulsive action",
+            "Watching thoughts calmly",
             "Ignoring emotions",
             "Constant distraction"
           ],
-          "c": 0,
+          "c": 1,
           "ex": [
-            "Observation builds metacognition",
             "Impulsivity reduces awareness",
+            "Observation builds metacognition",
             "Ignoring emotions blocks understanding",
             "Distraction weakens attention"
           ]
