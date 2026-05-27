@@ -442,20 +442,31 @@ function renderBlock(block, navHeader) {
     let textToRead = "";
     let isAvatarMode = (block.t === "sim");
     const timerUI = `
-        <div class="card center" style="border: 3px solid var(--primary); background: #0f172a; margin-bottom: 10px; padding: 10px;">
-            <h1 id="timerDisplay" style="font-size:2.5rem;margin:0; font-family: monospace;">00:00</h1>
-        </div>
-    `;
-    if (block.t === "v" || block.t === "h") { html += `<div class="card"><h2>${block.tx?.en || ""}</h2></div>`; textToRead = block.tx?.en; }
-    if (block.story) { html += `<div class="card"><p>${block.story.en || ""}</p></div>`; textToRead = block.story.en; }
-    if (block.t === "breath_auto" || block.t === "br") {
-        html += timerUI + `<div class="card center"><div class="breath-circle" id="breathCircle"><span id="breathLabel">READY</span></div><h3>${block.tx?.en || ""}</h3><p>${block.inf?.en || ""}</p></div>`;
-        textToRead = `${block.tx?.en}. ${block.inf?.en}. Get ready to breathe.`;
-    }
-    if (block.t === "sil") {
-        html += timerUI + `<div class="card"><h3>${block.tx?.en || ""}</h3><p>${block.inf?.en || ""}</p></div>`;
-        textToRead = `${block.tx?.en}. ${block.inf?.en}. Practice silence now.`;
-    }
+       <div class="card sim-gaming-container" style="
+    border: 4px solid #facc15; 
+    background: #020617; 
+    padding: 15px; 
+    border-radius: 20px; 
+    text-align: center;
+    position: relative;
+    // ... (dentro de la función renderBlock, al final donde cierras el narrate)
+    narrate(textToRead, isAvatarMode, () => {
+        if (block.t === "breath_auto" || block.t === "br") {
+            startCountdown(15, nextBlock); // Reducido de 24 a 15
+            startGuidedBreathing();
+            unlockContinue("SKIP", nextBlock);
+        } else if (block.t === "sil") {
+            startCountdown(block.d || 10, nextBlock); // Reducido para más ritmo
+            unlockContinue("SKIP", nextBlock);
+        } else if (block.t === "sim") {
+            startCountdown(block.d || 15, nextBlock); // Más rápido
+            unlockContinue("SKIP", nextBlock);
+        } else if (block.t === "d") {
+            // Espera activa
+        } else {
+            setTimeout(nextBlock, 600); // Antes era 1500, ahora es instantáneo
+        }
+    });
     // =========================================================
     // MODO SIMULACIÓN INTERACTIVA: RECOLECCIÓN FÍSICA CON SIGNIFICADO
     // =========================================================
@@ -535,98 +546,22 @@ function renderBlock(block, navHeader) {
                 from { background-position-x: 0px; }
                 to { background-position-x: 1000px; }
             }
-        </style>
-        ` + timerUI + `
-            <div class="card sim-gaming-container" style="
-                border: 4px solid #facc15; 
-                background: #020617; 
-                padding: 15px; 
-                border-radius: 20px; 
-                text-align: center;
-                position: relative;
-                box-shadow: 0 0 25px rgba(250, 204, 21, 0.5);
-                width: 100%;
-                box-sizing: border-box;
-            ">
-                <div style="position: absolute; top: 12px; left: 15px; background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-family: monospace; z-index:10;">🎮 LIVE HUNT</div>
-                <div style="position: absolute; top: 12px; right: 15px; font-size: 11px; color: #10b981; font-family: monospace; font-weight: bold; z-index:10;">🤝 TOUCH & ACQUIRE</div>
-                <div class="landscape-background" style="
-                    display: block;
-                    height: 190px;
-                    background: linear-gradient(180deg, #bae6fd 0%, #e0f2fe 55%, #4ade80 55%, #22c55e 100%);
-                    border: 3px solid #334155;
-                    border-radius: 20px;
-                    margin: 25px auto 15px auto;
-                    overflow: hidden;
-                    position: relative;
-                    width: 100%;
-                    box-sizing: border-box;
-                ">
-                    <div style="position: absolute; top: 10px; left:0; width:100%; height:40px; background: radial-gradient(circle, #fff 20%, transparent 20%) 0 0, radial-gradient(circle, #fff 20%, transparent 20%) 40px 10px; background-size: 80px 40px; opacity: 0.5; animation: moveClouds 25s linear infinite;"></div>
-                    <div style="position: absolute; bottom: 45%; left: 15%; width: 0; height: 0; border-left: 40px solid transparent; border-right: 40px solid transparent; border-bottom: 35px solid #86efac; opacity:0.6;"></div>
-                    <div style="position: absolute; bottom: 45%; left: 60%; width: 0; height: 0; border-left: 55px solid transparent; border-right: 55px solid transparent; border-bottom: 45px solid #65a30d; opacity:0.5;"></div>
-                    <div style="position: absolute; bottom: 45px; left: calc(50% - 40px); width: 80px; text-align: center; animation: itemFloat 6s infinite ease-in-out; z-index:8;">
-                        <div style="font-size: 32px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">${assetSymbol}</div>
-                        <div style="background: #1e1b4b; color: #facc15; font-size: 9px; font-weight: 900; padding: 2px 4px; border-radius: 4px; border: 1px solid #facc15; font-family:monospace; text-transform:uppercase;">
-                            ${powerWord}
-                        </div>
-                    </div>
-                    <div style="position: absolute; bottom: 15px; width: 60px; height: 110px; animation: grabAssetLeft 6s infinite ease-in-out;">
-                        <div style="font-family: monospace; font-size: 11px; color: #0369a1; font-weight: bold; text-align:center; margin-bottom:2px;">MICHAEL</div>
-                        <div class="cube-model-inner" style="width: 44px; height: 85px; position: relative; margin: 0 auto;">
-                            <div style="width: 24px; height: 24px; background: #ffdbac; border-radius: 4px; border: 2px solid #000; margin: 0 auto; position: relative; z-index:5;">
-                                <div style="display:flex; justify-content:space-around; margin-top:4px;"><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div></div>
-                                <div class="avatar-mouth" style="width: 8px; height: 3px; background: #7f1d1d; margin: 4px auto 0 auto; border-radius: 2px;"></div>
-                            </div>
-                            <div style="width: 40px; height: 34px; background: #0ea5e9; border: 2px solid #000; border-radius: 3px; margin-top: -2px; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 10px; position:relative; z-index:4;">M</div>
-                            <div style="position: absolute; left: -8px; top: 24px; width: 8px; height: 26px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingArmL 6s infinite ease-in-out;">
-                                <div style="position: absolute; bottom: -4px; left: 0; width: 8px; height: 4px; background: #000; border-radius: 50%;"></div> </div>
-                            <div style="position: absolute; right: -8px; top: 24px; width: 8px; height: 26px; background: #ffdbac; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingArmR 6s infinite ease-in-out;">
-                                <div style="position: absolute; bottom: -4px; left: 0; width: 8px; height: 4px; background: #000; border-radius: 50%;"></div> </div>
-                            <div style="position: absolute; left: 4px; bottom: 0; width: 10px; height: 24px; background: #1e293b; border: 1.5px solid #000; border-radius:0 0 4px 4px;"></div>
-                            <div style="position: absolute; right: 4px; bottom: 0; width: 10px; height: 24px; background: #1e293b; border: 1.5px solid #000; border-radius:0 0 4px 4px;"></div>
-                        </div>
-                    </div>
-                    <div style="position: absolute; bottom: 15px; width: 60px; height: 110px; animation: grabAssetRight 6s infinite ease-in-out;">
-                        <div style="font-family: monospace; font-size: 11px; color: #9f1239; font-weight: bold; text-align:center; margin-bottom:2px;">${state.userName.toUpperCase()}</div>
-                        <div class="cube-model-inner" style="width: 44px; height: 85px; position: relative; margin: 0 auto;">
-                            <div style="width: 24px; height: 24px; background: #ffdcbe; border-radius: 4px; border: 2px solid #000; margin: 0 auto; position: relative; z-index:5;">
-                                <div style="display:flex; justify-content:space-around; margin-top:4px;"><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div><div style="width:4px; height:4px; background:#000; border-radius:50%;"></div></div>
-                                <div class="avatar-mouth" style="width: 8px; height: 3px; background: #7f1d1d; margin: 4px auto 0 auto; border-radius: 2px;"></div>
-                            </div>
-                            <div style="width: 40px; height: 34px; background: #f43f5e; border: 2px solid #000; border-radius: 3px; margin-top: -2px; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 10px; position:relative; z-index:4;">${state.userName[0].toUpperCase()}</div>
-                            <div style="position: absolute; left: -8px; top: 24px; width: 8px; height: 26px; background: #ffdcbe; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingArmL 6s infinite ease-in-out;">
-                                <div style="position: absolute; bottom: -4px; left: 0; width: 8px; height: 4px; background: #000; border-radius: 50%;"></div>
-                            </div>
-                            <div style="position: absolute; right: -8px; top: 24px; width: 8px; height: 26px; background: #ffdcbe; border: 2px solid #000; border-radius: 2px; transform-origin: top center; animation: swingArmR 6s infinite ease-in-out;">
-                                <div style="position: absolute; bottom: -4px; left: 0; width: 8px; height: 4px; background: #000; border-radius: 50%;"></div>
-                            </div>
-                            <div style="position: absolute; left: 4px; bottom: 0; width: 10px; height: 24px; background: #111827; border: 1.5px solid #000; border-radius:0 0 4px 4px;"></div>
-                            <div style="position: absolute; right: 4px; bottom: 0; width: 10px; height: 24px; background: #111827; border: 1.5px solid #000; border-radius:0 0 4px 4px;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div style="background: rgba(15,23,42,0.9); border: 2px solid #0ea5e9; border-radius: 12px; padding: 10px; margin-top: 10px; text-align: left;">
-                    <span style="color:#0ea5e9; font-size:11px; font-weight:900; display:block; text-transform:uppercase; font-family:monospace;">💡 KID'S KNOWLEDGE LOGIC:</span>
-                    <p style="color:#f8fafc; font-size:0.95rem; margin: 3px 0 0 0; line-height:1.4; font-weight:500;">${kidsLesson}</p>
-                </div>
-                <div class="youtube-shorts-subtitles" style="width: 100%; box-sizing: border-box; margin-top: 10px;">
-                    <p id="shorts-text-target" style="
-                        font-size: 1.25rem; 
-                        font-weight: 900; 
-                        color: #facc15; 
-                        text-transform: uppercase; 
-                        letter-spacing: 0.5px;
-                        line-height: 1.3;
-                        margin: 0;
-                        text-shadow: 2px 2px 0px #000;
-                    ">
-                        ${basePhrase}
-                    </p>
-                </div>
-            </div>
-        `;
+       <style>
+    @keyframes mouthSpeak { 0% { transform: scaleY(0.4); } 100% { transform: scaleY(1.5); } }
+    .talking-avatar .avatar-mouth { animation: mouthSpeak 0.1s infinite alternate ease-in-out; } 
+    @keyframes grabAsset { 0% { transform: rotate(0deg); } 50% { transform: rotate(45deg); } 100% { transform: rotate(0deg); } }
+    @keyframes itemFloat {
+        0% { transform: scale(0.8) translateY(10px); }
+        50% { transform: scale(1.2) translateY(-10px); }
+        100% { transform: scale(0.8) translateY(10px); }
     }
+    @keyframes snapZoom {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.08); }
+        100% { transform: scale(1); }
+    }
+    .sim-gaming-container { animation: snapZoom 2s infinite ease-in-out; }
+</style>
     // =========================================================
     // BLOQUE REWARD CON DISEÑO DE AVATARES CELEBRANDO
     // =========================================================
