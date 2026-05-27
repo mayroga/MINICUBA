@@ -198,11 +198,11 @@ function narrate(text, isAvatarActive, callback) {
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-US";
     if (isAvatarActive) {
-        speech.rate = 1.00; 
-        speech.pitch = 1.1; 
+        speech.rate = 1.18; 
+        speech.pitch = 1.28; 
     } else {
-        speech.rate = 1.00; 
-        speech.pitch = 1.1; 
+        speech.rate = 1.12; 
+        speech.pitch = 1.22; 
     }
     speech.onend = () => { 
         state.speechLocked = false; 
@@ -345,7 +345,7 @@ function render() {
             <button id="continueBtn" disabled>NARRATING...</button>
         `;
         narrate(`${story.t}. ${story.en}`, false, () => {
-            setTimeout(startMission, 1500);
+            requestAnimationFrame(nextBlock);
         });
     } else if (state.phase === "mission") {
         const block = mission.b[state.currentBlock];
@@ -408,12 +408,83 @@ function renderBlock(block, navHeader) {
         html += `
         <style>
             @keyframes mouthSpeak {
-                0% { transform: scaleY(0.3); }
-                100% { transform: scaleY(1.3); }
-            }
-            .talking-avatar .avatar-mouth {
-                animation: mouthSpeak 0.15s infinite alternate ease-in-out;
-            }   
+    0% {
+        transform: scaleY(0.2);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scaleY(1.8);
+        opacity: 1;
+    }
+}
+@keyframes snapZoom {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+
+    25% {
+        transform: scale(1.03) rotate(-0.3deg);
+    }
+
+    50% {
+        transform: scale(1.06) rotate(0.3deg);
+    }
+
+    75% {
+        transform: scale(1.03) rotate(-0.2deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+}
+@keyframes hyperPulse {
+    0% {
+        box-shadow:
+            0 0 10px rgba(250,204,21,0.4),
+            0 0 20px rgba(250,204,21,0.2);
+    }
+    50% {
+        box-shadow:
+            0 0 25px rgba(250,204,21,0.9),
+            0 0 60px rgba(250,204,21,0.5);
+    }
+    100% {
+        box-shadow:
+            0 0 10px rgba(250,204,21,0.4),
+            0 0 20px rgba(250,204,21,0.2);
+    }
+}
+@keyframes avatarShake {
+    0% {
+        transform: translateX(-1px);
+    }
+    100% {
+        transform: translateX(1px);
+    }
+}
+@keyframes subtitlePop {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.04);
+    }
+}
+@keyframes flashCut {
+    0%, 92%, 100% {
+        opacity:0;
+    }
+    93% {
+        opacity:0.35;
+    }
+    94% {
+        opacity:0;
+    }
+    95% {
+        opacity:0.25;
+    }
+}
             /* Animación de Brazos Estirándose para AGARRAR el Tesoro Central */
             @keyframes grabAssetLeft {
                 0% { left: 5%; transform: translateY(0px); }
