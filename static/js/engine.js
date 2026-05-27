@@ -1,8 +1,16 @@
 /* =========================================================
-   KAMIZEN ENGINE V23 - HYPER MOTION PATCH (SAFE UPGRADE)
-   ✔ NO modifica avatars structure
-   ✔ SOLO añade motion + timing + hype layer
-   ✔ Compatible con tu engine V22 original
+   KAMIZEN ENGINE V23 - HYPER AVATAR LIVE HUNT EDITION
+   ✔ Hyper Reactive Avatar Engine
+   ✔ Shorts/TikTok Style Motion System
+   ✔ Snap Zoom Camera Simulation
+   ✔ Hyper Pulse Glow FX
+   ✔ Ultra Fast Mouth Sync
+   ✔ Zero Dead Time Transitions
+   ✔ Aggressive Asset Capture Arms
+   ✔ Flash Cut Editing Simulation
+   ✔ Subtitle Pop System
+   ✔ Dynamic Dopamine Feedback Loop
+   ✔ Full Compatibility With Existing Mission System
    ========================================================= */
 
 let state = {
@@ -22,19 +30,12 @@ let state = {
     gainNode: null,
     filterNode: null,
     musicInterval: null,
-    companionToggle: true,
-
-    /* =========================
-       HYPER MOTION FLAGS (NEW)
-    ========================= */
-    cameraShake: true,
-    microPulse: true,
-    ultraSpeedMode: true
+    companionToggle: true
 };
 
-/* =========================================================
-   PERSISTENCIA (UNCHANGED)
-========================================================= */
+/* =========================
+   SISTEMA DE PERSISTENCIA
+========================= */
 
 function saveProgress() {
     localStorage.setItem('kamizen_save', JSON.stringify({
@@ -56,9 +57,9 @@ function loadProgress() {
     }
 }
 
-/* =========================================================
-   INIT SYSTEM (UNCHANGED CORE)
-========================================================= */
+/* =========================
+   INICIALIZACIÓN DEL SISTEMA
+========================= */
 
 window.addEventListener("load", async () => {
     loadProgress();
@@ -110,88 +111,9 @@ async function loadAllData() {
     }
 }
 
-/* =========================================================
-   🔥 HYPER CAMERA SYSTEM (NEW - SAFE ADDITION)
-========================================================= */
-
-function applyCameraFX(element) {
-
-    if (!element) return;
-
-    element.style.animation = `
-        kamizen_snapZoom 1.1s infinite ease-in-out,
-        kamizen_pulse 1.4s infinite ease-in-out
-    `;
-}
-
-/* =========================================================
-   🔥 MOTION CSS INJECTION (NO AVATAR CHANGE)
-========================================================= */
-
-const kamizenStyle = document.createElement("style");
-kamizenStyle.innerHTML = `
-
-@keyframes kamizen_snapZoom {
-    0% { transform: scale(1) rotate(0deg); }
-    25% { transform: scale(1.02) rotate(-0.2deg); }
-    50% { transform: scale(1.05) rotate(0.2deg); }
-    75% { transform: scale(1.02) rotate(-0.1deg); }
-    100% { transform: scale(1) rotate(0deg); }
-}
-
-@keyframes kamizen_pulse {
-    0% {
-        box-shadow: 0 0 10px rgba(250,204,21,0.25);
-    }
-    50% {
-        box-shadow: 0 0 35px rgba(250,204,21,0.8);
-    }
-    100% {
-        box-shadow: 0 0 10px rgba(250,204,21,0.25);
-    }
-}
-
-@keyframes kamizen_microShake {
-    0% { transform: translateX(-1px); }
-    100% { transform: translateX(1px); }
-}
-
-@keyframes kamizen_mouthFast {
-    0% { transform: scaleY(0.2); }
-    100% { transform: scaleY(1.6); }
-}
-
-.kamizen_talking .avatar-mouth {
-    animation: kamizen_mouthFast 0.08s steps(2) infinite;
-}
-
-.kamizen_talking {
-    animation: kamizen_microShake 0.12s infinite alternate;
-}
-
-.kamizen_flash {
-    position:absolute;
-    inset:0;
-    background:white;
-    opacity:0;
-    pointer-events:none;
-    animation: kamizen_flashCut 2.2s infinite;
-}
-
-@keyframes kamizen_flashCut {
-    0%, 92%, 100% { opacity:0; }
-    93% { opacity:0.3; }
-    94% { opacity:0; }
-    95% { opacity:0.2; }
-}
-
-`;
-
-document.head.appendChild(kamizenStyle);
-
-/* =========================================================
-   AUDIO ENGINE (UNCHANGED LOGIC)
-========================================================= */
+/* =========================
+   SISTEMA DE MÚSICA DOPAMINA
+========================= */
 
 function startDopamineMusic() {
 
@@ -205,14 +127,24 @@ function startDopamineMusic() {
         state.gainNode = state.audioCtx.createGain();
         state.filterNode = state.audioCtx.createBiquadFilter();
 
-        state.oscillator.type = 'sine';
+        state.oscillator.type = "sine";
 
-        state.oscillator.frequency.setValueAtTime(288, state.audioCtx.currentTime);
+        state.oscillator.frequency.setValueAtTime(
+            288,
+            state.audioCtx.currentTime
+        );
 
-        state.filterNode.type = 'lowpass';
-        state.filterNode.frequency.setValueAtTime(600, state.audioCtx.currentTime);
+        state.filterNode.type = "lowpass";
 
-        state.gainNode.gain.setValueAtTime(0.04, state.audioCtx.currentTime);
+        state.filterNode.frequency.setValueAtTime(
+            600,
+            state.audioCtx.currentTime
+        );
+
+        state.gainNode.gain.setValueAtTime(
+            0.04,
+            state.audioCtx.currentTime
+        );
 
         state.oscillator.connect(state.filterNode);
         state.filterNode.connect(state.gainNode);
@@ -221,37 +153,295 @@ function startDopamineMusic() {
         state.oscillator.start();
 
         const notes = [288, 324, 384, 432];
-        let i = 0;
+
+        let noteIdx = 0;
 
         state.musicInterval = setInterval(() => {
 
-            i = (i + 1) % notes.length;
+            if (state.oscillator) {
 
-            state.oscillator.frequency.linearRampToValueAtTime(
-                notes[i],
-                state.audioCtx.currentTime + 0.1
-            );
+                noteIdx = (noteIdx + 1) % notes.length;
+
+                state.oscillator.frequency.linearRampToValueAtTime(
+                    notes[noteIdx],
+                    state.audioCtx.currentTime + 0.1
+                );
+            }
 
         }, 800);
 
     } catch (e) {
-        console.log("Audio deferred");
+
+        console.log("Audio deferred.");
     }
 }
 
 function stopDopamineMusic() {
 
-    if (state.musicInterval) clearInterval(state.musicInterval);
+    if (state.musicInterval) {
+        clearInterval(state.musicInterval);
+    }
 
     if (state.oscillator) {
-        try { state.oscillator.stop(); } catch(e){}
+
+        try {
+
+            state.oscillator.stop();
+            state.oscillator.disconnect();
+
+        } catch (e) {}
+
         state.oscillator = null;
     }
 }
 
-/* =========================================================
-   TIMER (UNCHANGED)
-========================================================= */
+/* =========================
+   MASTER TIMER CONTROL
+========================= */
+
+function startMasterTimer() {
+
+    state.sessionStartTime = Date.now();
+
+    setTimeout(() => {
+        finishSession();
+    }, 10 * 60 * 1000);
+}
+
+function finishSession() {
+
+    window.speechSynthesis.cancel();
+
+    stopDopamineMusic();
+
+    clearInterval(state.timer);
+
+    const app = document.getElementById("app");
+
+    app.innerHTML = `
+        <div class="card center animated fadeIn"
+             style="
+                border:4px solid #22c55e;
+                padding:25px;
+                width:100%;
+                box-sizing:border-box;
+             ">
+
+            <h2 style="
+                color:#22c55e;
+                font-size:2rem;
+                font-weight:900;
+            ">
+                🌟 SESSION COMPLETE! 🌟
+            </h2>
+
+            <p style="
+                font-size:1.2rem;
+                font-weight:bold;
+                margin:15px 0;
+            ">
+                Awesome work, MICHAEL and ${state.userName.toUpperCase()}!
+            </p>
+
+            <p>
+                Your brain only needs a few focused minutes
+                to become stronger every day.
+            </p>
+
+            <div style="
+                background:rgba(0,0,0,0.3);
+                padding:15px;
+                border-radius:12px;
+                margin:20px 0;
+                text-align:left;
+                border-left:5px solid #22c55e;
+            ">
+
+                <h4 style="
+                    margin:0 0 10px 0;
+                    color:#facc15;
+                    text-transform:uppercase;
+                ">
+                    🚀 NEXT QUEST:
+                </h4>
+
+                <p>✔ Start your class</p>
+                <p>✔ Rest your mind</p>
+                <p>✔ Go play outside</p>
+                <p>✔ Talk with family</p>
+                <p>✔ Return tomorrow stronger</p>
+
+            </div>
+
+            <button
+                onclick="location.reload()"
+                style="
+                    margin-top:25px;
+                    width:100%;
+                    background:#22c55e;
+                    padding:15px;
+                    font-weight:900;
+                    font-size:1.2rem;
+                "
+            >
+                FINISH SESSION
+            </button>
+
+        </div>
+    `;
+
+    const vocalGoodbye = `
+        Session complete.
+        Awesome work Michael and ${state.userName}.
+        Now go start your class,
+        rest your brain,
+        have fun,
+        and return tomorrow stronger.
+    `;
+
+    narrate(vocalGoodbye, false);
+}
+
+/* =========================
+   CONTROLES DE NAVEGACIÓN
+========================= */
+
+function jumpToBlock() {
+
+    const targetMissionId = prompt(
+        "Enter the MISSION ID to jump to (1-63):"
+    );
+
+    if (
+        targetMissionId !== null &&
+        targetMissionId !== ""
+    ) {
+
+        const idNum = Number(targetMissionId);
+
+        const idx = state.missions.findIndex(
+            m => m.id === idNum
+        );
+
+        if (idx !== -1) {
+
+            window.speechSynthesis.cancel();
+
+            stopDopamineMusic();
+
+            clearInterval(state.timer);
+
+            state.currentIndex = idx;
+            state.currentBlock = 0;
+            state.phase = "story";
+
+            render();
+
+        } else {
+
+            alert("Mission ID " + idNum + " not found.");
+        }
+    }
+}
+
+function goBack() {
+
+    window.speechSynthesis.cancel();
+
+    stopDopamineMusic();
+
+    clearInterval(state.timer);
+
+    state.speechLocked = false;
+
+    if (state.currentBlock > 0) {
+
+        state.currentBlock--;
+
+    } else if (state.currentIndex > 0) {
+
+        state.currentIndex--;
+        state.currentBlock = 0;
+        state.phase = "story";
+    }
+
+    render();
+}
+
+/* =========================
+   HYPER NARRATION ENGINE
+========================= */
+
+function narrate(text, isAvatarActive, callback) {
+
+    if (!text) {
+
+        if (callback) callback();
+
+        return;
+    }
+
+    state.speechLocked = true;
+
+    window.speechSynthesis.cancel();
+
+    const elements = document.querySelectorAll(".cube-model-inner");
+
+    elements.forEach(el => {
+        el.classList.add("talking-avatar");
+    });
+
+    const speech = new SpeechSynthesisUtterance(text);
+
+    speech.lang = "en-US";
+
+    if (isAvatarActive) {
+
+        speech.rate = 1.18;
+        speech.pitch = 1.28;
+
+    } else {
+
+        speech.rate = 1.12;
+        speech.pitch = 1.22;
+    }
+
+    speech.onend = () => {
+
+        state.speechLocked = false;
+
+        elements.forEach(el => {
+            el.classList.remove("talking-avatar");
+        });
+
+        if (callback) callback();
+    };
+
+    window.speechSynthesis.speak(speech);
+}
+
+/* =========================
+   RESET SYSTEM
+========================= */
+
+function restartSystem() {
+
+    if (confirm("Are you sure you want to RESTART from zero?")) {
+
+        localStorage.clear();
+
+        state.userName = "Warrior";
+        state.currentIndex = 0;
+        state.currentBlock = 0;
+        state.phase = "story";
+
+        render();
+    }
+}
+
+/* =========================
+   COUNTDOWN ENGINE
+========================= */
 
 function startCountdown(seconds, onComplete) {
 
@@ -259,7 +449,7 @@ function startCountdown(seconds, onComplete) {
 
     state.timeLeft = seconds;
 
-    const el = document.getElementById("timerDisplay");
+    const timerDisplay = document.getElementById("timerDisplay");
 
     state.timer = setInterval(() => {
 
@@ -268,39 +458,77 @@ function startCountdown(seconds, onComplete) {
         const m = Math.floor(state.timeLeft / 60);
         const s = state.timeLeft % 60;
 
-        if (el) {
-            el.innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        if (timerDisplay) {
+
+            timerDisplay.innerText =
+                `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         }
 
         if (state.timeLeft <= 0) {
+
             clearInterval(state.timer);
+
             if (onComplete) onComplete();
         }
 
     }, 1000);
 }
 
-/* =========================================================
-   INTRO (UNCHANGED LOGIC)
-========================================================= */
+/* =========================
+   MOTOR DE RENDER
+========================= */
 
 function showIntro() {
 
     state.phase = "intro";
 
     document.getElementById("app").innerHTML = `
+
         <div class="card center">
+
             <h1>KAMIZEN LIFE SYSTEM</h1>
-            <button onclick="askNameAndStart()">CONTINUE</button>
+
+            <p>Training • Awareness • Control</p>
+
+            <p class="small">
+                Range: Missions 1 - 63 Loaded
+            </p>
+
+            <button onclick="askNameAndStart()">
+                CONTINUE MISSION
+            </button>
+
+            <button
+                onclick="restartSystem()"
+                style="
+                    background:var(--danger);
+                    margin-top:10px;
+                "
+            >
+                RESET PROGRESS
+            </button>
+
         </div>
     `;
 }
 
 function askNameAndStart() {
 
-    let n = prompt("Enter name");
+    let nameInput = prompt(
+        "Please enter your name to begin training:"
+    );
 
-    state.userName = n?.trim() || "Warrior";
+    if (
+        nameInput &&
+        nameInput.trim() !== ""
+    ) {
+
+        state.userName = nameInput.trim();
+
+    } else {
+
+        state.userName = "Warrior";
+    }
 
     saveProgress();
 
@@ -308,10 +536,13 @@ function askNameAndStart() {
 }
 
 function startSystem() {
+
+    startMasterTimer();
+
     showPrefaceGuide();
 }
 /* =========================================================
-   PREFACE GUIDE (UNCHANGED STRUCTURE + HYPER FX ONLY)
+   PREFACE GUIDE (6 KINGDOMS)
 ========================================================= */
 
 function showPrefaceGuide() {
@@ -321,10 +552,20 @@ function showPrefaceGuide() {
     const app = document.getElementById("app");
 
     app.innerHTML = `
-        <div class="card kamizen_preface">
+        <div class="card animated fadeIn"
+            style="
+                border:4px solid #0ea5e9;
+                padding:20px;
+                width:100%;
+                box-sizing:border-box;
+                animation:
+                    snapZoom 1.2s infinite ease-in-out,
+                    hyperPulse 1.5s infinite ease-in-out;
+            ">
 
             <h2 style="
                 color:#facc15;
+                font-size:1.7rem;
                 text-align:center;
                 font-weight:900;
             ">
@@ -334,41 +575,49 @@ function showPrefaceGuide() {
             <div style="
                 display:flex;
                 flex-direction:column;
-                gap:8px;
-                margin-top:10px;
-                font-weight:700;
+                gap:10px;
+                margin-top:15px;
             ">
+
                 <div>🛡️ Respect Field (1-10)</div>
                 <div>🏡 Love Castle (11-20)</div>
                 <div>📚 Brain Focus (21-30)</div>
                 <div>🏎️ Healthy Engine (31-40)</div>
                 <div>🪙 Golden Joy (41-50)</div>
                 <div>🏰 Wealth Empire (51-63)</div>
+
             </div>
 
-            <button onclick="exitPreface()" class="kamizen_btn">
+            <button onclick="exitPreface()"
+                style="
+                    margin-top:20px;
+                    width:100%;
+                    background:#22c55e;
+                    font-weight:900;
+                    font-size:1.1rem;
+                    padding:15px;
+                ">
                 START QUEST NOW
             </button>
 
         </div>
     `;
 
-    const el = document.querySelector(".kamizen_preface");
-    if (el) applyCameraFX(el);
-
     narrate(
-        "Welcome. Six kingdoms. Sixty three missions. Begin now.",
+        "Welcome to the six kingdoms of power. Your mission begins now.",
         false
     );
 }
 
 function exitPreface() {
+
     state.phase = "story";
+
     render();
 }
 
 /* =========================================================
-   CORE RENDER ENGINE (HYPER SPEED PATCH ONLY)
+   CORE RENDER ENGINE (HYPER MODE)
 ========================================================= */
 
 function render() {
@@ -383,24 +632,48 @@ function render() {
     const mission = state.missions[state.currentIndex];
 
     if (!story || !mission) {
+
         state.currentIndex = 0;
         state.currentBlock = 0;
         state.phase = "story";
+
         return render();
     }
 
     const navHeader = `
-        <div class="kamizen_nav">
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:10px;
+            width:100%;
+        ">
 
             <div></div>
 
             <div style="display:flex; gap:5px;">
-                <button onclick="goBack()">BACK</button>
-                <button onclick="jumpToBlock()">JUMP</button>
-                <button onclick="restartSystem()">RESET</button>
+                <button onclick="goBack()"
+                    style="padding:6px 12px; font-size:11px;">
+                    BACK
+                </button>
+
+                <button onclick="jumpToBlock()"
+                    style="padding:6px 12px; font-size:11px;">
+                    JUMP
+                </button>
+
+                <button onclick="restartSystem()"
+                    style="padding:6px 12px; font-size:11px;">
+                    RESET
+                </button>
             </div>
 
-            <div class="kamizen_live">
+            <div style="
+                font-family:monospace;
+                font-size:11px;
+                color:#22c55e;
+                font-weight:bold;
+            ">
                 🔊 SPEAKER ONLINE
             </div>
 
@@ -408,30 +681,28 @@ function render() {
     `;
 
     /* =========================
-       STORY MODE (ZERO DEAD TIME)
+       STORY PHASE
     ========================= */
 
     if (state.phase === "story") {
 
         app.innerHTML = navHeader + `
-            <div class="card kamizen_story">
+            <div class="card">
                 <h2>STORY ${story.id}</h2>
                 <p>${story.en || ""}</p>
             </div>
         `;
 
-        const el = document.querySelector(".kamizen_story");
-        if (el) applyCameraFX(el);
-
         narrate(`${story.en}`, false, () => {
-            startMission();
+
+            setTimeout(startMission, 150);
         });
 
         return;
     }
 
     /* =========================
-       MISSION MODE
+       MISSION PHASE
     ========================= */
 
     if (state.phase === "mission") {
@@ -448,7 +719,7 @@ function render() {
 }
 
 /* =========================================================
-   BLOCK ENGINE (HYPER AVATAR SYSTEM - SAFE PATCH)
+   BLOCK ENGINE (HYPER AVATAR SYSTEM)
 ========================================================= */
 
 function renderBlock(block, navHeader) {
@@ -460,127 +731,163 @@ function renderBlock(block, navHeader) {
     let isAvatarMode = (block.t === "sim");
 
     const timerUI = `
-        <div class="card kamizen_timer">
+        <div class="card center"
+            style="
+                border:3px solid #0ea5e9;
+                animation:
+                    hyperPulse 1.2s infinite ease-in-out;
+            ">
             <h1 id="timerDisplay">00:00</h1>
         </div>
     `;
 
     /* =========================
-       BASIC BLOCKS (UNCHANGED LOGIC)
+       SIMPLE BLOCKS
     ========================= */
 
     if (block.t === "v" || block.t === "h") {
-        html += `<div class="card">${block.tx?.en || ""}</div>`;
+
+        html += `<div class="card"><h2>${block.tx?.en}</h2></div>`;
         textToRead = block.tx?.en;
     }
 
     if (block.story) {
-        html += `<div class="card">${block.story.en || ""}</div>`;
+
+        html += `<div class="card"><p>${block.story.en}</p></div>`;
         textToRead = block.story.en;
     }
 
     if (block.t === "sil") {
-        html += timerUI + `<div class="card">${block.tx?.en || ""}</div>`;
+
+        html += timerUI + `<div class="card"><h3>${block.tx?.en}</h3></div>`;
         textToRead = block.tx?.en;
     }
 
     /* =========================
-       SIM MODE (HYPER AVATAR ENGINE PATCH)
+       SIMULATION MODE (HYPER ENGINE)
     ========================= */
 
     if (isAvatarMode) {
 
         startDopamineMusic();
 
-        const selector = state.currentIndex % 6;
+        const blockSelector = state.currentIndex % 6;
 
         let powerWord = "FOCUS";
         let assetSymbol = "📘";
-        let kidsLesson = "Your brain grows with focus.";
+        let kidsLesson = "Your brain grows when you focus.";
 
-        if (selector === 0) {
+        if (blockSelector === 0) {
             powerWord = "RESPECT";
             assetSymbol = "🛡️";
-            kidsLesson = "Respect builds strong life rules.";
+            kidsLesson = "Respect protects your life and family rules.";
         }
 
-        if (selector === 1) {
+        if (blockSelector === 1) {
             powerWord = "LOVE";
             assetSymbol = "🏡";
-            kidsLesson = "Love creates strong families.";
+            kidsLesson = "Love builds strong homes and happy teams.";
         }
 
-        if (selector === 2) {
+        if (blockSelector === 2) {
             powerWord = "FOCUS";
             assetSymbol = "📚";
-            kidsLesson = "Focus unlocks intelligence.";
+            kidsLesson = "Focus unlocks intelligence and skill.";
         }
 
-        if (selector === 3) {
+        if (blockSelector === 3) {
             powerWord = "ENERGY";
             assetSymbol = "🏎️";
-            kidsLesson = "Energy comes from healthy habits.";
+            kidsLesson = "Healthy body = fast powerful life.";
         }
 
-        if (selector === 4) {
+        if (blockSelector === 4) {
             powerWord = "JOY";
             assetSymbol = "🪙";
-            kidsLesson = "Joy makes discipline easy.";
+            kidsLesson = "Joy makes discipline feel easy.";
         }
 
-        if (selector === 5) {
+        if (blockSelector === 5) {
             powerWord = "WEALTH";
             assetSymbol = "🏰";
-            kidsLesson = "Wealth is built daily.";
+            kidsLesson = "Wealth is built through daily discipline.";
         }
 
         textToRead =
-            `Michael and ${state.userName}. Grab ${powerWord}. ${kidsLesson}`;
+            `Michael and ${state.userName}. Grab the ${powerWord} object now! ${kidsLesson}`;
 
         html += `
-            <div class="card sim-gaming-container kamizen_hyper">
+            <style>
+                .sim-gaming-container{
+                    animation:
+                        snapZoom 1.1s infinite ease-in-out,
+                        hyperPulse 1.3s infinite ease-in-out;
+                    position:relative;
+                    overflow:hidden;
+                }
 
-                <div class="kamizen_flash"></div>
+                .talking-avatar .avatar-mouth{
+                    animation: mouthSpeak 0.08s infinite steps(2);
+                }
 
-                <div class="kamizen_live_tag">LIVE HUNT</div>
+                .talking-avatar{
+                    animation: avatarShake 0.12s infinite alternate;
+                }
+            </style>
 
-                <div class="kamizen_stage">
+            ${timerUI}
 
-                    <div class="avatar_left cube-model-inner">
-                        MICHAEL
-                    </div>
+            <div class="card sim-gaming-container">
 
-                    <div class="asset">
+                <div class="flash-overlay"></div>
+
+                <div style="
+                    position:absolute;
+                    top:10px;
+                    left:10px;
+                    color:#facc15;
+                    font-weight:900;
+                ">
+                    LIVE HUNT
+                </div>
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    padding:10px;
+                ">
+
+                    <div class="cube-model-inner">MICHAEL</div>
+
+                    <div style="font-size:40px;">
                         ${assetSymbol}
                     </div>
 
-                    <div class="avatar_right cube-model-inner">
+                    <div class="cube-model-inner">
                         ${state.userName}
                     </div>
 
                 </div>
 
-                <div class="kamizen_power">
+                <div style="
+                    text-align:center;
+                    font-weight:900;
+                    color:#facc15;
+                    margin-top:10px;
+                ">
                     ${powerWord}
                 </div>
 
-                <p class="kamizen_lesson">
+                <p style="text-align:center;">
                     ${kidsLesson}
                 </p>
 
             </div>
         `;
-
-        setTimeout(() => {
-
-            const el = document.querySelector(".kamizen_hyper");
-            if (el) applyCameraFX(el);
-
-        }, 0);
     }
 
     /* =========================
-       CONTINUE BUTTON (ZERO LATENCY FIX)
+       CONTINUE BUTTON
     ========================= */
 
     html += `<button id="continueBtn" disabled>NARRATING...</button>`;
@@ -589,89 +896,39 @@ function renderBlock(block, navHeader) {
 
     narrate(textToRead, isAvatarMode, () => {
 
-        // 🔥 ZERO DEAD TIME FLOW (IMPORTANT PATCH)
         if (block.t === "sim") {
 
-            startCountdown(18, nextBlock);
+            startCountdown(20, nextBlock);
 
             unlockContinue("SKIP", nextBlock);
 
-            // auto-flow protection (no waiting feel)
-            setTimeout(() => {
-                unlockContinue("SKIP", nextBlock);
-            }, 50);
-
         } else {
 
-            nextBlock();
+            setTimeout(nextBlock, 150);
         }
     });
 }
 
 /* =========================================================
-   HYPER BREATHING (UNCHANGED LOGIC OPTIONAL)
-========================================================= */
-
-function startGuidedBreathing() {
-
-    const circle = document.getElementById("breathCircle");
-    const label = document.getElementById("breathLabel");
-
-    if (!circle || !label) return;
-
-    let inhale = true;
-
-    setInterval(() => {
-
-        if (!document.getElementById("breathCircle")) return;
-
-        label.innerText = inhale ? "INHALE" : "EXHALE";
-
-        circle.style.transform = inhale ? "scale(1.4)" : "scale(0.8)";
-
-        inhale = !inhale;
-
-    }, 4000);
-}
-
-/* =========================================================
-   ANSWERS (UNCHANGED)
-========================================================= */
-
-function selectAnswer(index, correct, explanations) {
-
-    const isCorrect = index === correct;
-
-    const wrap = document.createElement("div");
-
-    wrap.innerHTML = `
-        <div class="card ${isCorrect ? 'ok' : 'fail'}">
-            ${explanations?.[index] || ""}
-        </div>
-        <button id="continueBtn" disabled>NARRATING...</button>
-    `;
-
-    document.getElementById("app").appendChild(wrap);
-
-    narrate(explanations?.[index], false, () => {
-        unlockContinue("NEXT", nextBlock);
-    });
-}
-
-/* =========================================================
-   FLOW CONTROL (UNCHANGED CORE)
+   FLOW CONTROL
 ========================================================= */
 
 function startMission() {
+
     state.phase = "mission";
     state.currentBlock = 0;
+
     render();
 }
 
 function nextBlock() {
+
     stopDopamineMusic();
+
     clearInterval(state.timer);
+
     state.currentBlock++;
+
     render();
 }
 
@@ -692,7 +949,7 @@ function nextStory() {
 }
 
 /* =========================================================
-   CONTINUE UNLOCK
+   INTERACTION
 ========================================================= */
 
 function unlockContinue(label, action) {
@@ -700,6 +957,7 @@ function unlockContinue(label, action) {
     const btn = document.getElementById("continueBtn");
 
     if (btn) {
+
         btn.disabled = false;
         btn.innerText = label;
         btn.onclick = action;
