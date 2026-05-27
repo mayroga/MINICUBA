@@ -306,6 +306,10 @@ function askNameAndStart() {
 
     startSystem();
 }
+
+function startSystem() {
+    showPrefaceGuide();
+}
 /* =========================================================
    PREFACE GUIDE (UNCHANGED STRUCTURE + HYPER FX ONLY)
 ========================================================= */
@@ -700,7 +704,4 @@ function unlockContinue(label, action) {
         btn.innerText = label;
         btn.onclick = action;
     }
-}
-function startSystem() {
-    showPrefaceGuide();
 }
