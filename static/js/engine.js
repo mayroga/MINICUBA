@@ -307,7 +307,7 @@ function showPrefaceGuide() {
         </div>
     `;    
     navigator.id = "preface";
-    narrate("Welcome to the six Kingdoms of power. Respect field, love castle, brain focus zone, healthy engine, golden joy arena, and total wealth empire. Complete sixty three levels to win. Let us start your quest now.", false);
+    narrate("Welcome to the six Kingdoms of power. KAMIZEN helps children aged 6 to 15 develop the independence, security, and confidence to act on their own in everyday situations. Let us start your quest now.", false);
 }
 function exitPreface() {
     state.phase = "story";
