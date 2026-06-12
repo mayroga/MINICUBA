@@ -246,7 +246,7 @@ function showIntro() {
     document.getElementById("app").innerHTML = `
         <div class="card center">
             <h1>KAMIZEN LIFE SYSTEM</h1>
-            <p>Training • Awareness • Control</p>
+            <p>Helps children to develop the independence, security, and confidence to act on their own in everyday situations</p>
             <p class="small">Range: Missions 1 - 63 Loaded</p>
             <button onclick="askNameAndStart()">CONTINUE MISSION</button>
             <button onclick="restartSystem()" style="background:var(--danger);margin-top:10px;">RESET PROGRESS</button>
